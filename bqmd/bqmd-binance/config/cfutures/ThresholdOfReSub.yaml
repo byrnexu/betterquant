@@ -1,0 +1,2 @@
+thresholdOfReSub:
+  - {name: default, timeDur: 180000}

@@ -1,0 +1,1 @@
+#cmakedefine PROJ_VER "@PROJ_VER@"

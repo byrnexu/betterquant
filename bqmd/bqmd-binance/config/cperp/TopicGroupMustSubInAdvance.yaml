@@ -1,0 +1,13 @@
+topicGroup:
+  - BTC-USD-CPerp@Trades
+  - BTC-USD-CPerp@Tickers
+  - BTC-USD-CPerp@Candle
+  - BTC-USD-CPerp@Books@400
+  - ETH-USD-CPerp@Trades
+  - ETH-USD-CPerp@Tickers
+  - ETH-USD-CPerp@Candle
+  - ETH-USD-CPerp@Books@400
+  - DOT-USD-CPerp@Trades
+  - DOT-USD-CPerp@Tickers
+  - DOT-USD-CPerp@Candle
+  - DOT-USD-CPerp@Books@400

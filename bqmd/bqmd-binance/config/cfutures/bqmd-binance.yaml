@@ -1,0 +1,57 @@
+marketCode: Binance
+symbolType: CFutures
+
+addrOfSymbolTable: "https://dapi.binance.com/dapi/v1/exchangeInfo"
+addrOfWSPub: "wss://dstream.binance.com/ws"
+
+enableSymbolTableMaint: true
+
+wsParam: svcName=WSCli; milliSecIntervalOfSendPingAndCheckConn=5000; sendPing=1; expireTimeOfConn=120000
+wsTaskDispatcherParam: moduleName=wsCliTaskDispatcher; taskRandAssignedThreadPoolSize=0; taskSpecificThreadPoolSize=2
+
+milliSecIntervalOfSymbolTableMaint: 30000
+timeoutOfQuerySymbolTableFromExch: 30000
+
+dbEngParam: svcName=dbEng; dbName=BetterQuant; host=0.0.0.0; port=3306; username=root; password=123456
+dbTaskDispatcherParam: moduleName=dbTaskDispatcher
+
+milliSecIntervalOfTBLMonitorOfSymbolInfo: 10000
+milliSecIntervalOfTopicGroupMustSubMaint: 1000
+
+topicGroupMustSubInAdvance: config/bqmd-binance/cfutures/TopicGroupMustSubInAdvance.yaml
+topicGroupInBlackList: config/bqmd-binance/cfutures/TopicGroupInBlackList.yaml
+thresholdOfReSubWithoutRecvMD: config/bqmd-binance/cfutures/ThresholdOfReSub.yaml
+
+addrOfSnapshot: https://dapi.binance.com/dapi/v1/depth?symbol=symbolCode&limit=1000
+timeoutOfQuerySnapshot: 60000
+
+defaultExchMDTypeBooks: depth@100ms
+defaultBooksDepthGroup: [5, 20, 200, 400]
+
+subAndUnSubSvcParam: moduleName=subAndUnSubSvcOfBinance; taskRandAssignedThreadPoolSize=0; taskSpecificThreadPoolSize=1
+mdStorageParam: moduleName=mdStorageOfBinance;numOfUnprocessedTaskAlert=1000
+
+storageRootPath: data
+thresholdOfMDRowNumInCache: 10000
+maxNumOfHisMDCanBeQeuryEachTime: 10000
+
+flowCtrlRule:
+  - taskGroup:
+    - {name: Sub, weight: 1}
+    - {name: UnSub, weight: 1}
+    timeDur: 2000
+    limitNum: 1
+
+logger: 
+  queueSize: 128
+  backingThreadsCount: 1
+  defaultLoggerName: defaultLogger
+  loggerGroup: 
+    - 
+      loggerName: "defaultLogger"
+      maxFiles: 10
+      maxSize: 104857600
+      outputDir: "data/logs/bqmd/bqmd-binance-cfutures"
+      outputFilename: "bqmd-binance-spot"
+      rotatingSinkPattern: "[%Y%m%d %T.%f] [%L] [%t] [%s:%#] %v"
+      stdoutSinkPattern: "[%Y%m%d %T.%f] [%^%L%$] [%t] [%s:%#] %v"

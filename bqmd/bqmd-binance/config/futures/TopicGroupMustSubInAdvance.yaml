@@ -1,0 +1,9 @@
+topicGroup:
+  - BTC-USDT-ThisQuarter@Trades
+  - ETH-USDT-ThisQuarter@Trades
+  - BTC-USDT-ThisQuarter@Tickers
+  - ETH-USDT-ThisQuarter@Tickers
+  - BTC-USDT-ThisQuarter@Candle
+  - ETH-USDT-ThisQuarter@Candle
+  - BTC-USDT-ThisQuarter@Books@400
+  - ETH-USDT-ThisQuarter@Books@400

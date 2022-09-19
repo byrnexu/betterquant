@@ -1,0 +1,37 @@
+tdGWChannel: "RISK@TDGWChannel@Trade"
+stgEngChannel: "RISK@StgEngChannel@Trade"
+pubChannel: "RISK@PubChannel@Trade"
+
+dbEngParam: svcName=dbEng; dbName=BetterQuant; host=0.0.0.0; port=3306; username=root; password=123456
+dbTaskDispatcherParam: moduleName=dbTaskDispatcher
+
+milliSecIntervalOfTBLMonitorOfSymbolInfo: 10000
+
+milliSecIntervalOfSubMarketData: 1000
+
+milliSecIntervalOfPubPosUpdateOfAcctId: 100
+milliSecIntervalOfPubPosUpdateOfStgId: 100
+milliSecIntervalOfPubPosUpdateOfStgInstId: 100
+
+milliSecIntervalOfPubPosSnapshotOfAcctId: 5000
+milliSecIntervalOfPubPosSnapshotOfStgId: 5000
+milliSecIntervalOfPubPosSnapshotOfStgInstId: 5000
+
+milliSecIntervalOfPubAssetsUpdate: 10 
+milliSecIntervalOfPubAssetsSnapshot: 500
+
+riskMgrTaskDispatcherParam: moduleName=RiskMgrTaskDispatcherParam;taskRandAssignedThreadPoolSize=0;taskSpecificThreadPoolSize=4
+
+logger: 
+  queueSize: 128
+  backingThreadsCount: 1
+  defaultLoggerName: defaultLogger
+  loggerGroup: 
+    - 
+      loggerName: "defaultLogger"
+      maxFiles: 10
+      maxSize: 104857600
+      outputDir: "data/logs/bqriskmgr"
+      outputFilename: "bqriskmgr"
+      rotatingSinkPattern: "[%Y%m%d %T.%f] [%L] [%t] [%s:%#] %v"
+      stdoutSinkPattern: "[%Y%m%d %T.%f] [%^%L%$] [%t] [%s:%#] %v"

@@ -1,0 +1,61 @@
+marketCode: Binance
+symbolType: Futures
+acctId: 10012
+
+tdSrvChannel: "TD@TDGWChannel@Trade"
+tdSrvTaskDispatcherParam: moduleName=tdSrvTaskDispatcher; taskRandAllocThreadPoolSize=0; taskSpecificThreadPoolSize=2
+
+riskMgrChannel: "RISK@TDGWChannel@Trade"
+
+addrOfWS: "wss://fstream.binance.com/ws" 
+addrOfHttp: "https://fapi.binance.com"
+
+recvWindow: 60000
+
+secIntervalOfExtendConnLifecycle: 600
+secIntervalOfSyncAssetsSnapshot: 60
+secIntervalOfSyncUnclosedOrderInfo: 55
+secIntervalOfReloadExternalStatusCode: 10
+
+milliSecIntervalOfSyncTask: 5
+
+secAgoTheOrderNeedToBeSynced: 30
+
+timeoutOfGetListenKey: 60000
+timeoutOfQueryAssetInfoGroup: 60000
+timeoutOfQueryOrderInfo: 60000
+
+wsParam: svcName=WSCli; milliSecIntervalOfSendPingAndCheckConn=5000; sendPing=1; expireTimeOfConn=10800000
+wsTaskDispatcherParam: moduleName=wsCliTaskDispatcher; taskRandAllocThreadPoolSize=0; taskSpecificThreadPoolSize=1
+
+dbEngParam: svcName=dbEng; dbName=BetterQuant; host=0.0.0.0; port=3306; username=root; password=123456
+dbTaskDispatcherParam: moduleName=dbTaskDispatcher
+
+milliSecIntervalOfTBLMonitorOfSymbolInfo: 10000
+
+flowCtrlRule:
+  - taskGroup:  # each key
+    - {name: order, weight: 1}
+    - {name: cancelOrder, weight: 1}
+    timeDur: 10000
+    limitNum: 40
+  - taskGroup:  # each ip
+    - {name: extendConnLifecycle, weight: 1}
+    - {name: syncAssetsSnapshot, weight: 10}
+    - {name: syncUnclosedOrderInfo, weight: 1}
+    timeDur: 60000
+    limitNum: 200
+
+logger: 
+  queueSize: 128
+  backingThreadsCount: 1
+  defaultLoggerName: defaultLogger
+  loggerGroup: 
+    - 
+      loggerName: "defaultLogger"
+      maxFiles: 10
+      maxSize: 104857600
+      outputDir: "data/logs/bqtd/bqtd-binance-perp"
+      outputFilename: "bqtd-binance-perp"
+      rotatingSinkPattern: "[%Y%m%d %T.%f] [%L] [%t] [%s:%#] %v"
+      stdoutSinkPattern: "[%Y%m%d %T.%f] [%^%L%$] [%t] [%s:%#] %v"

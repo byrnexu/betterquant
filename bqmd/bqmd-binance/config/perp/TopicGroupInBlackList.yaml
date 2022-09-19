@@ -1,0 +1,9 @@
+topicGroup:
+  - OKB-USDT-Perp@Trades
+  - OKT-USDT-Perp@Trades
+  - OKB-USDT-Perp@Tickers
+  - OKT-USDT-Perp@Tickers
+  - OKB-USDT-Perp@Candle
+  - OKT-USDT-Perp@Candle
+  - OKB-USDT-Perp@Books@400
+  - OKT-USDT-Perp@Books@400

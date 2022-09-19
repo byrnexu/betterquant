@@ -1,0 +1,21 @@
+topicGroup:
+  - BTC-USDT-Perp@Trades
+  - BTC-USDT-Perp@Tickers
+  - BTC-USDT-Perp@Candle
+  - BTC-USDT-Perp@Books@400
+  - ETH-USDT-Perp@Trades
+  - ETH-USDT-Perp@Tickers
+  - ETH-USDT-Perp@Candle
+  - ETH-USDT-Perp@Books@400
+  - ADA-USDT-Perp@Trades
+  - ADA-USDT-Perp@Tickers
+  - ADA-USDT-Perp@Candle
+  - ADA-USDT-Perp@Books@400
+  - DOT-USDT-Perp@Trades
+  - DOT-USDT-Perp@Tickers
+  - DOT-USDT-Perp@Candle
+  - DOT-USDT-Perp@Books@400
+  - BNB-USDT-Perp@Trades
+  - BNB-USDT-Perp@Tickers
+  - BNB-USDT-Perp@Candle
+  - BNB-USDT-Perp@Books@400

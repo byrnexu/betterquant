@@ -1,0 +1,26 @@
+name: risk-plugin-flow-ctrl
+version: 1.0.0
+enable: true
+
+flowCtrlRule:
+  - taskGroup:
+    - {name: 10011-onOrder, weight: 1}
+    timeDur: 1000
+    limitNum: 1
+  - taskGroup:
+    - {name: 10014-onOrder, weight: 1}
+    timeDur: 1000
+    limitNum: 1
+  - taskGroup:
+    - {name: 10015-onOrder, weight: 1}
+    timeDur: 1000
+    limitNum: 1
+
+logger: 
+  loggerName: "flow-ctrl"
+  maxFiles: 10
+  maxSize: 104857600
+  outputDir: "data/logs/bqtd-srv"
+  outputFilename: "risk-plugin-flow-ctrl"
+  rotatingSinkPattern: "[%Y%m%d %T.%f] [%L] [%t] [%s:%#] %v"
+  stdoutSinkPattern: "[%Y%m%d %T.%f] [%^%L%$] [%t] [%s:%#] %v"

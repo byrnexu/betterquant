@@ -1,0 +1,10 @@
+DELETE FROM `acctInfo`; 
+DELETE FROM `assetInfo`;
+DELETE FROM `exchTradeInfo`;
+DELETE FROM `externalStatusCode`;
+DELETE FROM `hisAssetInfo`;
+DELETE FROM `hisPnl`;
+DELETE FROM `orderInfo`;
+DELETE FROM `posInfo`;
+DELETE FROM `tradeInfo`;
+DELETE FROM `trdSymbol`;

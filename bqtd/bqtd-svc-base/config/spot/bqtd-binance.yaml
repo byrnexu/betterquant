@@ -1,0 +1,59 @@
+loggerConfFilename: config/BQTDBinance/spot/Logger.BQTDBinance.properties
+
+marketCode: BINANCE
+symbolType: SPOT
+acctId: 10011
+
+tdGWChannel: "TD@TDGWChannel@Trade"
+
+tdSrvParam: svcName=TD@BINANCE@SPOT; srvAddr=tcp://0.0.0.0:62000
+tdSrvTaskDispatcherParam: moduleName=tdSrvTaskDispatcher; taskRandAllocThreadPoolSize=0; taskSpecificThreadPoolSize=2
+
+addrOfWS: "wss://stream.binance.com:9443/ws" 
+addrOfHttp: "https://api.binance.com"
+
+recvWindow: 60000
+
+secIntervalOfExtendConnLifecycle: 600
+secIntervalOfSyncAssetsSnapshot: 60
+secIntervalOfSyncUnclosedOrderInfo: 55
+secIntervalOfReloadExternalStatusCode: 10
+
+timeoutOfGetListenKey: 60000
+timeoutOfQueryAssetInfoGroup: 60000
+timeoutOfQueryOrderInfo: 60000
+
+wsParam: svcName=WSCli; intervalOfSendPingAndCheckConn=5000; sendPing=1; expireTimeOfConn=10800000
+wsTaskDispatcherParam: moduleName=wsCliTaskDispatcher; taskRandAllocThreadPoolSize=0; taskSpecificThreadPoolSize=1
+
+dbEngParam: svcName=dbEng; dbName=BetterQuant; host=0.0.0.0; port=3306; username=root; password=123456
+dbTaskDispatcherParam: moduleName=dbTaskDispatcher
+
+intervalOfTBLMonitorOfSymbolInfo: 10000
+
+flowCtrlRule:
+  - taskGroup:  # each key
+    - {name: order, weight: 1}
+    - {name: cancelOrder, weight: 1}
+    timeDur: 10000
+    limitNum: 40
+  - taskGroup:  # each ip
+    - {name: extendConnLifecycle, weight: 1}
+    - {name: syncAssetsSnapshot, weight: 10}
+    - {name: syncUnclosedOrderInfo, weight: 2}
+    timeDur: 60000
+    limitNum: 200
+
+logger: 
+  queueSize: 128
+  backingThreadsCount: 1
+  defaultLoggerName: defaultLogger
+  loggerGroup: 
+    - 
+      loggerName: "defaultLogger"
+      maxFiles: 10
+      maxSize: 104857600
+      outputDir: "data/logs/bqtd/bqtd-binance-spot"
+      outputFilename: "bqtd-binance-spot-trades"
+      rotatingSinkPattern: "[%Y%m%d %T.%f] [%L] [%t] [%s:%#] %v"
+      stdoutSinkPattern: "[%Y%m%d %T.%f] [%^%L%$] [%t] [%s:%#] %v"

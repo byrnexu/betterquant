@@ -1,0 +1,28 @@
+tdGWChannel: "TD@TDGWChannel@Trade"
+stgEngChannel: "TD@StgEngChannel@Trade"
+
+timeoutOfReqInCache: 600
+
+dbEngParam: svcName=dbEng; dbName=BetterQuant; host=0.0.0.0; port=3306; username=root; password=123456
+dbTaskDispatcherParam: moduleName=dbTaskDispatcher
+
+milliSecIntervalOfTBLMonitorOfSymbolInfo: 10000
+milliSecIntervalOfSyncTask: 100
+
+tdSrvTaskDispatcherParam: moduleName=TDSrvTaskDispatcherParam;taskRandAssignedThreadPoolSize=0;taskSpecificThreadPoolSize=4;preCreateTaskSpecificThreadPool=1
+
+tdSrvRiskPluginPath: ./plugin/
+
+logger: 
+  queueSize: 128
+  backingThreadsCount: 1
+  defaultLoggerName: defaultLogger
+  loggerGroup: 
+    - 
+      loggerName: "defaultLogger"
+      maxFiles: 10
+      maxSize: 104857600
+      outputDir: "data/logs/bqtd-srv"
+      outputFilename: "bqtd-srv"
+      rotatingSinkPattern: "[%Y%m%d %T.%f] [%L] [%t] [%s:%#] %v"
+      stdoutSinkPattern: "[%Y%m%d %T.%f] [%^%L%$] [%t] [%s:%#] %v"

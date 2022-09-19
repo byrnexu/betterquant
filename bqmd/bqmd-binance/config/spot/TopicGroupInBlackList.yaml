@@ -1,0 +1,9 @@
+topicGroup:
+  - 'OKB-USDT@Trades'
+  - 'OKT-USDT@Trades'
+  - 'OKB-USDT@Tickers'
+  - 'OKT-USDT@Tickers'
+  - 'OKB-USDT@Candle'
+  - 'OKT-USDT@Candle'
+  - 'OKB-USDT@Books@400'
+  - 'OKT-USDT@Books@400'

@@ -1,0 +1,60 @@
+aux_source_directory(. BENCH_SRC_LIST)
+set(BENCH_SRC_LIST ${BENCH_SRC_LIST})
+add_executable(${BENCH_PROJECT_NAME} ${BENCH_SRC_LIST})
+
+if(${CMAKE_BUILD_TYPE} MATCHES Debug)
+    set_target_properties(${BENCH_PROJECT_NAME} PROPERTIES DEBUG_POSTFIX "-d-${PROJ_VER}")
+    add_custom_target(link_bench_target ALL
+        COMMAND ${CMAKE_COMMAND} -E create_symlink "${BENCH_PROJECT_NAME}-d-${PROJ_VER}" ${EXECUTABLE_OUTPUT_PATH}/${BENCH_PROJECT_NAME}-d)
+else()
+    set_target_properties(${BENCH_PROJECT_NAME} PROPERTIES RELEASE_POSTFIX "-${PROJ_VER}")
+    add_custom_target(link_bench_target ALL
+        COMMAND ${CMAKE_COMMAND} -E create_symlink "${BENCH_PROJECT_NAME}-${PROJ_VER}" ${EXECUTABLE_OUTPUT_PATH}/${BENCH_PROJECT_NAME})
+endif()
+
+target_include_directories(${BENCH_PROJECT_NAME}
+    PUBLIC "${PROJECT_SOURCE_DIR}/inc"
+    PUBLIC "${PROJECT_SOURCE_DIR}/src"
+    PUBLIC "${MYSQLCPPCONN_INC_DIR}"
+    PUBLIC "${YYJSON_INC_DIR}"
+    PUBLIC "${RAPIDJSON_INC_DIR}"
+    PUBLIC "${NLOHMANN_JSON_INC_DIR}"
+    PUBLIC "${CPR_INC_DIR}"
+    PUBLIC "${YAMLCPP_INC_DIR}"
+    PUBLIC "${WEBSOCKETPP_INC_DIR}"
+    PUBLIC "${SPDLOG_INC_DIR}"
+    PUBLIC "${BOOST_INC_DIR}"
+    PUBLIC "${READERWRITER_QUEUE_INC_DIR}"
+    PUBLIC "${CONCURRENT_QUEUE_INC_DIR}"
+    PUBLIC "${MAGIC_ENUM_INC_DIR}"
+    PUBLIC "${FMT_INC_DIR}"
+    PUBLIC "${XXHASH_INC_DIR}"
+    PUBLIC "${MIMALLOC_INC_DIR}"
+    PUBLIC "${BENCHMARK_INC_DIR}"
+    )
+
+target_link_directories(${BENCH_PROJECT_NAME}
+    PUBLIC "${PROJECT_SOURCE_DIR}/lib"
+    PUBLIC "${MYSQLCPPCONN_LIB_DIR}"
+    PUBLIC "${YYJSON_LIB_DIR}"
+    PUBLIC "${NLOHMANN_JSON_LIB_DIR}"
+    PUBLIC "${CPR_LIB_DIR}"
+    PUBLIC "${YAMLCPP_LIB_DIR}"
+    PUBLIC "${WEBSOCKETPP_LIB_DIR}"
+    PUBLIC "${SPDLOG_LIB_DIR}"
+    PUBLIC "${BOOST_LIB_DIR}"
+    PUBLIC "${READERWRITER_QUEUE_LIB_DIR}"
+    PUBLIC "${MAGIC_ENUM_LIB_DIR}"
+    PUBLIC "${FMT_LIB_DIR}"
+    PUBLIC "${XXHASH_LIB_DIR}"
+    PUBLIC "${MIMALLOC_LIB_DIR}"
+    PUBLIC "${BENCHMARK_LIB_DIR}"
+    )
+
+target_link_libraries(${BENCH_PROJECT_NAME}
+    libyyjson.a
+    libfmt.a
+    libbenchmark.a
+    dl
+    pthread
+    )

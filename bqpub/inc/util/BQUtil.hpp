@@ -1,0 +1,25 @@
+#pragma once
+
+#include "def/BQDef.hpp"
+#include "util/Pch.hpp"
+
+namespace bq {
+
+struct SHMIPCTask;
+using SHMIPCTaskSPtr = std::shared_ptr<SHMIPCTask>;
+
+struct StgInstInfo;
+using StgInstInfoSPtr = std::shared_ptr<StgInstInfo>;
+
+std::tuple<int, std::string> GetAddrFromTopic(const std::string& appName,
+                                              const std::string& topic);
+
+AcctId GetAcctIdFromTask(const SHMIPCTaskSPtr& task);
+
+std::string convertTopic(const std::string& topic);
+
+std::string ToPrettyStr(Decimal value);
+
+void PrintLogo();
+
+}  // namespace bq
