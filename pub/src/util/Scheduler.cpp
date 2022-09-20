@@ -1,3 +1,13 @@
+/*!
+ * \file Scheduler.cpp
+ * \project BetterQuant
+ *
+ * \author byrnexu
+ * \date 2022/09/08
+ *
+ * \brief
+ */
+
 #include "util/Scheduler.hpp"
 
 #include "util/Logger.hpp"

@@ -1,3 +1,13 @@
+/*!
+ * \file DBEngAsync.cpp
+ * \project BetterQuant
+ *
+ * \author byrnexu
+ * \date 2022/09/08
+ *
+ * \brief
+ */
+
 #include "db/DBEngAsync.hpp"
 
 #include "db/DBConnpool.hpp"

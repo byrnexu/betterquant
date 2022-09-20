@@ -1,3 +1,13 @@
+/*!
+ * \file Config.cpp
+ * \project BetterQuant
+ *
+ * \author byrnexu
+ * \date 2022/09/08
+ *
+ * \brief
+ */
+
 #include "Config.hpp"
 
 #include "def/BQConst.hpp"
@@ -84,10 +94,8 @@ std::tuple<int, TopicGroupSPtr> Config::getTopicGroupInConf(
     for (auto iter = topicGroup.begin(); iter != topicGroup.end(); ++iter) {
       const auto name = iter->as<std::string>();
       if (boost::contains(name, "*")) {
-        // 如果配中的topic包含*，那么直接放入返回的topic集合
         topicGroupInConf->emplace(name);
       } else {
-        // 如果配中的topic不包含*，那么加上前缀放入返回的topic集合
         const auto topic = fmt::format("{}{}{}", prefix, SEP_OF_TOPIC, name);
         topicGroupInConf->emplace(topic);
       }

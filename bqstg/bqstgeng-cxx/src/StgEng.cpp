@@ -1,3 +1,13 @@
+/*!
+ * \file StgEng.cpp
+ * \project BetterQuant
+ *
+ * \author byrnexu
+ * \date 2022/09/08
+ *
+ * \brief
+ */
+
 #include "StgEng.hpp"
 
 #include "StgEngImpl.hpp"

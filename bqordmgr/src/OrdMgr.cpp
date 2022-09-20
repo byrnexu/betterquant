@@ -1,3 +1,13 @@
+/*!
+ * \file OrdMgr.cpp
+ * \project BetterQuant
+ *
+ * \author byrnexu
+ * \date 2022/09/08
+ *
+ * \brief
+ */
+
 #include "OrdMgr.hpp"
 
 #include "db/DBEng.hpp"

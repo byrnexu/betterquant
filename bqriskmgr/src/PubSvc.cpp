@@ -1,3 +1,13 @@
+/*!
+ * \file PubSvc.cpp
+ * \project BetterQuant
+ *
+ * \author byrnexu
+ * \date 2022/09/08
+ *
+ * \brief
+ */
+
 #include "PubSvc.hpp"
 
 #include "AssetsMgr.hpp"

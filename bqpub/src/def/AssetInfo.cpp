@@ -1,3 +1,13 @@
+/*!
+ * \file AssetInfo.cpp
+ * \project BetterQuant
+ *
+ * \author byrnexu
+ * \date 2022/09/08
+ *
+ * \brief
+ */
+
 #include "db/TBLAssetInfo.hpp"
 #include "def/DataStruOfAssets.hpp"
 #include "def/Def.hpp"

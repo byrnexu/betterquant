@@ -1,3 +1,13 @@
+/*!
+ * \file SubAndUnSubSvcOfBinance.cpp
+ * \project BetterQuant
+ *
+ * \author byrnexu
+ * \date 2022/09/08
+ *
+ * \brief
+ */
+
 #include "SubAndUnSubSvcOfBinance.hpp"
 
 #include <boost/algorithm/string/erase.hpp>

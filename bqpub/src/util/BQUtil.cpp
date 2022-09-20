@@ -1,3 +1,13 @@
+/*!
+ * \file BQUtil.cpp
+ * \project BetterQuant
+ *
+ * \author byrnexu
+ * \date 2022/09/08
+ *
+ * \brief
+ */
+
 #include "util/BQUtil.hpp"
 
 #include "SHMIPC.hpp"
@@ -65,17 +75,20 @@ std::string ToPrettyStr(Decimal value) {
   return RemoveTrailingZero(ret);
 }
 
+// clang-format off
 void PrintLogo() {
   std::cout <<
-      R"(
+  R"(
         __         __  __                                       __ 
        / /_  ___  / /_/ /____  _____   ____ ___  ______ _____  / /_
       / __ \/ _ \/ __/ __/ _ \/ ___/  / __ `/ / / / __ `/ __ \/ __/
      / /_/ /  __/ /_/ /_/  __/ /     / /_/ / /_/ / /_/ / / / / /_  
     /_.___/\___/\__/\__/\___/_/      \__, /\__,_/\__,_/_/ /_/\__/  
                                        /_/   
-  )" << std::endl
-            << std::endl;
+  )" 
+  << std::endl 
+  << std::endl;
 }
+// clang-format on
 
 }  // namespace bq

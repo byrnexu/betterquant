@@ -1,3 +1,13 @@
+/*!
+ * \file DataStruOfTD.cpp
+ * \project BetterQuant
+ *
+ * \author byrnexu
+ * \date 2022/09/08
+ *
+ * \brief
+ */
+
 #include "def/DataStruOfTD.hpp"
 
 #include "db/TBLOrderInfo.hpp"
@@ -172,7 +182,6 @@ IsTheOrderCanBeUsedCalcPos OrderInfo::updateByOrderInfoFromTDGW(
   if (!isApproximatelyZero(newOrderInfo->dealSize_)) {
     if (isDefinitelyLessThan(newOrderInfo->dealSize_, orderSize_) ||
         isApproximatelyEqual(newOrderInfo->dealSize_, orderSize_)) {
-      // 如果成交数量小于等于下单数量
       dealSize_ = newOrderInfo->dealSize_;
     } else {
       isTheOrderCanBeUsedCalcPos = IsTheOrderCanBeUsedCalcPos::False;

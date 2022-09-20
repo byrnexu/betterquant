@@ -1,3 +1,13 @@
+/*!
+ * \file TDGWTaskHandler.cpp
+ * \project BetterQuant
+ *
+ * \author byrnexu
+ * \date 2022/09/08
+ *
+ * \brief
+ */
+
 #include "TDGWTaskHandler.hpp"
 
 #include "AssetsMgr.hpp"
@@ -58,8 +68,6 @@ void TDGWTaskHandler::handleMsgIdOnOrderRet(
     if (isTheOrderCanBeUsedCalcPos == IsTheOrderCanBeUsedCalcPos::True) {
       riskMgr_->getPosMgr()->updateByOrderInfoFromTDGW(ordRet, LockFunc::True);
     }
-
-    // TODO 通知此账号的仓位信息
   }
 }
 
@@ -92,8 +100,6 @@ void TDGWTaskHandler::handleMsgIdSyncAssets(
 
   LOG_D("Sync asset info group. {}",
         riskMgr_->getAssetsMgr()->toStr(LockFunc::True));
-
-  // TODO 通知此账号的资产信息
 }
 
 void TDGWTaskHandler::handleMsgIdOnTDGWReg(

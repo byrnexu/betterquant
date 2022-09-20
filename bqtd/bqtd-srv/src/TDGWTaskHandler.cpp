@@ -1,3 +1,13 @@
+/*!
+ * \file TDGWTaskHandler.cpp
+ * \project BetterQuant
+ *
+ * \author byrnexu
+ * \date 2022/09/08
+ *
+ * \brief
+ */
+
 #include "TDGWTaskHandler.hpp"
 
 #include "AssetsMgr.hpp"

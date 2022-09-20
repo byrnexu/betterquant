@@ -11,7 +11,7 @@ sed -i "s/SOLUTION_ROOT_DIR=.*/SOLUTION_ROOT_DIR=${SOLUTION_ROOT_DIR//\//\\/}/g"
  $(find . -type f | grep 'build-proj.sh')
 
 mkdir -p inc/cxx/
-bash rsync-inc.sh
+bash rsync-inc-of-stgeng.sh
 
 cd pub                && bash build-proj.sh && cd -
 cd bqipc              && bash build-proj.sh && cd -

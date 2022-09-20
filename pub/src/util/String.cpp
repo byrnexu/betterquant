@@ -1,3 +1,13 @@
+/*!
+ * \file String.cpp
+ * \project BetterQuant
+ *
+ * \author byrnexu
+ * \date 2022/09/08
+ *
+ * \brief
+ */
+
 #include "util/String.hpp"
 
 #include "def/Def.hpp"

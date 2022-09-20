@@ -1,3 +1,13 @@
+/*!
+ * \file SHMCli.cpp
+ * \project BetterQuant
+ *
+ * \author byrnexu
+ * \date 2022/09/08
+ *
+ * \brief
+ */
+
 #include "SHMCli.hpp"
 
 #include "SHMHeader.hpp"

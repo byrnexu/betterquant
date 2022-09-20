@@ -1,3 +1,13 @@
+/*!
+ * \file TDSrvRiskPluginFlowCtrl.cpp
+ * \project BetterQuant
+ *
+ * \author byrnexu
+ * \date 2022/09/08
+ *
+ * \brief
+ */
+
 #include "TDSrvRiskPluginFlowCtrl.hpp"
 
 #include "AssetsMgr.hpp"

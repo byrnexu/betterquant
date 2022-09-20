@@ -1,3 +1,13 @@
+/*!
+ * \file ConnMetaData.cpp
+ * \project BetterQuant
+ *
+ * \author byrnexu
+ * \date 2022/09/08
+ *
+ * \brief
+ */
+
 #include "ConnMetadata.hpp"
 
 #include "WebDef.hpp"

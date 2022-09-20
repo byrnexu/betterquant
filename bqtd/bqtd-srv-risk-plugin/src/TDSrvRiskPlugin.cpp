@@ -1,3 +1,13 @@
+/*!
+ * \file TDSrvRiskPlugin.cpp
+ * \project BetterQuant
+ *
+ * \author byrnexu
+ * \date 2022/09/08
+ *
+ * \brief
+ */
+
 #include "TDSrvRiskPlugin.hpp"
 
 #include "ConfigOfPlugin.hpp"
