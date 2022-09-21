@@ -66,8 +66,8 @@
 ### 🐋 [安装](doc/installation.md)
 ### ⭐ [文档](doc/documentation.md)
 ### 🧨 [注意](doc/caution.md)
-### 🥔 [TODO](doc/todo.md)
 ### ⁉️ [FAQ](doc/faq.md)
+### 🥔 [TODO](doc/todo.md)
 
 ---
 <div align="center"> <img  src="https://github-readme-streak-stats.herokuapp.com?user=byrnexu&theme=onedark&date_format=M%20j%5B%2C%20Y%5D" /> </div>
