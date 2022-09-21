@@ -62,12 +62,12 @@
 * 🔥 目前系统内延迟是10微秒这个量级（阿里云 Intel(R)cpu Xeon(R) Platinum 8369B CPU @ 2.70GHz），也就是行情进入系统开始计时、dispatch到convert线程转换为内部统一格式、发布到行情子系统的PUB_CHANNEL，策略收到行情将行情dispatch到订阅该行情的子策略，子策略发起报单，交易服务收到报单，经过最简单的风控（目前内置了流控插件），订单由交易服务发往交易网关，交易网关将订单转换为交易所的格式后发出后计时结束。后续版本会针对一些高频比如套利策略增加编译参数，消除一些如无锁异步队列导致的额外开销，将整个过程缩短到10微秒以内。<br/>
 ---
 ## 目录
+### 🥔 [TODO](doc/todo.md)
 ### 🛠 [编译](doc/build.md)
 ### 🐋 [安装](doc/installation.md)
 ### ⭐ [文档](doc/documentation.md)
 ### 🧨 [注意](doc/caution.md)
 ### ⁉️ [FAQ](doc/faq.md)
-### 🥔 [TODO](doc/todo.md)
 
 ---
 <div align="center"> <img  src="https://github-readme-streak-stats.herokuapp.com?user=byrnexu&theme=onedark&date_format=M%20j%5B%2C%20Y%5D" /> </div>
