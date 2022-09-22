@@ -1,14 +1,15 @@
 # 编译
+* 🔥 目前在Ubuntu 20.04.3 LTS上编译通过，系统本身是跨平台的，只是在Ubuntu 20.04.3 LTS完善了初始化脚本
+
 * 🔥 先Clone 代码到本地
 ```bash
    git clone git@github.com:byrnexu/betterquant.git
 ```
 
-* 🔥 目前在Ubuntu 20.04.3 LTS上编译通过，首次编译请先初始化系统安装必要的依赖，C++采用的是17标准。
+* 🔥 首次编译请先初始化系统安装必要的依赖，C++采用的是17标准。
 ```bash
    cd betterquant && bash init-sys.sh
 ```
-&emsp;&emsp;*代码本身是跨平台的，只是在Ubuntu 20.04.3 LTS完善了编译脚本*
 
 * 🔥 编译
 ```bash
