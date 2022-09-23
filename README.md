@@ -9,7 +9,7 @@
 
 [![github](https://img.shields.io/badge/github-byrnexu-brightgreen.svg)](https://github.com/byrnexu)
 
-# Better Quant    <code><img height="20" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/cpp/cpp.png" alt="cpp"></code>  
+# Better Quant      
 **Better quant today, best quant tomorrow.** 💪
   ## 前言
 &emsp;&emsp;目前交易所只接了数字货币的币安，但是国内现货和其他衍生品的仓位管理、盈亏计算、资产管理的算法及订单的状态维护基本都类似，稍加修改即可同时支持国内的二级市场，作为一个独立开发者，时间和精力有限，这些功能就暂时放在todo list里了。另外如果要接入更多的交易所，基于目前良好的行情和交易网关的接口，也可以逐个快速接入。betterquant的主要功能和特点包括：<br/>
