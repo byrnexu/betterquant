@@ -133,13 +133,13 @@ class StgEngImpl : public SvcBase {
   void doExit(const boost::system::error_code* ec, int signalNum) final;
 
  public:
-  OrderInfoSPtr order(const StgInstInfoSPtr& stgInstInfo, AcctId acctId,
-                      const std::string& symbolCode, Side side, PosSide posSide,
-                      Decimal orderPrice, Decimal orderSize);
+  OrderId order(const StgInstInfoSPtr& stgInstInfo, AcctId acctId,
+                const std::string& symbolCode, Side side, PosSide posSide,
+                Decimal orderPrice, Decimal orderSize);
 
-  OrderInfoSPtr order(OrderInfoSPtr& orderInfo);
+  OrderId order(OrderInfoSPtr& orderInfo);
 
-  OrderInfoSPtr cancelOrder(OrderId orderId);
+  int cancelOrder(OrderId orderId);
 
  public:
   int sub(StgInstId subscriber, const std::string& topic);
@@ -175,6 +175,7 @@ class StgEngImpl : public SvcBase {
 
   MarketDataCacheSPtr getMarketDataCache() const { return marketDataCache_; }
 
+  std::tuple<int, OrderInfoSPtr> getOrderInfo(OrderId orderId) const;
   OrdMgrSPtr getOrdMgr() const { return ordMgr_; }
 
   void resetBarrierOfStgStartSignal() {

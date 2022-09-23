@@ -47,16 +47,17 @@ class StgEng {
   void installStgInstTaskHandler(const StgInstTaskHandlerBaseSPtr& taskHandler);
 
  public:
-  OrderInfoSPtr order(const StgInstInfoSPtr& stgInstInfo, AcctId acctId,
-                      const std::string& symbolCode, Side side, PosSide posSide,
-                      Decimal orderPrice, Decimal orderSize);
+  OrderId order(const StgInstInfoSPtr& stgInstInfo, AcctId acctId,
+                const std::string& symbolCode, Side side, PosSide posSide,
+                Decimal orderPrice, Decimal orderSize);
 
-  OrderInfoSPtr order(OrderInfoSPtr& orderInfo);
+  OrderId order(OrderInfoSPtr& orderInfo);
 
-  OrderInfoSPtr cancelOrder(OrderId orderId);
+  int cancelOrder(OrderId orderId);
 
  public:
   MarketDataCacheSPtr getMarketDataCache() const;
+  std::tuple<int, OrderInfoSPtr> getOrderInfo(OrderId orderId) const;
 
  public:
   int sub(StgInstId subscriber, const std::string& topic);

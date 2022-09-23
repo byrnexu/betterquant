@@ -468,16 +468,16 @@ void StgEngImpl::doExit(const boost::system::error_code* ec, int signalNum) {
   getDBEng()->stop();
 }
 
-OrderInfoSPtr StgEngImpl::order(const StgInstInfoSPtr& stgInstInfo,
-                                AcctId acctId, const std::string& symbolCode,
-                                Side side, PosSide posSide, Decimal orderPrice,
-                                Decimal orderSize) {
+OrderId StgEngImpl::order(const StgInstInfoSPtr& stgInstInfo, AcctId acctId,
+                          const std::string& symbolCode, Side side,
+                          PosSide posSide, Decimal orderPrice,
+                          Decimal orderSize) {
   auto orderInfo = MakeOrderInfo(stgInstInfo, acctId, symbolCode, side, posSide,
                                  orderPrice, orderSize);
   return order(orderInfo);
 }
 
-OrderInfoSPtr StgEngImpl::order(OrderInfoSPtr& orderInfo) {
+OrderId StgEngImpl::order(OrderInfoSPtr& orderInfo) {
   int retOfGetMarketCodeAndSymbolType = 0;
   std::tie(retOfGetMarketCodeAndSymbolType, orderInfo->marketCode_,
            orderInfo->symbolType_) =
@@ -487,7 +487,7 @@ OrderInfoSPtr StgEngImpl::order(OrderInfoSPtr& orderInfo) {
     orderInfo->statusCode_ = retOfGetMarketCodeAndSymbolType;
     LOG_W("[{}] Order failed. [{} - {}] {}", appName_, orderInfo->statusCode_,
           GetStatusMsg(orderInfo->statusCode_), orderInfo->toShortStr());
-    return orderInfo;
+    return retOfGetMarketCodeAndSymbolType;
   }
 
   const auto [retOfGetSym, recSymbolInfo] =
@@ -498,7 +498,7 @@ OrderInfoSPtr StgEngImpl::order(OrderInfoSPtr& orderInfo) {
     orderInfo->statusCode_ = retOfGetSym;
     LOG_W("[{}] Order failed. [{} - {}] {}", appName_, orderInfo->statusCode_,
           GetStatusMsg(orderInfo->statusCode_), orderInfo->toShortStr());
-    return orderInfo;
+    return retOfGetSym;
   }
 
   const auto [retOfGetStgInst, stgInstInfo] =
@@ -508,7 +508,7 @@ OrderInfoSPtr StgEngImpl::order(OrderInfoSPtr& orderInfo) {
     orderInfo->statusCode_ = retOfGetStgInst;
     LOG_W("[{}] Order failed. [{} - {}] {}", appName_, orderInfo->statusCode_,
           GetStatusMsg(orderInfo->statusCode_), orderInfo->toShortStr());
-    return orderInfo;
+    return retOfGetStgInst;
   }
 
   if (orderInfo->symbolType_ == SymbolType::Spot) {
@@ -526,7 +526,7 @@ OrderInfoSPtr StgEngImpl::order(OrderInfoSPtr& orderInfo) {
     orderInfo->statusCode_ = ret;
     LOG_W("[{}] Order failed. [{} - {}] {}", appName_, orderInfo->statusCode_,
           GetStatusMsg(orderInfo->statusCode_), orderInfo->toShortStr());
-    return orderInfo;
+    return ret;
   }
 
 #ifdef PERF_TEST
@@ -548,17 +548,17 @@ OrderInfoSPtr StgEngImpl::order(OrderInfoSPtr& orderInfo) {
 #ifdef PERF_TEST
   EXEC_PERF_TEST("Order", orderInfo->orderTime_, 100, 10);
 #endif
-  return std::make_shared<OrderInfo>(*orderInfo);
+  return 0;
 }
 
-OrderInfoSPtr StgEngImpl::cancelOrder(OrderId orderId) {
+int StgEngImpl::cancelOrder(OrderId orderId) {
   auto [ret, orderInfo] = getOrdMgr()->get(orderId, DeepClone::False);
   if (ret != 0) {
     auto orderInfo = std::make_shared<OrderInfo>();
     orderInfo->statusCode_ = ret;
     LOG_W("[{}] Cancel order {} failed. [{} - {}]", appName_, orderId,
           orderInfo->statusCode_, GetStatusMsg(orderInfo->statusCode_));
-    return orderInfo;
+    return ret;
   }
 
   shmCliOfTDSrv_->asyncSendMsgWithZeroCopy(
@@ -571,7 +571,7 @@ OrderInfoSPtr StgEngImpl::cancelOrder(OrderId orderId) {
   cacheTaskOfSyncGroup(MSG_ID_ON_CANCEL_ORDER, orderInfo, SyncToRiskMgr::True,
                        SyncToDB::False);
 
-  return std::make_shared<OrderInfo>(*orderInfo);
+  return 0;
 }
 
 int StgEngImpl::sub(StgInstId subscriber, const std::string& topic) {
@@ -637,6 +637,10 @@ void StgEngImpl::saveToDB(const PnlSPtr& pnl) {
   if (ret != 0) {
     LOG_W("Insert pnl to db failed. [{}]", sql);
   }
+}
+
+std::tuple<int, OrderInfoSPtr> StgEngImpl::getOrderInfo(OrderId orderId) const {
+  return ordMgr_->get(orderId, DeepClone::True, LockFunc::True);
 }
 
 ScheduleTaskBundleSPtr StgEngImpl::getScheduleTaskBundle() {

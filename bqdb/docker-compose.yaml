@@ -1,0 +1,24 @@
+version: '3'
+
+networks:
+  bqnet:
+    external: true
+
+services:
+
+  mysql:
+    image: mysql:5.7.37
+    container_name: bqdb
+    ports:
+      - 3306:3306
+    volumes:
+      - $ROOT_DIR_OF_SOLUTION/../test_sql:/docker-entrypoint-initdb.d
+      - $ROOT_DIR_OF_INSTALLATION/mysql/data:/var/lib/mysql
+      - $ROOT_DIR_OF_INSTALLATION/mysql/conf.d:/etc/mysql/conf.d
+      - $ROOT_DIR_OF_INSTALLATION/mysql/logs:/logs
+    environment:
+      MYSQL_ROOT_PASSWORD: "${DB_PASSWD}"
+      MYSQL_DATABASE: BetterQuant
+    restart: always
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER --password=$$MYSQL_PASSWORD

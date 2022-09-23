@@ -73,6 +73,7 @@ std::tuple<int, std::vector<SymbolInfoSPtr>, std::uint64_t, Decimal> CalcPrice(
     const std::string& baseCurrency, const std::string& quoteCurrency,
     const std::string& quoteCurrencyForCalc,
     const std::string& quoteCurrencyForConv) {
+
   const auto makeSymbolGroupForCalc = [&]() {
     const auto s1 = fmt::format("{}{}{}", quoteCurrencyForCalc,
                                 SEP_OF_SYMBOL_SPOT, quoteCurrency);

@@ -98,24 +98,27 @@ void StgEng::installStgInstTaskHandler(
 
 }  // namespace bq::stg
 
-OrderInfoSPtr StgEng::order(const StgInstInfoSPtr& stgInstInfo, AcctId acctId,
-                            const std::string& symbolCode, Side side,
-                            PosSide posSide, Decimal orderPrice,
-                            Decimal orderSize) {
+OrderId StgEng::order(const StgInstInfoSPtr& stgInstInfo, AcctId acctId,
+                      const std::string& symbolCode, Side side, PosSide posSide,
+                      Decimal orderPrice, Decimal orderSize) {
   return stgEngImpl_->order(stgInstInfo, acctId, symbolCode, side, posSide,
                             orderPrice, orderSize);
 }
 
-OrderInfoSPtr StgEng::order(OrderInfoSPtr& orderInfo) {
+OrderId StgEng::order(OrderInfoSPtr& orderInfo) {
   return stgEngImpl_->order(orderInfo);
 }
 
-OrderInfoSPtr StgEng::cancelOrder(OrderId orderId) {
+int StgEng::cancelOrder(OrderId orderId) {
   return stgEngImpl_->cancelOrder(orderId);
 }
 
 MarketDataCacheSPtr StgEng::getMarketDataCache() const {
   return stgEngImpl_->getMarketDataCache();
+}
+
+std::tuple<int, OrderInfoSPtr> StgEng::getOrderInfo(OrderId orderId) const {
+  return stgEngImpl_->getOrderInfo(orderId);
 }
 
 int StgEng::sub(StgInstId subscriber, const std::string& topic) {

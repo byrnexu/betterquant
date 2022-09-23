@@ -13,7 +13,7 @@ milliSecIntervalOfTBLMonitorOfStgInstInfo: 10000
 
 milliSecIntervalOfSyncTask: 5
 
-rootDirOfStgPrivateData: data/stg
+rootDirOfStgPrivateData: /dev/shm
 
 logger: 
   queueSize: 128

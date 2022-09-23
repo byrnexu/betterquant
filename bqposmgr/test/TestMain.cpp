@@ -36,6 +36,7 @@ OrderInfoSPtr MakeBaseOrderInfo() {
   return baseOrderInfo;
 }
 
+
 OrderInfoSPtr Make_S_U_Bid_0_01_PRICE_19999() {
   auto ret = MakeBaseOrderInfo();
   ret->symbolType_ = SymbolType::Perp;
@@ -979,6 +980,7 @@ TEST(PosMgr, PosMgrDoubleSideCShort) {
   EXPECT_TRUE(posMgr->toStr() == R"(
 1/2/3/4/Binance/CPerp/BTC-USDT-CPERP/Ask/Short/100/BTC fee=6e-06; pos=0; prePos=0; avgOpenPrice=20654.737167401676; pnlUnReal=0; pnlReal=7.047598111186435e-05)");
 }
+
 
 OrderInfoSPtr Make_S_U_Bid_0_01_SPOT_PRICE_19999() {
   auto ret = MakeBaseOrderInfo();
