@@ -19,8 +19,9 @@
 namespace bq {
 
 PosSnapshotImpl::PosSnapshotImpl(
-    const std::map<std::string, PosInfoSPtr>& posInfoDetail)
-    : posInfoDetail_(posInfoDetail) {}
+    const std::map<std::string, PosInfoSPtr>& posInfoDetail,
+    const MarketDataCacheSPtr& marketDataCache)
+    : posInfoDetail_(posInfoDetail), marketDataCache_(marketDataCache) {}
 
 const std::map<std::string, PosInfoSPtr>& PosSnapshotImpl::getPosInfoDetail()
     const {
@@ -28,8 +29,7 @@ const std::map<std::string, PosInfoSPtr>& PosSnapshotImpl::getPosInfoDetail()
 }
 
 std::tuple<int, PnlSPtr> PosSnapshotImpl::queryPnl(
-    const std::string& queryCond, const MarketDataCacheSPtr& marketDataCache,
-    const std::string& quoteCurrencyForCalc,
+    const std::string& queryCond, const std::string& quoteCurrencyForCalc,
     const std::string& quoteCurrencyForConv,
     const std::string& origQuoteCurrencyOfUBasedContract) {
   const auto keyGroup2Str = [](const auto& key2PnlGroup) {
@@ -49,8 +49,8 @@ std::tuple<int, PnlSPtr> PosSnapshotImpl::queryPnl(
   }
 
   const auto [statusCode, key2PnlGroup] =
-      queryPnlGroupBy(groupCond, marketDataCache, quoteCurrencyForCalc,
-                      quoteCurrencyForConv, origQuoteCurrencyOfUBasedContract);
+      queryPnlGroupBy(groupCond, quoteCurrencyForCalc, quoteCurrencyForConv,
+                      origQuoteCurrencyOfUBasedContract);
   if (statusCode != 0) {
     return {statusCode, nullptr};
   }
@@ -66,8 +66,7 @@ std::tuple<int, PnlSPtr> PosSnapshotImpl::queryPnl(
 }
 
 std::tuple<int, Key2PnlGroupSPtr> PosSnapshotImpl::queryPnlGroupBy(
-    const std::string& groupCond, const MarketDataCacheSPtr& marketDataCache,
-    const std::string& quoteCurrencyForCalc,
+    const std::string& groupCond, const std::string& quoteCurrencyForCalc,
     const std::string& quoteCurrencyForConv,
     const std::string& origQuoteCurrencyOfUBasedContract) {
   const auto iter = cond2Key2PnlGroup_.find(groupCond);
@@ -90,7 +89,7 @@ std::tuple<int, Key2PnlGroupSPtr> PosSnapshotImpl::queryPnlGroupBy(
     const auto& posInfoGroup = rec.second;
     for (const auto& posInfo : *posInfoGroup) {
       const auto curPnl = posInfo->calcPnl(
-          marketDataCache, quoteCurrencyForCalc, quoteCurrencyForConv,
+          marketDataCache_, quoteCurrencyForCalc, quoteCurrencyForConv,
           origQuoteCurrencyOfUBasedContract);
       pnl->fee_ += curPnl->fee_;
       pnl->pnlUnReal_ += curPnl->pnlUnReal_;

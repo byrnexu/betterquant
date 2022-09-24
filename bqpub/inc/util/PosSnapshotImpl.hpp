@@ -36,20 +36,19 @@ class PosSnapshotImpl {
   PosSnapshotImpl& operator=(const PosSnapshotImpl&&) = delete;
 
   explicit PosSnapshotImpl(
-      const std::map<std::string, PosInfoSPtr>& posInfoDetail);
+      const std::map<std::string, PosInfoSPtr>& posInfoDetail,
+      const MarketDataCacheSPtr& marketDataCache);
 
  public:
   const std::map<std::string, PosInfoSPtr>& getPosInfoDetail() const;
 
   std::tuple<int, PnlSPtr> queryPnl(
-      const std::string& queryCond, const MarketDataCacheSPtr& marketDataCache,
-      const std::string& quoteCurrencyForCalc,
+      const std::string& queryCond, const std::string& quoteCurrencyForCalc,
       const std::string& quoteCurrencyForConv,
       const std::string& origQuoteCurrencyOfUBasedContract = "USDT");
 
   std::tuple<int, Key2PnlGroupSPtr> queryPnlGroupBy(
-      const std::string& groupCond, const MarketDataCacheSPtr& marketDataCache,
-      const std::string& quoteCurrencyForCalc,
+      const std::string& groupCond, const std::string& quoteCurrencyForCalc,
       const std::string& quoteCurrencyForConv,
       const std::string& origQuoteCurrencyOfUBasedContract = "USDT");
 
@@ -65,6 +64,7 @@ class PosSnapshotImpl {
 
  private:
   std::map<std::string, PosInfoSPtr> posInfoDetail_;
+  MarketDataCacheSPtr marketDataCache_{nullptr};
 
   std::map<std::string, Key2PnlGroupSPtr> cond2Key2PnlGroup_;
   std::map<std::string, Key2PosInfoBundleSPtr> cond2Key2PosInfoBundle_;

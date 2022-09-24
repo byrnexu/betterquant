@@ -127,8 +127,8 @@ void StgInstTaskHandlerImpl::handleAsyncTaskImpl(
           MakeMsgSPtrByTask<PosUpdateOfAcctIdForPub>(asyncTask->task_);
       const auto posUpdateOfAcctId =
           MakePosUpdateOfAcctId(posUpdateOfAcctIdForPub);
-      const auto posSnapshot =
-          std::make_shared<PosSnapshot>(std::move(posUpdateOfAcctId));
+      const auto posSnapshot = std::make_shared<PosSnapshot>(
+          std::move(posUpdateOfAcctId), stgEng_->getMarketDataCache());
       stgInstTaskHandlerBundle_.onPosUpdateOfAcctId_(stgInstInfo, posSnapshot);
     } break;
 
@@ -137,8 +137,8 @@ void StgInstTaskHandlerImpl::handleAsyncTaskImpl(
           MakeMsgSPtrByTask<PosUpdateOfAcctIdForPub>(asyncTask->task_);
       const auto posSnapshotOfAcctId =
           MakePosUpdateOfAcctId(posUpdateOfAcctIdForPub);
-      const auto posSnapshot =
-          std::make_shared<PosSnapshot>(std::move(posSnapshotOfAcctId));
+      const auto posSnapshot = std::make_shared<PosSnapshot>(
+          std::move(posSnapshotOfAcctId), stgEng_->getMarketDataCache());
       stgInstTaskHandlerBundle_.onPosSnapshotOfAcctId_(stgInstInfo,
                                                        posSnapshot);
     } break;
@@ -148,8 +148,8 @@ void StgInstTaskHandlerImpl::handleAsyncTaskImpl(
           MakeMsgSPtrByTask<PosUpdateOfStgIdForPub>(asyncTask->task_);
       const auto posUpdateOfStgId =
           MakePosUpdateOfStgId(posUpdateOfStgIdForPub);
-      const auto posSnapshot =
-          std::make_shared<PosSnapshot>(std::move(posUpdateOfStgId));
+      const auto posSnapshot = std::make_shared<PosSnapshot>(
+          std::move(posUpdateOfStgId), stgEng_->getMarketDataCache());
       stgInstTaskHandlerBundle_.onPosUpdateOfStgId_(stgInstInfo, posSnapshot);
     } break;
 
@@ -158,8 +158,8 @@ void StgInstTaskHandlerImpl::handleAsyncTaskImpl(
           MakeMsgSPtrByTask<PosUpdateOfStgIdForPub>(asyncTask->task_);
       const auto posSnapshotOfStgId =
           MakePosUpdateOfStgId(posUpdateOfStgIdForPub);
-      const auto posSnapshot =
-          std::make_shared<PosSnapshot>(std::move(posSnapshotOfStgId));
+      const auto posSnapshot = std::make_shared<PosSnapshot>(
+          std::move(posSnapshotOfStgId), stgEng_->getMarketDataCache());
       stgInstTaskHandlerBundle_.onPosSnapshotOfStgId_(stgInstInfo, posSnapshot);
     } break;
 
@@ -168,8 +168,8 @@ void StgInstTaskHandlerImpl::handleAsyncTaskImpl(
           MakeMsgSPtrByTask<PosUpdateOfStgInstIdForPub>(asyncTask->task_);
       const auto posUpdateOfStgInstId =
           MakePosUpdateOfStgInstId(posUpdateOfStgInstIdForPub);
-      const auto posSnapshot =
-          std::make_shared<PosSnapshot>(std::move(posUpdateOfStgInstId));
+      const auto posSnapshot = std::make_shared<PosSnapshot>(
+          std::move(posUpdateOfStgInstId), stgEng_->getMarketDataCache());
       stgInstTaskHandlerBundle_.onPosUpdateOfStgInstId_(stgInstInfo,
                                                         posSnapshot);
     } break;
@@ -179,8 +179,8 @@ void StgInstTaskHandlerImpl::handleAsyncTaskImpl(
           MakeMsgSPtrByTask<PosUpdateOfStgInstIdForPub>(asyncTask->task_);
       const auto posSnapshotOfStgInstId =
           MakePosUpdateOfStgInstId(posUpdateOfStgInstIdForPub);
-      const auto posSnapshot =
-          std::make_shared<PosSnapshot>(std::move(posSnapshotOfStgInstId));
+      const auto posSnapshot = std::make_shared<PosSnapshot>(
+          std::move(posSnapshotOfStgInstId), stgEng_->getMarketDataCache());
       stgInstTaskHandlerBundle_.onPosSnapshotOfStgInstId_(stgInstInfo,
                                                           posSnapshot);
     } break;

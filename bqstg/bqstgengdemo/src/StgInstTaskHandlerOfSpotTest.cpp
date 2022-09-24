@@ -251,8 +251,7 @@ void StgInstTaskHandlerOfSpotTest::onPosUpdateOfStgId(
   if (StgInstIdOfTriggerSignal(stgInstInfo) == 1) {
     const auto queryCond = "stgId=10000";
     const auto [statusCode, pnl] =
-        posUpdate->queryPnl(queryCond, getStgEng()->getMarketDataCache(),
-                            QuoteCurrencyForCalc("USDT"));
+        posUpdate->queryPnl(queryCond, QuoteCurrencyForCalc("USDT"));
     if (statusCode == 0 && pnl) {
       getStgEng()->saveToDB(pnl);
       LOG_I("Query pnl of [{}]", pnl->toStr());
@@ -265,8 +264,7 @@ void StgInstTaskHandlerOfSpotTest::onPosUpdateOfStgId(
   if (StgInstIdOfTriggerSignal(stgInstInfo) == 1) {
     const auto queryCond = "stgId=10000&stgInstId=1";
     const auto [statusCode, pnl] =
-        posUpdate->queryPnl(queryCond, getStgEng()->getMarketDataCache(),
-                            QuoteCurrencyForCalc("USDT"));
+        posUpdate->queryPnl(queryCond, QuoteCurrencyForCalc("USDT"));
     if (statusCode == 0 && pnl) {
       getStgEng()->saveToDB(pnl);
       LOG_I("Query pnl of [{}]", pnl->toStr());
@@ -279,8 +277,7 @@ void StgInstTaskHandlerOfSpotTest::onPosUpdateOfStgId(
   if (StgInstIdOfTriggerSignal(stgInstInfo) == 1) {
     const auto queryCond = "stgId=10000&stgInstId=2";
     const auto [statusCode, pnl] =
-        posUpdate->queryPnl(queryCond, getStgEng()->getMarketDataCache(),
-                            QuoteCurrencyForCalc("USDT"));
+        posUpdate->queryPnl(queryCond, QuoteCurrencyForCalc("USDT"));
     if (statusCode == 0 && pnl) {
       getStgEng()->saveToDB(pnl);
       LOG_I("Query pnl of [{}]", pnl->toStr());
@@ -293,8 +290,7 @@ void StgInstTaskHandlerOfSpotTest::onPosUpdateOfStgId(
   if (StgInstIdOfTriggerSignal(stgInstInfo) == 1) {
     const auto queryCond = "stgId=10000&stgInstId=2&symbolCode=DOT-USDT-Perp";
     const auto [statusCode, pnl] =
-        posUpdate->queryPnl(queryCond, getStgEng()->getMarketDataCache(),
-                            QuoteCurrencyForCalc("USDT"));
+        posUpdate->queryPnl(queryCond, QuoteCurrencyForCalc("USDT"));
     if (statusCode == 0 && pnl) {
       getStgEng()->saveToDB(pnl);
       LOG_I("Query pnl of [{}]", pnl->toStr());
@@ -307,8 +303,7 @@ void StgInstTaskHandlerOfSpotTest::onPosUpdateOfStgId(
   if (StgInstIdOfTriggerSignal(stgInstInfo) == 1) {
     const auto queryCond = "stgId=10000&stgInstId=2&symbolCode=ETH-USDT-Perp";
     const auto [statusCode, pnl] =
-        posUpdate->queryPnl(queryCond, getStgEng()->getMarketDataCache(),
-                            QuoteCurrencyForCalc("USDT"));
+        posUpdate->queryPnl(queryCond, QuoteCurrencyForCalc("USDT"));
     if (statusCode == 0 && pnl) {
       getStgEng()->saveToDB(pnl);
       LOG_I("Query pnl of [{}]", pnl->toStr());

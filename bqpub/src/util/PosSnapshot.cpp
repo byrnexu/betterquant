@@ -15,8 +15,10 @@
 
 namespace bq {
 
-PosSnapshot::PosSnapshot(const std::map<std::string, PosInfoSPtr>& posInfoGroup)
-    : posSnapshotImpl_(std::make_shared<PosSnapshotImpl>(posInfoGroup)) {}
+PosSnapshot::PosSnapshot(const std::map<std::string, PosInfoSPtr>& posInfoGroup,
+                         const MarketDataCacheSPtr& marketDataCache)
+    : posSnapshotImpl_(
+          std::make_shared<PosSnapshotImpl>(posInfoGroup, marketDataCache)) {}
 
 const std::map<std::string, PosInfoSPtr>& PosSnapshot::getPosInfoDetail()
     const {
@@ -24,23 +26,21 @@ const std::map<std::string, PosInfoSPtr>& PosSnapshot::getPosInfoDetail()
 }
 
 std::tuple<int, PnlSPtr> PosSnapshot::queryPnl(
-    const std::string& groupCond, const MarketDataCacheSPtr& marketDataCache,
-    const std::string& quoteCurrencyForCalc,
+    const std::string& groupCond, const std::string& quoteCurrencyForCalc,
     const std::string& quoteCurrencyForConv,
     const std::string& origQuoteCurrencyOfUBasedContract) {
-  return posSnapshotImpl_->queryPnl(groupCond, marketDataCache,
-                                    quoteCurrencyForCalc, quoteCurrencyForConv,
+  return posSnapshotImpl_->queryPnl(groupCond, quoteCurrencyForCalc,
+                                    quoteCurrencyForConv,
                                     origQuoteCurrencyOfUBasedContract);
 }
 
 std::tuple<int, Key2PnlGroupSPtr> PosSnapshot::queryPnlGroupBy(
-    const std::string& groupCond, const MarketDataCacheSPtr& marketDataCache,
-    const std::string& quoteCurrencyForCalc,
+    const std::string& groupCond, const std::string& quoteCurrencyForCalc,
     const std::string& quoteCurrencyForConv,
     const std::string& origQuoteCurrencyOfUBasedContract) {
-  return posSnapshotImpl_->queryPnlGroupBy(
-      groupCond, marketDataCache, quoteCurrencyForCalc, quoteCurrencyForConv,
-      origQuoteCurrencyOfUBasedContract);
+  return posSnapshotImpl_->queryPnlGroupBy(groupCond, quoteCurrencyForCalc,
+                                           quoteCurrencyForConv,
+                                           origQuoteCurrencyOfUBasedContract);
 }
 
 std::tuple<int, PosInfoGroupSPtr> PosSnapshot::queryPosInfoGroup(

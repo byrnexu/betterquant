@@ -286,7 +286,8 @@ TEST(testPosSnapshotImpl, testPosSnapshotImplGroupBy) {
   posInfoDetail.emplace(posInfo3->getKey(), posInfo3);
   posInfoDetail.emplace(posInfo4->getKey(), posInfo4);
 
-  auto posSnapshotImpl = std::make_shared<PosSnapshotImpl>(posInfoDetail);
+  auto posSnapshotImpl =
+      std::make_shared<PosSnapshotImpl>(posInfoDetail, nullptr);
   auto [ret, posInfoGroup] =
       posSnapshotImpl->queryPosInfoGroupBy("acctId&userId");
   EXPECT_TRUE((*posInfoGroup)["acctId=1&userId=2"]->size() == 2);

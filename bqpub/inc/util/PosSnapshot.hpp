@@ -32,20 +32,19 @@ class PosSnapshot {
   PosSnapshot(const PosSnapshot&&) = delete;
   PosSnapshot& operator=(const PosSnapshot&&) = delete;
 
-  explicit PosSnapshot(const std::map<std::string, PosInfoSPtr>& posInfoDetail);
+  explicit PosSnapshot(const std::map<std::string, PosInfoSPtr>& posInfoDetail,
+                       const MarketDataCacheSPtr& marketDataCache);
 
  public:
   const std::map<std::string, PosInfoSPtr>& getPosInfoDetail() const;
 
   std::tuple<int, PnlSPtr> queryPnl(
-      const std::string& groupCond, const MarketDataCacheSPtr& marketDataCache,
-      const std::string& quoteCurrencyForCalc,
+      const std::string& groupCond, const std::string& quoteCurrencyForCalc,
       const std::string& quoteCurrencyForConv = "USDT",
       const std::string& origQuoteCurrencyOfUBasedContract = "USDT");
 
   std::tuple<int, Key2PnlGroupSPtr> queryPnlGroupBy(
-      const std::string& groupCond, const MarketDataCacheSPtr& marketDataCache,
-      const std::string& quoteCurrencyForCalc,
+      const std::string& groupCond, const std::string& quoteCurrencyForCalc,
       const std::string& quoteCurrencyForConv = "USDT",
       const std::string& origQuoteCurrencyOfUBasedContract = "USDT");
 
