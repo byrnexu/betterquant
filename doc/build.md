@@ -17,3 +17,9 @@
 ```
 &emsp;&emsp;系统会自动下载并编译第三方库。<br/>
 &emsp;&emsp;由于开启了并行编译，因此可能编译过程系统内存不足导致中断，请将setting.sh中DEFAULT_PARALLEL_COMPILE_THREAD_NUM=8从8修改为更小的数值🎃。
+
+* 🔥 生成策略需要的头文件和库
+
+&emsp;&emsp;运行脚本
+```bash
+   bash deploy_stgeng.sh

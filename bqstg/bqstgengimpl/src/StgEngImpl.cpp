@@ -552,7 +552,7 @@ OrderId StgEngImpl::order(OrderInfoSPtr& orderInfo) {
 }
 
 int StgEngImpl::cancelOrder(OrderId orderId) {
-  auto [ret, orderInfo] = getOrdMgr()->get(orderId, DeepClone::False);
+  auto [ret, orderInfo] = getOrdMgr()->getOrderInfo(orderId, DeepClone::False);
   if (ret != 0) {
     auto orderInfo = std::make_shared<OrderInfo>();
     orderInfo->statusCode_ = ret;
@@ -640,7 +640,7 @@ void StgEngImpl::saveToDB(const PnlSPtr& pnl) {
 }
 
 std::tuple<int, OrderInfoSPtr> StgEngImpl::getOrderInfo(OrderId orderId) const {
-  return ordMgr_->get(orderId, DeepClone::True, LockFunc::True);
+  return ordMgr_->getOrderInfo(orderId, DeepClone::True, LockFunc::True);
 }
 
 ScheduleTaskBundleSPtr StgEngImpl::getScheduleTaskBundle() {

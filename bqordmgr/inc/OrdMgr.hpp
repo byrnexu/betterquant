@@ -70,13 +70,12 @@ class OrdMgr {
 
   int remove(OrderId orderId, LockFunc lockFunc = LockFunc::True);
 
-  std::tuple<int, OrderInfoSPtr> get(OrderId orderId, DeepClone deepClone,
-                                     LockFunc lockFunc = LockFunc::True);
+  std::tuple<int, OrderInfoSPtr> getOrderInfo(
+      OrderId orderId, DeepClone deepClone, LockFunc lockFunc = LockFunc::True);
 
-  std::tuple<int, OrderInfoSPtr> get(MarketCode marketCode,
-                                     ExchOrderId exchOrderId,
-                                     DeepClone deepClone,
-                                     LockFunc lockFunc = LockFunc::True);
+  std::tuple<int, OrderInfoSPtr> getOrderInfo(
+      MarketCode marketCode, ExchOrderId exchOrderId, DeepClone deepClone,
+      LockFunc lockFunc = LockFunc::True);
 
   std::vector<OrderInfoSPtr> getOrderInfoGroup(
       std::uint32_t secAgoTheOrderNeedToBeSynced,

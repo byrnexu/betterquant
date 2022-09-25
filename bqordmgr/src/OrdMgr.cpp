@@ -92,8 +92,9 @@ int OrdMgr::remove(OrderId orderId, LockFunc lockFunc) {
   return SCODE_ORD_MGR_REMOVE_ORDER_INFO_FAILED;
 }
 
-std::tuple<int, OrderInfoSPtr> OrdMgr::get(OrderId orderId, DeepClone deepClone,
-                                           LockFunc lockFunc) {
+std::tuple<int, OrderInfoSPtr> OrdMgr::getOrderInfo(OrderId orderId,
+                                                    DeepClone deepClone,
+                                                    LockFunc lockFunc) {
   {
     SPIN_LOCK(mtxOrderInfoGroup_);
     auto& idx = orderInfoGroup_->get<TagOrderId>();
@@ -113,10 +114,10 @@ std::tuple<int, OrderInfoSPtr> OrdMgr::get(OrderId orderId, DeepClone deepClone,
   return {SCODE_ORD_MGR_CAN_NOT_FIND_ORDER, nullptr};
 }
 
-std::tuple<int, OrderInfoSPtr> OrdMgr::get(MarketCode marketCode,
-                                           ExchOrderId exchOrderId,
-                                           DeepClone deepClone,
-                                           LockFunc lockFunc) {
+std::tuple<int, OrderInfoSPtr> OrdMgr::getOrderInfo(MarketCode marketCode,
+                                                    ExchOrderId exchOrderId,
+                                                    DeepClone deepClone,
+                                                    LockFunc lockFunc) {
   {
     SPIN_LOCK(mtxOrderInfoGroup_);
     auto& idx = orderInfoGroup_->get<TagMarketCodeExchOrderId>();
