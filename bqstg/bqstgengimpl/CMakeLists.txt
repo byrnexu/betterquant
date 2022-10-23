@@ -53,6 +53,7 @@ add_dependencies(${PROJECT_NAME} ${3RDPARTY_DEPENDENCIES})
 message(STATUS "3RDPARTY_DEPENDENCIES ${3RDPARTY_DEPENDENCIES}")
 
 target_include_directories(${PROJECT_NAME}
+    PUBLIC "${SOLUTION_ROOT_DIR}/bqposmgr/inc"
     PUBLIC "${SOLUTION_ROOT_DIR}/bqordmgr/inc"
     PUBLIC "${SOLUTION_ROOT_DIR}/bqweb/inc"
     PUBLIC "${SOLUTION_ROOT_DIR}/bqipc/inc"
@@ -101,12 +102,14 @@ target_link_directories(${PROJECT_NAME}
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_link_libraries(${PROJECT_NAME}
+      PUBLIC bqposmgr-d
       PUBLIC bqordmgr-d
       PUBLIC bqipc-d
       PUBLIC bqpub-d
       )
 else()
     target_link_libraries(${PROJECT_NAME}
+      PUBLIC bqposmgr
       PUBLIC bqordmgr
       PUBLIC bqipc
       PUBLIC bqpub

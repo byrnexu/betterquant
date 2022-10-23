@@ -17,8 +17,6 @@
 
 namespace bq {
 
-
-
 SHMIPCBase::SHMIPCBase(const std::string& addr,
                        const DataRecvCallback& dataRecvCallback) {
   std::vector<std::string> fieldGroup;

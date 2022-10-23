@@ -136,7 +136,6 @@ IsTheAssetInfoUpdated AssetsMgr::updateByAssetInfoFromExch(
     isTheAssetInfoUpdated = IsTheAssetInfoUpdated::True;
   }
 
-
   return isTheAssetInfoUpdated;
 }
 

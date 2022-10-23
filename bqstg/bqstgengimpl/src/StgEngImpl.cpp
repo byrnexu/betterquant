@@ -11,6 +11,7 @@
 #include "StgEngImpl.hpp"
 
 #include "OrdMgr.hpp"
+#include "PosMgr.hpp"
 #include "SHMIPC.hpp"
 #include "StgEngUtil.hpp"
 #include "StgInstTaskHandlerImpl.hpp"
@@ -89,6 +90,7 @@ int StgEngImpl::doInit() {
 
   initSubMgr();
   initOrdMgr();
+  initPosMgr();
 
   initStgInstTaskDispatcher();
 
@@ -240,6 +242,12 @@ void StgEngImpl::initOrdMgr() {
       "SELECT * FROM `orderInfo` WHERE `stgId` = {} AND `orderStatus` < {}; ",
       getStgId(), filled);
   getOrdMgr()->init(*getConfig(), getDBEng(), sql);
+}
+
+void StgEngImpl::initPosMgr() {
+  const auto sql =
+      fmt::format("SELECT * FROM `posInfo` WHERE `stgId` = {}", getStgId());
+  getPosMgr()->init(*getConfig(), getDBEng(), sql);
 }
 
 int StgEngImpl::initStgInstTaskDispatcher() {

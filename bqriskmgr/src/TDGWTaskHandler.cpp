@@ -68,7 +68,6 @@ void TDGWTaskHandler::handleMsgIdOnOrderRet(
     if (isTheOrderCanBeUsedCalcPos == IsTheOrderCanBeUsedCalcPos::True) {
       riskMgr_->getPosMgr()->updateByOrderInfoFromTDGW(ordRet, LockFunc::True);
     }
-
   }
 }
 
@@ -101,7 +100,6 @@ void TDGWTaskHandler::handleMsgIdSyncAssets(
 
   LOG_D("Sync asset info group. {}",
         riskMgr_->getAssetsMgr()->toStr(LockFunc::True));
-
 }
 
 void TDGWTaskHandler::handleMsgIdOnTDGWReg(

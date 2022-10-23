@@ -207,8 +207,12 @@ void StgInstTaskHandlerImpl::handleAsyncTaskImpl(
 
 void StgInstTaskHandlerImpl::beforeOnOrderRet(
     const StgInstInfoSPtr& stgInstInfo, const OrderInfoSPtr& orderInfo) {
-  getStgEngImpl()->getOrdMgr()->updateByOrderInfoFromTDGW(
-      std::make_shared<OrderInfo>(*orderInfo));
+  const auto orderRet = std::make_shared<OrderInfo>(*orderInfo);
+  const auto [isTheOrderCanBeUsedCalcPos, orderInfoInOrdMgr] =
+      getStgEngImpl()->getOrdMgr()->updateByOrderInfoFromTDGW(orderRet);
+  if (isTheOrderCanBeUsedCalcPos == IsTheOrderCanBeUsedCalcPos::True) {
+    getStgEngImpl()->getOrdMgr()->updateByOrderInfoFromTDGW(orderRet);
+  }
 }
 
 }  // namespace bq::stg

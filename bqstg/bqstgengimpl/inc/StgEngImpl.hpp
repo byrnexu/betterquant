@@ -56,6 +56,9 @@ using SubMgrSPtr = std::shared_ptr<SubMgr>;
 class OrdMgr;
 using OrdMgrSPtr = std::shared_ptr<OrdMgr>;
 
+class PosMgr;
+using PosMgrSPtr = std::shared_ptr<PosMgr>;
+
 struct TaskOfSync;
 using TaskOfSyncSPtr = std::shared_ptr<TaskOfSync>;
 
@@ -113,6 +116,7 @@ class StgEngImpl : public SvcBase {
   void initSHMCliOfTDSrv();
   void initSHMCliOfRiskMgr();
   void initOrdMgr();
+  void initPosMgr();
   int initStgInstTaskDispatcher();
   void initScheduleTaskBundle();
 
@@ -177,6 +181,7 @@ class StgEngImpl : public SvcBase {
 
   std::tuple<int, OrderInfoSPtr> getOrderInfo(OrderId orderId) const;
   OrdMgrSPtr getOrdMgr() const { return ordMgr_; }
+  PosMgrSPtr getPosMgr() const { return posMgr_; }
 
   void resetBarrierOfStgStartSignal() {
     barrierOfStgStartSignal_ = std::make_shared<std::promise<void>>();
@@ -209,6 +214,7 @@ class StgEngImpl : public SvcBase {
   MarketDataCacheSPtr marketDataCache_{nullptr};
 
   OrdMgrSPtr ordMgr_{nullptr};
+  PosMgrSPtr posMgr_{nullptr};
   SubMgrSPtr subMgr_{nullptr};
 
   SHMCliSPtr shmCliOfTDSrv_{nullptr};
