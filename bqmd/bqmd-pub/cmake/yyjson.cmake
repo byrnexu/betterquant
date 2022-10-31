@@ -14,6 +14,7 @@ set(YYJSON_LIB_DIR   ${YYJSON_ROOT}/src/yyjson-${YYJSON_VER}/build)
 set(YYJSON_URL           https://github.com/ibireme/yyjson/archive/refs/tags/${YYJSON_VER}.tar.gz)
 set(YYJSON_CONFIGURE     cd ${YYJSON_ROOT}/src/yyjson-${YYJSON_VER} )
 set(YYJSON_BUILD         cd ${YYJSON_ROOT}/src/yyjson-${YYJSON_VER} && mkdir build && cd build && cmake .. && make CXXFLAGS+='-fPIC')
+set(YYJSON_INSTALL       echo "install yyjson")
 
 ExternalProject_Add(yyjson-${YYJSON_VER}
     URL                   ${YYJSON_URL}
@@ -22,7 +23,7 @@ ExternalProject_Add(yyjson-${YYJSON_VER}
     PREFIX                ${YYJSON_ROOT}
     CONFIGURE_COMMAND     ${YYJSON_CONFIGURE}
     BUILD_COMMAND         ${YYJSON_BUILD}
-    INSTALL_COMMAND       ""
+    INSTALL_COMMAND       ${YYJSON_INSTALL}
     )
 
 set(3RDPARTY_DEPENDENCIES ${3RDPARTY_DEPENDENCIES} yyjson-${YYJSON_VER})

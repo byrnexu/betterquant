@@ -27,6 +27,7 @@ struct FieldGroupOfVal {
 };
 
 struct FieldGroupOfAll {
+  std::uint32_t productId;
   std::uint32_t stgId;
   std::string stgName;
   std::uint32_t userIdOfAuthor;
@@ -35,7 +36,7 @@ struct FieldGroupOfAll {
   std::string stgInstName;
   std::uint32_t userId;
   int isDel;
-  JSER(FieldGroupOfAll, stgId, stgName, userIdOfAuthor, stgInstId,
+  JSER(FieldGroupOfAll, productId, stgId, stgName, userIdOfAuthor, stgInstId,
        stgInstParams, stgInstName, userId, isDel)
 };
 

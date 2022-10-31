@@ -38,10 +38,12 @@ std::string PosGroup2Str(const PosInfoGroup& posInfoGroup) {
 
 TEST(testPosInfo, testMergePosInfoOfSpot) {
   auto posInfo1 = std::make_shared<PosInfo>();
+  posInfo1->productId_ = 0;
   posInfo1->userId_ = 1;
   posInfo1->acctId_ = 2;
   posInfo1->stgId_ = 3;
   posInfo1->stgInstId_ = 4;
+  posInfo1->algoId_ = 5;
   posInfo1->marketCode_ = MarketCode::Binance;
   posInfo1->symbolType_ = SymbolType::Spot;
   strncpy(posInfo1->symbolCode_, "BTC-USDT", sizeof(posInfo1->symbolCode_) - 1);
@@ -66,10 +68,12 @@ TEST(testPosInfo, testMergePosInfoOfSpot) {
   posInfo2->totalAskSize_ = -100;
 
   auto posInfo3 = std::make_shared<PosInfo>();
+  posInfo3->productId_ = 0;
   posInfo3->userId_ = 1;
   posInfo3->acctId_ = 2;
   posInfo3->stgId_ = 3;
   posInfo3->stgInstId_ = 4;
+  posInfo3->algoId_ = 5;
   posInfo3->marketCode_ = MarketCode::Binance;
   posInfo3->symbolType_ = SymbolType::Spot;
   strncpy(posInfo3->symbolCode_, "BTC-USDT", sizeof(posInfo3->symbolCode_) - 1);
@@ -104,18 +108,20 @@ TEST(testPosInfo, testMergePosInfoOfSpot) {
   EXPECT_TRUE(posInfoGroup.size() == 2);
   EXPECT_TRUE(
       posInfoGroup[0]->toStr() ==
-      R"(1/2/3/4/Binance/Spot/BTC-USDT/Bid/Both/100/USDT fee=30; pos=200; prePos=0; avgOpenPrice=30000; pnlUnReal=60; pnlReal=100)");
+      R"(0/1/2/3/4/5/Binance/Spot/BTC-USDT/Bid/Both/100/USDT fee=30; pos=200; prePos=0; avgOpenPrice=30000; pnlUnReal=60; pnlReal=100)");
   EXPECT_TRUE(
       posInfoGroup[1]->toStr() ==
-      R"(1/2/3/4/Binance/Spot/BTC-USDT/Ask/Both/100/USDT fee=30; pos=-200; prePos=0; avgOpenPrice=30000; pnlUnReal=60; pnlReal=100)");
+      R"(0/1/2/3/4/5/Binance/Spot/BTC-USDT/Ask/Both/100/USDT fee=30; pos=-200; prePos=0; avgOpenPrice=30000; pnlUnReal=60; pnlReal=100)");
 }
 
 TEST(testPosInfo, testMergePosInfoOfUBaseContract) {
   auto posInfo1 = std::make_shared<PosInfo>();
+  posInfo1->productId_ = 0;
   posInfo1->userId_ = 1;
   posInfo1->acctId_ = 2;
   posInfo1->stgId_ = 3;
   posInfo1->stgInstId_ = 4;
+  posInfo1->algoId_ = 5;
   posInfo1->marketCode_ = MarketCode::Binance;
   posInfo1->symbolType_ = SymbolType::Perp;
   strncpy(posInfo1->symbolCode_, "BTC-USDT", sizeof(posInfo1->symbolCode_) - 1);
@@ -140,10 +146,12 @@ TEST(testPosInfo, testMergePosInfoOfUBaseContract) {
   posInfo2->totalAskSize_ = -100;
 
   auto posInfo3 = std::make_shared<PosInfo>();
+  posInfo3->productId_ = 0;
   posInfo3->userId_ = 1;
   posInfo3->acctId_ = 2;
   posInfo3->stgId_ = 3;
   posInfo3->stgInstId_ = 4;
+  posInfo3->algoId_ = 5;
   posInfo3->marketCode_ = MarketCode::Binance;
   posInfo3->symbolType_ = SymbolType::Perp;
   strncpy(posInfo3->symbolCode_, "BTC-USDT", sizeof(posInfo3->symbolCode_) - 1);
@@ -178,18 +186,20 @@ TEST(testPosInfo, testMergePosInfoOfUBaseContract) {
   EXPECT_TRUE(posInfoGroup.size() == 2);
   EXPECT_TRUE(
       posInfoGroup[0]->toStr() ==
-      R"(1/2/3/4/Binance/Perp/BTC-USDT/Bid/Both/100/USDT fee=30; pos=200; prePos=0; avgOpenPrice=30000; pnlUnReal=60; pnlReal=100)");
+      R"(0/1/2/3/4/5/Binance/Perp/BTC-USDT/Bid/Both/100/USDT fee=30; pos=200; prePos=0; avgOpenPrice=30000; pnlUnReal=60; pnlReal=100)");
   EXPECT_TRUE(
       posInfoGroup[1]->toStr() ==
-      R"(1/2/3/4/Binance/Perp/BTC-USDT/Ask/Both/100/USDT fee=30; pos=-200; prePos=0; avgOpenPrice=30000; pnlUnReal=60; pnlReal=100)");
+      R"(0/1/2/3/4/5/Binance/Perp/BTC-USDT/Ask/Both/100/USDT fee=30; pos=-200; prePos=0; avgOpenPrice=30000; pnlUnReal=60; pnlReal=100)");
 }
 
 TEST(testPosInfo, testMergePosInfoOfCBaseContract) {
   auto posInfo1 = std::make_shared<PosInfo>();
+  posInfo1->productId_ = 0;
   posInfo1->userId_ = 1;
   posInfo1->acctId_ = 2;
   posInfo1->stgId_ = 3;
   posInfo1->stgInstId_ = 4;
+  posInfo1->algoId_ = 5;
   posInfo1->marketCode_ = MarketCode::Binance;
   posInfo1->symbolType_ = SymbolType::CPerp;
   strncpy(posInfo1->symbolCode_, "BTC-USDT", sizeof(posInfo1->symbolCode_) - 1);
@@ -214,10 +224,12 @@ TEST(testPosInfo, testMergePosInfoOfCBaseContract) {
   posInfo2->totalAskSize_ = -100;
 
   auto posInfo3 = std::make_shared<PosInfo>();
+  posInfo3->productId_ = 0;
   posInfo3->userId_ = 1;
   posInfo3->acctId_ = 2;
   posInfo3->stgId_ = 3;
   posInfo3->stgInstId_ = 4;
+  posInfo3->algoId_ = 5;
   posInfo3->marketCode_ = MarketCode::Binance;
   posInfo3->symbolType_ = SymbolType::CPerp;
   strncpy(posInfo3->symbolCode_, "BTC-USDT", sizeof(posInfo3->symbolCode_) - 1);
@@ -252,10 +264,10 @@ TEST(testPosInfo, testMergePosInfoOfCBaseContract) {
   EXPECT_TRUE(posInfoGroup.size() == 2);
   EXPECT_TRUE(
       posInfoGroup[0]->toStr() ==
-      R"(1/2/3/4/Binance/CPerp/BTC-USDT/Bid/Both/100/USDT fee=30; pos=200; prePos=0; avgOpenPrice=26666.666666666668; pnlUnReal=60; pnlReal=100)");
+      R"(0/1/2/3/4/5/Binance/CPerp/BTC-USDT/Bid/Both/100/USDT fee=30; pos=200; prePos=0; avgOpenPrice=26666.666666666668; pnlUnReal=60; pnlReal=100)");
   EXPECT_TRUE(
       posInfoGroup[1]->toStr() ==
-      R"(1/2/3/4/Binance/CPerp/BTC-USDT/Ask/Both/100/USDT fee=30; pos=-200; prePos=0; avgOpenPrice=26666.666666666668; pnlUnReal=60; pnlReal=100)");
+      R"(0/1/2/3/4/5/Binance/CPerp/BTC-USDT/Ask/Both/100/USDT fee=30; pos=-200; prePos=0; avgOpenPrice=26666.666666666668; pnlUnReal=60; pnlReal=100)");
 }
 
 TEST(testPosSnapshotImpl, testPosSnapshotImplGroupBy) {

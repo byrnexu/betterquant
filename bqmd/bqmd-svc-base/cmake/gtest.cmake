@@ -14,6 +14,7 @@ set(GTEST_LIB_DIR   ${GTEST_ROOT}/src/gtest-${GTEST_VER}/build/lib/)
 set(GTEST_URL       https://github.com/google/googletest/archive/release-${GTEST_VER}.tar.gz)
 set(GTEST_CONFIGURE cd ${GTEST_ROOT}/src/gtest-${GTEST_VER} && mkdir -p build && cd build && cmake ..)
 set(GTEST_BUILD     cd ${GTEST_ROOT}/src/gtest-${GTEST_VER} && cd build && make)
+set(GTEST_INSTALL   echo "install gtest")
 
 ExternalProject_Add(gtest-${GTEST_VER}
     URL               ${GTEST_URL}
@@ -22,7 +23,7 @@ ExternalProject_Add(gtest-${GTEST_VER}
     PREFIX            ${GTEST_ROOT}
     CONFIGURE_COMMAND ${GTEST_CONFIGURE}
     BUILD_COMMAND     ${GTEST_BUILD}
-    INSTALL_COMMAND   ""
+    INSTALL_COMMAND   ${GTEST_INSTALL}
     )
 
 set(3RDPARTY_DEPENDENCIES ${3RDPARTY_DEPENDENCIES} gtest-${GTEST_VER})

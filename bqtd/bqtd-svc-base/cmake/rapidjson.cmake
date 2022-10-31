@@ -9,6 +9,7 @@ set(RAPIDJSON_URL_HASH  SHA256=bf7ced29704a1e696fbccf2a2b4ea068e7774fa37f6d7dd40
 set(RAPIDJSON_VER     ${RAPIDJSON_MAJOR_VER}.${RAPIDJSON_MINOR_VER}.${RAPIDJSON_PATCH_VER})
 set(RAPIDJSON_ROOT    ${3RDPARTY_PATH}/rapidjson)
 set(RAPIDJSON_INC_DIR ${RAPIDJSON_ROOT}/src/rapidjson-${RAPIDJSON_VER}/include)
+set(RAPIDJSON_INSTALL echo "install rapidjson")
 
 set(RAPIDJSON_URL https://github.com/Tencent/rapidjson/archive/v${RAPIDJSON_VER}.tar.gz)
 
@@ -19,7 +20,7 @@ ExternalProject_Add(rapidjson-${RAPIDJSON_VER}
     PREFIX            ${RAPIDJSON_ROOT}
     CONFIGURE_COMMAND ""
     BUILD_COMMAND     ""
-    INSTALL_COMMAND   ""
+    INSTALL_COMMAND   ${RAPIDJSON_INSTALL}
     )
 
 set(3RDPARTY_DEPENDENCIES ${3RDPARTY_DEPENDENCIES} rapidjson-${RAPIDJSON_VER})

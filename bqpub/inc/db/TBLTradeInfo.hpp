@@ -45,14 +45,17 @@ struct FieldGroupOfVal {
 };
 
 struct FieldGroupOfAll {
+  ProductId productId;
   UserId userId;
   AcctId acctId;
 
   StgId stgId;
   StgInstId stgInstId;
+  AlgoId algoId;
 
   std::string orderId;
   std::string exchOrderId;
+  std::string parentOrderId;
 
   std::string marketCode;
   std::string symbolType;
@@ -85,11 +88,12 @@ struct FieldGroupOfAll {
   std::uint64_t noUsedToCalcPos;
   std::int32_t statusCode;
 
-  JSER(FieldGroupOfAll, userId, acctId, stgId, stgInstId, orderId, exchOrderId,
-       marketCode, symbolType, symbolCode, exchSymbolCode, side, posSide,
-       orderPrice, orderSize, parValue, orderType, orderTypeExtra, orderTime,
-       fee, feeCurrency, dealSize, avgDealPrice, lastTradeId, lastDealPrice,
-       lastDealSize, lastDealTime, orderStatus, noUsedToCalcPos, statusCode)
+  JSER(FieldGroupOfAll, productId, userId, acctId, stgId, stgInstId, algoId,
+       orderId, exchOrderId, parentOrderId, marketCode, symbolType, symbolCode,
+       exchSymbolCode, side, posSide, orderPrice, orderSize, parValue,
+       orderType, orderTypeExtra, orderTime, fee, feeCurrency, dealSize,
+       avgDealPrice, lastTradeId, lastDealPrice, lastDealSize, lastDealTime,
+       orderStatus, noUsedToCalcPos, statusCode)
 };
 
 struct TableSchema {

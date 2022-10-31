@@ -24,10 +24,10 @@ using PosSnapshotImplSPtr = std::shared_ptr<PosSnapshotImpl>;
 
 class PosSnapshotImpl {
   inline static std::map<std::string, int> FieldName2NoInPosInfo{
-      {"userId", 0},     {"acctId", 1},      {"stgId", 2},
-      {"stgInstId", 3},  {"marketCode", 4},  {"symbolType", 5},
-      {"symbolCode", 6}, {"side", 7},        {"posSide", 8},
-      {"parValue", 9},   {"feeCurrency", 10}};
+      {"productId", 0},   {"userId", 1}, {"acctId", 2},     {"stgId", 3},
+      {"stgInstId", 4},   {"algoId", 5}, {"marketCode", 6}, {"symbolType", 7},
+      {"symbolCode", 8},  {"side", 9},   {"posSide", 10},   {"parValue", 11},
+      {"feeCurrency", 12}};
 
  public:
   PosSnapshotImpl(const PosSnapshotImpl&) = delete;

@@ -11,6 +11,7 @@
 #include "StgInstTaskHandlerImpl.hpp"
 
 #include "OrdMgr.hpp"
+#include "PosMgr.hpp"
 #include "SHMHeader.hpp"
 #include "SHMIPCTask.hpp"
 #include "StgEngImpl.hpp"
@@ -209,9 +210,11 @@ void StgInstTaskHandlerImpl::beforeOnOrderRet(
     const StgInstInfoSPtr& stgInstInfo, const OrderInfoSPtr& orderInfo) {
   const auto orderRet = std::make_shared<OrderInfo>(*orderInfo);
   const auto [isTheOrderCanBeUsedCalcPos, orderInfoInOrdMgr] =
-      getStgEngImpl()->getOrdMgr()->updateByOrderInfoFromTDGW(orderRet);
+      getStgEngImpl()->getOrdMgr()->updateByOrderInfoFromTDGW(orderRet,
+                                                              LockFunc::True);
   if (isTheOrderCanBeUsedCalcPos == IsTheOrderCanBeUsedCalcPos::True) {
-    getStgEngImpl()->getOrdMgr()->updateByOrderInfoFromTDGW(orderRet);
+    getStgEngImpl()->getPosMgr()->updateByOrderInfoFromTDGW(orderRet,
+                                                            LockFunc::True);
   }
 }
 

@@ -104,6 +104,10 @@ enum class IsTheAssetInfoUpdated { True = 1, False = 2 };
 
 constexpr static std::uint32_t MAX_DEPTH_LEVEL = 400;
 
+constexpr static std::uint16_t DEFAULT_PRODUCT_ID = 0xFFFF;
+constexpr static std::uint32_t DEFAULT_ALGO_ID = 0xFFFFFFFF;
+constexpr static std::uint64_t DEFAULT_PARENT_ORDER_ID = 0xFFFF;
+
 constexpr static std::uint16_t MAX_SYMBOL_CODE_LEN = 32;
 constexpr static std::uint16_t MAX_TRADE_ID_LEN = 32;
 constexpr static std::uint16_t MAX_CURRENCY_LEN = 16;

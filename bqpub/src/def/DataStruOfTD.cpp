@@ -280,12 +280,15 @@ std::string OrderInfo::toShortStr() const {
 std::string OrderInfo::getSqlOfReplace() const {
   const auto sql = fmt::format(
     "REPLACE INTO `BetterQuant`.`orderInfo` ("
+    "`productId`,"
     "`userId`,"
     "`acctId`,"
     "`stgId`,"
     "`stgInstId`,"
+    "`algoId`,"
     "`orderId`,"
     "`exchOrderId`,"
+    "`parentOrderId`,"
     "`marketCode`,"
     "`symbolType`,"
     "`symbolCode`,"
@@ -312,12 +315,15 @@ std::string OrderInfo::getSqlOfReplace() const {
     ")"
   "VALUES"
   "("
+    " {}, "  // productId 
     " {}, "  // userId
     " {}, "  // acctId
     " {}, "  // stgId
     " {}, "  // stgInstId
+    " {}, "  // algoId
     "'{}',"  // orderId
     "'{}',"  // exchOrderId
+    "'{}',"  // parentOrderId
     "'{}',"  // marketCode
     "'{}',"  // symbolType
     "'{}',"  // symbolCode
@@ -342,12 +348,15 @@ std::string OrderInfo::getSqlOfReplace() const {
     " {}, "  // statusCode
     "'{}' "  // statusMsg
   "); ",
+    productId_,
     userId_,
     acctId_,
     stgId_,
     stgInstId_,
+    algoId_,
     orderId_,
     exchOrderId_,
+    parentOrderId_,
     GetMarketName(marketCode_),
     magic_enum::enum_name(symbolType_),
     symbolCode_,
@@ -381,12 +390,15 @@ std::string OrderInfo::getSqlOfUSPOrderInfoUpdate() const {
   const auto sql = fmt::format(
   "call `uspOrderInfoUpdate` "
   "("
+    " {}, "  // productId 
     " {}, "  // userId
     " {}, "  // acctId
     " {}, "  // stgId
     " {}, "  // stgInstId
+    " {}, "  // algoId
     "'{}',"  // orderId
     "'{}',"  // exchOrderId
+    "'{}',"  // parentOrderId
     "'{}',"  // marketCode
     "'{}',"  // symbolType
     "'{}',"  // symbolCode
@@ -412,12 +424,15 @@ std::string OrderInfo::getSqlOfUSPOrderInfoUpdate() const {
     " {}, "  // statusCode
     "'{}' "  // statusMsg
   "); ",
+    productId_,
     userId_,
     acctId_,
     stgId_,
     stgInstId_,
+    algoId_,
     orderId_,
     exchOrderId_,
+    parentOrderId_,
     GetMarketName(marketCode_),
     magic_enum::enum_name(symbolType_),
     symbolCode_,
@@ -457,44 +472,52 @@ Decimal OrderInfo::getFeeOfLastTrade() const {
 
 std::string OrderInfo::getPosKey() const {
   const auto ret = fmt::format(
-      "{}/{}/{}/{}/{}/{}/{}/{}/{}/{}/{}", userId_, acctId_, stgId_, stgInstId_,
-      GetMarketName(marketCode_), magic_enum::enum_name(symbolType_),
-      symbolCode_, magic_enum::enum_name(side_),
-      magic_enum::enum_name(posSide_), parValue_, feeCurrency_);
+      "{}/{}/{}/{}/{}/{}/{}/{}/{}/{}/{}/{}/{}", productId_, userId_, acctId_,
+      stgId_, stgInstId_, algoId_, GetMarketName(marketCode_),
+      magic_enum::enum_name(symbolType_), symbolCode_,
+      magic_enum::enum_name(side_), magic_enum::enum_name(posSide_), parValue_,
+      feeCurrency_);
   return ret;
 }
 
 std::string OrderInfo::getPosKeyOfBid() const {
   const auto ret = fmt::format(
-      "{}/{}/{}/{}/{}/{}/{}/{}/{}/{}/{}", userId_, acctId_, stgId_, stgInstId_,
-      GetMarketName(marketCode_), magic_enum::enum_name(symbolType_),
-      symbolCode_, magic_enum::enum_name(Side::Bid),
-      magic_enum::enum_name(posSide_), parValue_, feeCurrency_);
+      "{}/{}/{}/{}/{}/{}/{}/{}/{}/{}/{}/{}/{}", productId_, userId_, acctId_,
+      stgId_, stgInstId_, algoId_, GetMarketName(marketCode_),
+      magic_enum::enum_name(symbolType_), symbolCode_,
+      magic_enum::enum_name(Side::Bid), magic_enum::enum_name(posSide_),
+      parValue_, feeCurrency_);
   return ret;
 }
 
 std::string OrderInfo::getPosKeyOfAsk() const {
   const auto ret = fmt::format(
-      "{}/{}/{}/{}/{}/{}/{}/{}/{}/{}/{}", userId_, acctId_, stgId_, stgInstId_,
-      GetMarketName(marketCode_), magic_enum::enum_name(symbolType_),
-      symbolCode_, magic_enum::enum_name(Side::Ask),
-      magic_enum::enum_name(posSide_), parValue_, feeCurrency_);
+      "{}/{}/{}/{}/{}/{}/{}/{}/{}/{}/{}/{}/{}", productId_, userId_, acctId_,
+      stgId_, stgInstId_, algoId_, GetMarketName(marketCode_),
+      magic_enum::enum_name(symbolType_), symbolCode_,
+      magic_enum::enum_name(Side::Ask), magic_enum::enum_name(posSide_),
+      parValue_, feeCurrency_);
   return ret;
 }
 
 OrderInfoSPtr MakeOrderInfo(const db::orderInfo::RecordSPtr& recOrderInfo) {
   auto orderInfo = std::make_shared<OrderInfo>();
 
+  orderInfo->productId_ = recOrderInfo->productId;
   orderInfo->userId_ = recOrderInfo->userId;
   orderInfo->acctId_ = recOrderInfo->acctId;
   orderInfo->stgId_ = recOrderInfo->stgId;
   orderInfo->stgInstId_ = recOrderInfo->stgInstId;
+  orderInfo->algoId_ = recOrderInfo->algoId;
 
   if (!recOrderInfo->orderId.empty()) {
     orderInfo->orderId_ = CONV(OrderId, recOrderInfo->orderId);
   }
   if (!recOrderInfo->exchOrderId.empty()) {
     orderInfo->exchOrderId_ = CONV(ExchOrderId, recOrderInfo->exchOrderId);
+  }
+  if (!recOrderInfo->parentOrderId.empty()) {
+    orderInfo->parentOrderId_ = CONV(OrderId, recOrderInfo->parentOrderId);
   }
 
   orderInfo->marketCode_ = GetMarketCode(recOrderInfo->marketCode);
@@ -547,16 +570,21 @@ OrderInfoSPtr MakeOrderInfo(const db::orderInfo::RecordSPtr& recOrderInfo) {
 OrderInfoSPtr MakeOrderInfo(const db::tradeInfo::RecordSPtr& recTradeInfo) {
   auto orderInfo = std::make_shared<OrderInfo>();
 
+  orderInfo->productId_ = recTradeInfo->productId;
   orderInfo->userId_ = recTradeInfo->userId;
   orderInfo->acctId_ = recTradeInfo->acctId;
   orderInfo->stgId_ = recTradeInfo->stgId;
   orderInfo->stgInstId_ = recTradeInfo->stgInstId;
+  orderInfo->algoId_ = recTradeInfo->algoId;
 
   if (!recTradeInfo->orderId.empty()) {
     orderInfo->orderId_ = CONV(OrderId, recTradeInfo->orderId);
   }
   if (!recTradeInfo->exchOrderId.empty()) {
     orderInfo->exchOrderId_ = CONV(ExchOrderId, recTradeInfo->exchOrderId);
+  }
+  if (!recTradeInfo->parentOrderId.empty()) {
+    orderInfo->parentOrderId_ = CONV(OrderId, recTradeInfo->parentOrderId);
   }
 
   orderInfo->marketCode_ = GetMarketCode(recTradeInfo->marketCode);
@@ -609,16 +637,18 @@ OrderInfoSPtr MakeOrderInfo(const db::tradeInfo::RecordSPtr& recTradeInfo) {
 OrderInfoSPtr MakeOrderInfo(const StgInstInfoSPtr& stgInstInfo, AcctId acctId,
                             const std::string& symbolCode, Side side,
                             PosSide posSide, Decimal orderPrice,
-                            Decimal orderSize) {
+                            Decimal orderSize, AlgoId algoId) {
   const auto now = GetTotalUSSince1970();
   const auto orderInfo = std::make_shared<OrderInfo>();
   orderInfo->orderTime_ = now;
 
+  orderInfo->productId_ = stgInstInfo->productId_;
   orderInfo->userId_ = stgInstInfo->userId_;
   orderInfo->acctId_ = acctId;
 
   orderInfo->stgId_ = stgInstInfo->stgId_;
   orderInfo->stgInstId_ = stgInstInfo->stgInstId_;
+  orderInfo->algoId_ = algoId;
 
   strncpy(orderInfo->symbolCode_, symbolCode.c_str(),
           sizeof(orderInfo->symbolCode_) - 1);

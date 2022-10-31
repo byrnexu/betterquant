@@ -25,14 +25,17 @@ using OrderInfoSPtr = std::shared_ptr<OrderInfo>;
 struct OrderInfo {
   SHMHeader shmHeader_;
 
+  ProductId productId_{DEFAULT_PRODUCT_ID};
   UserId userId_{0};
   AcctId acctId_{0};
 
   StgId stgId_{0};
   StgInstId stgInstId_{0};
+  AlgoId algoId_{DEFAULT_ALGO_ID};
 
   OrderId orderId_{0};
   ExchOrderId exchOrderId_{0};
+  OrderId parentOrderId_{DEFAULT_PARENT_ORDER_ID};
 
   MarketCode marketCode_{MarketCode::Others};
   SymbolType symbolType_{SymbolType::Others};

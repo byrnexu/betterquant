@@ -85,7 +85,8 @@ void TDGWTaskHandler::handleMsgIdOnOrderRet(
 
   if (isTheOrderCanBeUsedCalcPos == IsTheOrderCanBeUsedCalcPos::True) {
     const auto posChgInfo =
-        std::ext::tls_get<PosMgr>().updateByOrderInfoFromTDGW(ordRet);
+        std::ext::tls_get<PosMgr>().updateByOrderInfoFromTDGW(ordRet,
+                                                              LockFunc::False);
 
     PosChgInfoSPtr posInfGroup = std::make_shared<PosChgInfo>();
     posInfGroup->reserve(posChgInfo->size());

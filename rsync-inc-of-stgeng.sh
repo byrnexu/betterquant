@@ -10,7 +10,6 @@ rsync -avzPcR ./bqpub/inc/def/SymbolInfoIF.hpp inc/cxx/
 rsync -avzPcR ./bqpub/inc/BQPub.hpp inc/cxx/
 rsync -avzPcR ./bqpub/inc/util/PosSnapshot.hpp inc/cxx/
 rsync -avzPcR ./bqpub/inc/util/MarketDataCache.hpp inc/cxx/
-rsync -avzPcR ./bqpub/BQPub.hpp inc/cxx/
 rsync -avzPcR ./pub/inc/def/ConstIF.hpp inc/cxx/
 rsync -avzPcR ./pub/inc/def/DefIF.hpp inc/cxx/
 rsync -avzPcR ./pub/inc/def/StatusCode.hpp inc/cxx/

@@ -9,6 +9,7 @@ set(NLOHMANN_URL_HASH SHA256=d69f9deb6a75e2580465c6c4c5111b89c4dc2fa94e3a85fcd2f
 set(NLOHMANN_JSON_VER     ${NLOHMANN_JSON_MAJOR_VER}.${NLOHMANN_JSON_MINOR_VER}.${NLOHMANN_JSON_PATCH_VER})
 set(NLOHMANN_JSON_ROOT    ${3RDPARTY_PATH}/nlohmann_json)
 set(NLOHMANN_JSON_INC_DIR ${NLOHMANN_JSON_ROOT}/src/nlohmann_json-${NLOHMANN_JSON_VER}/include)
+set(NLOHMANN_INSTALL      echo "install nlohmann")
 
 set(NLOHMANN_JSON_URL https://github.com/nlohmann/json/archive/refs/tags/v${NLOHMANN_JSON_VER}.tar.gz)
 
@@ -19,7 +20,7 @@ ExternalProject_Add(nlohmann_json-${NLOHMANN_JSON_VER}
     PREFIX            ${NLOHMANN_JSON_ROOT}
     CONFIGURE_COMMAND ""
     BUILD_COMMAND     ""
-    INSTALL_COMMAND   ""
+    INSTALL_COMMAND   ${NLOHMANN_INSTALL} 
     )
 
 set(3RDPARTY_DEPENDENCIES ${3RDPARTY_DEPENDENCIES} nlohmann_json-${NLOHMANN_JSON_VER})

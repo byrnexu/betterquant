@@ -328,10 +328,11 @@ std::string PosInfo::toStr() const {
 
 std::string PosInfo::getKey() const {
   const auto ret = fmt::format(
-      "{}/{}/{}/{}/{}/{}/{}/{}/{}/{}/{}", userId_, acctId_, stgId_, stgInstId_,
-      GetMarketName(marketCode_), magic_enum::enum_name(symbolType_),
-      symbolCode_, magic_enum::enum_name(side_),
-      magic_enum::enum_name(posSide_), parValue_, feeCurrency_);
+      "{}/{}/{}/{}/{}/{}/{}/{}/{}/{}/{}/{}/{}", productId_, userId_, acctId_,
+      stgId_, stgInstId_, algoId_, GetMarketName(marketCode_),
+      magic_enum::enum_name(symbolType_), symbolCode_,
+      magic_enum::enum_name(side_), magic_enum::enum_name(posSide_), parValue_,
+      feeCurrency_);
   return ret;
 }
 
@@ -345,8 +346,9 @@ std::string PosInfo::getTopicPrefix() const {
 
 bool PosInfo::oneMoreFeeCurrencyThanInput(const PosInfoSPtr& posInfo) const {
   bool keyWithoutFeeCurrencyNotEqual =
-      (userId_ != posInfo->userId_ || acctId_ != posInfo->acctId_ ||
-       stgId_ != posInfo->stgId_ || stgInstId_ != posInfo->stgInstId_ ||
+      (productId_ != posInfo->productId_ || userId_ != posInfo->userId_ ||
+       acctId_ != posInfo->acctId_ || stgId_ != posInfo->stgId_ ||
+       stgInstId_ != posInfo->stgInstId_ || algoId_ != posInfo->algoId_ ||
        marketCode_ != posInfo->marketCode_ ||
        symbolType_ != posInfo->symbolType_ ||
        strcmp(symbolCode_, posInfo->symbolCode_) != 0 ||
@@ -376,10 +378,12 @@ bool PosInfo::isEqual(const PosInfoSPtr& posInfo) {
 std::string PosInfo::getSqlOfReplace() const {
 const auto sql = fmt::format(
 "REPLACE INTO `BetterQuant`.`posInfo` ("
+  "`productId`,"
   "`userId`,"
   "`acctId`,"
   "`stgId`,"
   "`stgInstId`,"
+  "`algoId`,"
   "`marketCode`,"
   "`symbolType`,"
   "`symbolCode`,"
@@ -400,10 +404,12 @@ const auto sql = fmt::format(
 ")"
 "VALUES"
 "("
+  " {} ,"  // productId
   " {} ,"  // userId
   " {} ,"  // acctId
   " {} ,"  // stgId
   " {} ,"  // stgInstId
+  " {} ,"  // algoId
   "'{}',"  // marketCode
   "'{}',"  // symbolType
   "'{}',"  // symbolCode
@@ -422,10 +428,12 @@ const auto sql = fmt::format(
   " {} ,"  // lastNoUsedToCalcPos
   "'{}' "  // updateTime
 "); ",
+  productId_,
   userId_,
   acctId_,
   stgId_,
   stgInstId_,
+  algoId_,
   GetMarketName(marketCode_),
   magic_enum::enum_name(symbolType_),
   symbolCode_,
@@ -450,10 +458,12 @@ return sql;
 std::string PosInfo::getSqlOfInsert() const {
 const auto sql = fmt::format(
 "INSERT INTO `BetterQuant`.`posInfo` ("
+  "`productId`,"
   "`userId`,"
   "`acctId`,"
   "`stgId`,"
   "`stgInstId`,"
+  "`algoId`,"
   "`marketCode`,"
   "`symbolType`,"
   "`symbolCode`,"
@@ -474,10 +484,12 @@ const auto sql = fmt::format(
 ")"
 "VALUES"
 "("
+  " {} ,"  // productId
   " {} ,"  // userId
   " {} ,"  // acctId
   " {} ,"  // stgId
   " {} ,"  // stgInstId
+  " {} ,"  // algoId
   "'{}',"  // marketCode
   "'{}',"  // symbolType
   "'{}',"  // symbolCode
@@ -496,10 +508,12 @@ const auto sql = fmt::format(
   " {} ,"  // lastNoUsedToCalcPos
   "'{}' "  // updateTime
 "); ",
+  productId_,
   userId_,
   acctId_,
   stgId_,
   stgInstId_,
+  algoId_,
   GetMarketName(marketCode_),
   magic_enum::enum_name(symbolType_),
   symbolCode_,
@@ -534,10 +548,12 @@ const auto sql = fmt::format(
   "`totalAskSize`       = {}, "
   "`lastNoUsedToCalcPos`= {},"
   "`updateTime`         ='{}' "
-"WHERE `userId`     = {}  "
+"WHERE `productId`  = {}  "
+  "AND `userId`     = {}  "
   "AND `acctId`     = {}  "
   "AND `stgId`      = {}  "
   "AND `stgInstId`  = {}  "
+  "AND `algoId`     = {}  "
   "AND `marketCode` ='{}' "
   "AND `symbolType` ='{}' "
   "AND `symbolCode` ='{}' "
@@ -555,10 +571,12 @@ const auto sql = fmt::format(
   totalAskSize_,
   lastNoUsedToCalcPos_,
   ConvertTsToDBTime(updateTime_),
+  productId_,
   userId_,
   acctId_,
   stgId_,
   stgInstId_,
+  algoId_,
   GetMarketName(marketCode_),
   magic_enum::enum_name(symbolType_),
   symbolCode_,
@@ -573,10 +591,12 @@ return sql;
 std::string PosInfo::getSqlOfDelete() const{
 const auto sql = fmt::format(
   "DELETE FROM `BetterQuant`.`posInfo` "
-  "WHERE `userId`     = {}  "
+  "WHERE `productId`  = {}  "
+  "  AND `userId`     = {}  "
   "  AND `acctId`     = {}  "
   "  AND `stgId`      = {}  "
   "  AND `stgInstId`  = {}  "
+  "  AND `algoId`     = {}  "
   "  AND `marketCode` ='{}' "
   "  AND `symbolType` ='{}' "
   "  AND `symbolCode` ='{}' "
@@ -584,10 +604,12 @@ const auto sql = fmt::format(
   "  AND `posSide`    ='{}' "
   "  AND `parValue`   ='{}' "
   "  AND `feeCurrency`='{}';",
+  productId_,
   userId_,
   acctId_,
   stgId_,
   stgInstId_,
+  algoId_,
   GetMarketName(marketCode_),
   magic_enum::enum_name(symbolType_),
   symbolCode_,
@@ -603,10 +625,12 @@ return sql;
 PosInfoSPtr MakePosInfo(const db::posInfo::RecordSPtr& recPosInfo) {
   auto posInfo = std::make_shared<PosInfo>();
 
+  posInfo->productId_ = recPosInfo->productId;
   posInfo->userId_ = recPosInfo->userId;
   posInfo->acctId_ = recPosInfo->acctId;
   posInfo->stgId_ = recPosInfo->stgId;
   posInfo->stgInstId_ = recPosInfo->stgInstId;
+  posInfo->algoId_ = recPosInfo->algoId;
 
   posInfo->marketCode_ =
       magic_enum::enum_cast<MarketCode>(recPosInfo->marketCode).value();
@@ -641,10 +665,12 @@ PosInfoSPtr MakePosInfo(const db::posInfo::RecordSPtr& recPosInfo) {
 PosInfoSPtr MakePosInfoOfContract(const OrderInfoSPtr& orderInfo) {
   auto posInfo = std::make_shared<PosInfo>();
 
+  posInfo->productId_ = orderInfo->productId_;
   posInfo->userId_ = orderInfo->userId_;
   posInfo->acctId_ = orderInfo->acctId_;
   posInfo->stgId_ = orderInfo->stgId_;
   posInfo->stgInstId_ = orderInfo->stgInstId_;
+  posInfo->algoId_ = orderInfo->algoId_;
 
   posInfo->marketCode_ = orderInfo->marketCode_;
   posInfo->symbolType_ = orderInfo->symbolType_;
@@ -682,10 +708,12 @@ PosInfoSPtr MakePosInfoOfContractWithKeyFields(const OrderInfoSPtr& orderInfo,
                                                Side side) {
   auto posInfo = std::make_shared<PosInfo>();
 
+  posInfo->productId_ = orderInfo->productId_;
   posInfo->userId_ = orderInfo->userId_;
   posInfo->acctId_ = orderInfo->acctId_;
   posInfo->stgId_ = orderInfo->stgId_;
   posInfo->stgInstId_ = orderInfo->stgInstId_;
+  posInfo->algoId_ = orderInfo->algoId_;
 
   posInfo->marketCode_ = orderInfo->marketCode_;
   posInfo->symbolType_ = orderInfo->symbolType_;

@@ -37,10 +37,12 @@ struct PosInfo {
 
   std::uint64_t keyHash_;
 
+  ProductId productId_{DEFAULT_PRODUCT_ID};
   UserId userId_;
   AcctId acctId_;
   StgId stgId_;
   StgInstId stgInstId_;
+  AlgoId algoId_{DEFAULT_ALGO_ID};
 
   MarketCode marketCode_;
   SymbolType symbolType_;

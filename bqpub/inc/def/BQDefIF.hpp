@@ -28,8 +28,12 @@ using SHMIPCAsyncTaskSPtr = std::shared_ptr<SHMIPCAsyncTask>;
 
 using Decimal = double;
 
+using ProductId = std::uint16_t;
+
 using StgId = std::uint16_t;
 using StgInstId = std::uint16_t;
+
+using AlgoId = std::uint32_t;
 
 using UserId = std::uint16_t;
 using AcctId = std::uint16_t;

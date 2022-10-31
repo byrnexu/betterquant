@@ -14,6 +14,7 @@ set(FMT_LIB_DIR   ${FMT_ROOT}/src/fmt-${FMT_VER}/build)
 set(FMT_URL  https://github.com/fmtlib/fmt/archive/refs/tags/${FMT_VER}.tar.gz)
 set(FMT_CONFIGURE cd ${FMT_ROOT}/src/fmt-${FMT_VER} && mkdir -p build && cd build && cmake .. -DCMAKE_POSITION_INDEPENDENT_CODE=ON)
 set(FMT_BUILD     cd ${FMT_ROOT}/src/fmt-${FMT_VER} && cd build && make -j8)
+set(FMT_INSTALL   echo "install fmt")
 
 ExternalProject_Add(fmt-${FMT_VER}
     URL                 ${FMT_URL}
@@ -22,7 +23,7 @@ ExternalProject_Add(fmt-${FMT_VER}
     PREFIX              ${FMT_ROOT}
     CONFIGURE_COMMAND   ${FMT_CONFIGURE}
     BUILD_COMMAND       ${FMT_BUILD}
-    INSTALL_COMMAND     ""
+    INSTALL_COMMAND     ${FMT_INSTALL}
     )
 
 set(3RDPARTY_DEPENDENCIES ${3RDPARTY_DEPENDENCIES} fmt-${FMT_VER})

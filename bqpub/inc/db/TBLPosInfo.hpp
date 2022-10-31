@@ -17,10 +17,12 @@
 namespace bq::db::posInfo {
 
 struct FieldGroupOfKey {
-  AcctId userId;
-  UserId acctId;
+  ProductId productId;
+  UserId userId;
+  AcctId acctId;
   StgId stgId;
   StgInstId stgInstId;
+  AlgoId algoId;
   std::string marketCode;
   std::string symbolType;
   std::string symbolCode;
@@ -29,8 +31,8 @@ struct FieldGroupOfKey {
   std::uint32_t parValue;
   std::string feeCurrency;
 
-  JSER(FieldGroupOfKey, userId, acctId, stgId, stgInstId, marketCode,
-       symbolType, symbolCode, side, posSide, parValue, feeCurrency)
+  JSER(FieldGroupOfKey, productId, userId, acctId, stgId, stgInstId, algoId,
+       marketCode, symbolType, symbolCode, side, posSide, parValue, feeCurrency)
 };
 
 struct FieldGroupOfVal {
@@ -49,10 +51,12 @@ struct FieldGroupOfVal {
 };
 
 struct FieldGroupOfAll {
+  ProductId productId;
   UserId userId;
   AcctId acctId;
   StgId stgId;
   StgInstId stgInstId;
+  AlgoId algoId;
   std::string marketCode;
   std::string symbolType;
   std::string symbolCode;
@@ -71,10 +75,10 @@ struct FieldGroupOfAll {
   std::string totalAskSize;
   std::string updateTime;
 
-  JSER(FieldGroupOfAll, userId, acctId, stgId, stgInstId, marketCode,
-       symbolType, symbolCode, side, posSide, parValue, feeCurrency, fee, pos,
-       prePos, avgOpenPrice, pnlUnReal, pnlReal, totalBidSize, totalAskSize,
-       updateTime)
+  JSER(FieldGroupOfAll, productId, userId, acctId, stgId, stgInstId, algoId,
+       marketCode, symbolType, symbolCode, side, posSide, parValue, feeCurrency,
+       fee, pos, prePos, avgOpenPrice, pnlUnReal, pnlReal, totalBidSize,
+       totalAskSize, updateTime)
 };
 
 struct TableSchema {

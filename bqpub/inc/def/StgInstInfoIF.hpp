@@ -19,6 +19,7 @@ struct StgInstInfo;
 using StgInstInfoSPtr = std::shared_ptr<StgInstInfo>;
 
 struct StgInstInfo {
+  std::uint32_t productId_;
   std::uint32_t stgId_;
   std::string stgName_;
   std::uint32_t userIdOfAuthor_;

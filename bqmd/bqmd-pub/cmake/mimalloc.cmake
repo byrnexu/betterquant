@@ -14,6 +14,7 @@ set(MIMALLOC_LIB_DIR   ${MIMALLOC_ROOT}/src/mimalloc-${MIMALLOC_VER}/build/)
 set(MIMALLOC_URL       https://github.com/microsoft/mimalloc/archive/refs/tags/v${MIMALLOC_VER}.tar.gz)
 set(MIMALLOC_CONFIGURE cd ${MIMALLOC_ROOT}/src/mimalloc-${MIMALLOC_VER} && mkdir -p build && cd build && cmake ..)
 set(MIMALLOC_BUILD     cd ${MIMALLOC_ROOT}/src/mimalloc-${MIMALLOC_VER} && cd build && make)
+set(MIMALLOC_INSTALL   echo "install mimalloc")
 
 ExternalProject_Add(mimalloc-${MIMALLOC_VER}
     URL               ${MIMALLOC_URL}
@@ -22,7 +23,7 @@ ExternalProject_Add(mimalloc-${MIMALLOC_VER}
     PREFIX            ${MIMALLOC_ROOT}
     CONFIGURE_COMMAND ${MIMALLOC_CONFIGURE}
     BUILD_COMMAND     ${MIMALLOC_BUILD}
-    INSTALL_COMMAND   ""
+    INSTALL_COMMAND   ${MIMALLOC_INSTALL}
     )
 
 set(3RDPARTY_DEPENDENCIES ${3RDPARTY_DEPENDENCIES} mimalloc-${MIMALLOC_VER})

@@ -40,6 +40,6 @@ OrderInfoSPtr MakeOrderInfo(const db::tradeInfo::RecordSPtr& recTradeInfo);
 OrderInfoSPtr MakeOrderInfo(const StgInstInfoSPtr& stgInstInfo, AcctId acctId,
                             const std::string& symbolCode, Side side,
                             PosSide posSide, Decimal orderPrice,
-                            Decimal orderSize);
+                            Decimal orderSize, AlgoId algoId = DEFAULT_ALGO_ID);
 
 }  // namespace bq

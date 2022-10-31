@@ -9,6 +9,7 @@ set(MAGIC_ENUM_URL_HASH  SHA256=b8d0cd848546fee136dc1fa4bb021a1e4dc8fe98e44d8c11
 set(MAGIC_ENUM_VER     ${MAGIC_ENUM_MAJOR_VER}.${MAGIC_ENUM_MINOR_VER}.${MAGIC_ENUM_PATCH_VER})
 set(MAGIC_ENUM_ROOT    ${3RDPARTY_PATH}/magic_enum)
 set(MAGIC_ENUM_INC_DIR ${MAGIC_ENUM_ROOT}/src/magic_enum-${MAGIC_ENUM_VER}/include)
+set(MAGIC_INSTALL      echo "install magic enum")
 
 set(MAGIC_ENUM_URL https://github.com/Neargye/magic_enum/archive/refs/tags/v${MAGIC_ENUM_VER}.tar.gz)
 
@@ -19,7 +20,7 @@ ExternalProject_Add(magic_enum-${MAGIC_ENUM_VER}
     PREFIX            ${MAGIC_ENUM_ROOT}
     CONFIGURE_COMMAND ""
     BUILD_COMMAND     ""
-    INSTALL_COMMAND   ""
+    INSTALL_COMMAND   ${MAGIC_INSTALL}
     )
 
 set(3RDPARTY_DEPENDENCIES ${3RDPARTY_DEPENDENCIES} magic_enum-${MAGIC_ENUM_VER})

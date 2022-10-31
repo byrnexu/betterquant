@@ -166,10 +166,10 @@ void StgEngImpl::initTBLMonitorOfStgInstInfo() {
       (*getConfig())["milliSecIntervalOfTBLMonitorOfStgInstInfo"]
           .as<std::uint32_t>();
   const auto sql = fmt::format(
-      "SELECT a.`stgId`, a.`stgName`, a.`userIdOfAuthor`, b.`stgInstId`, "
-      "b.`stgInstParams`, b.`stgInstName`, b.`userId`, b.`isDel` FROM "
-      "stgInfo a, stgInstInfo b WHERE a.`stgId` = {} AND a.`stgId` = b.`stgId` "
-      "AND b.`isDel` = 0; ",
+      "SELECT a.`productId`, a.`stgId`, a.`stgName`, a.`userIdOfAuthor`, "
+      "b.`stgInstId`, b.`stgInstParams`, b.`stgInstName`, b.`userId`, "
+      "b.`isDel` FROM stgInfo a, stgInstInfo b WHERE a.`stgId` = {} AND "
+      "a.`stgId` = b.`stgId` AND b.`isDel` = 0; ",
       getStgId());
   tblMonitorOfStgInstInfo_ = std::make_shared<db::TBLMonitorOfStgInstInfo>(
       getDBEng(), milliSecIntervalOfTBLMonitorOfStgInstInfo, sql,
@@ -247,6 +247,7 @@ void StgEngImpl::initOrdMgr() {
 void StgEngImpl::initPosMgr() {
   const auto sql =
       fmt::format("SELECT * FROM `posInfo` WHERE `stgId` = {}", getStgId());
+  posMgr_ = std::make_shared<PosMgr>();
   getPosMgr()->init(*getConfig(), getDBEng(), sql);
 }
 

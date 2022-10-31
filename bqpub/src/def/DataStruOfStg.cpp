@@ -17,9 +17,9 @@ namespace bq {
 std::string StgInstInfo::toStr() const {
   std::string ret;
   ret = fmt::format(
-      "stgId={}; stgName={}; userIdOfAuthor={}; stgInstId={}; "
+      "productId = {}; stgId={}; stgName={}; userIdOfAuthor={}; stgInstId={}; "
       "stgInstParams={}; stgInstName={}; userId={}; isDel={}",
-      stgId_, stgName_, userIdOfAuthor_, stgInstId_, stgInstParams_,
+      productId_, stgId_, stgName_, userIdOfAuthor_, stgInstId_, stgInstParams_,
       stgInstName_, userId_, isDel_);
   return ret;
 }
@@ -27,6 +27,7 @@ std::string StgInstInfo::toStr() const {
 StgInstInfoSPtr MakeStgInstInfo(
     const db::stgInstInfo::RecordSPtr& recStgInstInfo) {
   StgInstInfoSPtr ret = std::make_shared<StgInstInfo>();
+  ret->productId_ = recStgInstInfo->productId;
   ret->stgId_ = recStgInstInfo->stgId;
   ret->stgName_ = recStgInstInfo->stgName;
   ret->userIdOfAuthor_ = recStgInstInfo->userIdOfAuthor;

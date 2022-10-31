@@ -14,6 +14,7 @@ set(BENCHMARK_LIB_DIR   ${BENCHMARK_ROOT}/src/benchmark-${BENCHMARK_VER}/build/s
 set(BENCHMARK_URL       https://github.com/google/benchmark/archive/v${BENCHMARK_VER}.tar.gz)
 set(BENCHMARK_CONFIGURE cd ${BENCHMARK_ROOT}/src/benchmark-${BENCHMARK_VER} && mkdir -p build && cd build && cmake .. -DCMAKE_BUILD_TYPE=release -DBENCHMARK_ENABLE_TESTING=OFF)
 set(BENCHMARK_BUILD     cd ${BENCHMARK_ROOT}/src/benchmark-${BENCHMARK_VER} && cd build && make)
+set(BENCHMARK_INSTALL   echo "install benchmark")
 
 ExternalProject_Add(benchmark-${BENCHMARK_VER}
     URL               ${BENCHMARK_URL}
@@ -22,7 +23,7 @@ ExternalProject_Add(benchmark-${BENCHMARK_VER}
     PREFIX            ${BENCHMARK_ROOT}
     CONFIGURE_COMMAND ${BENCHMARK_CONFIGURE}
     BUILD_COMMAND     ${BENCHMARK_BUILD}
-    INSTALL_COMMAND   ""
+    INSTALL_COMMAND   ${BENCHMARK_INSTALL}
     )
 
 set(3RDPARTY_DEPENDENCIES ${3RDPARTY_DEPENDENCIES} benchmark-${BENCHMARK_VER})
