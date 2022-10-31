@@ -137,7 +137,7 @@ AcctId2Key2PosInfoGroupSPtr PubSvc::getAcctId2Key2PosInfoGroupUpdate(
   return ret;
 }
 
-// topic = "RISK@PubChannel@Trade@PosInfo@AcctId@10011"
+// topic = "RISK@PubChannel@Trade@PosInfo@AcctId@10001"
 void PubSvc::pushAcctId2Key2PosInfoGroup(
     MsgId msgId, const AcctId2Key2PosInfoGroupSPtr& acctId2Key2PosInfoGroup) {
   const auto makeTopicHash = [&](AcctId acctId) {
@@ -481,7 +481,7 @@ AcctId2Key2AssetInfoGroupSPtr PubSvc::getAcctId2Key2AssetInfoGroupUpdate(
   return ret;
 }
 
-// topic = "RISK@PubChannel@Trade@AssetInfo@AcctId@10011"
+// topic = "RISK@PubChannel@Trade@AssetInfo@AcctId@10001"
 void PubSvc::pushAcctId2Key2AssetInfoGroup(
     MsgId msgId,
     const AcctId2Key2AssetInfoGroupSPtr& acctId2Key2AssetInfoGroup) {

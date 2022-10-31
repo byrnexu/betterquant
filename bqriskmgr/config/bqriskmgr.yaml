@@ -2,7 +2,7 @@ tdGWChannel: "RISK@TDGWChannel@Trade"
 stgEngChannel: "RISK@StgEngChannel@Trade"
 pubChannel: "RISK@PubChannel@Trade"
 
-dbEngParam: svcName=dbEng; dbName=BetterQuant; host=0.0.0.0; port=3306; username=root; password=123456
+dbEngParam: svcName=dbEng; dbName=BetterQuant; host=0.0.0.0; port=3306; username=root; password=showmethemoney
 dbTaskDispatcherParam: moduleName=dbTaskDispatcher
 
 milliSecIntervalOfTBLMonitorOfSymbolInfo: 10000

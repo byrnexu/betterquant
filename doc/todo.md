@@ -1,31 +1,30 @@
 # TODO
-* ☑️ pnl监控
-* ☑️ docker-compose容器化部署
+* ☑️ pnl monitoring
+* ☑️ docker-compose containerized deployment
+* ☑️ python strategy engine interface
 ---
-* 💤 通用pub接口
-* 💤 算法交易接口
-* 💤 实现对金工更友好的接口，例如金工只指定多空和目标仓位，剩下的全交给系统
-* 💤 高级限价单
-* 💤 止损止盈单
-* 💤 内部结算
-* 💤 内部撮合
-* 💤 支持目前安全的多进程架构的基础上将子系统编译成库成为单一进程，实现纳秒级系统内延时
-* 💤 系统内单边持仓，净头寸管理 
-* 💤 回测功能
-* 💤 标记价格&现货指数价格接收
-* 💤 历史行情查询
-* 💤 c语言策略引擎接口
-* 💤 python策略引擎接口
-* 💤 运行期自动切换优质行情
-* 💤 期权支持
-* 💤 人工干预接口
-* 💤 监控子系统
-* 💤 权限管理
-* 💤 OrderBook性能优化
-* 💤 web服务和前端 
-* 💤 去中心化交易所接入
-* 💤 接入更多的交易所
-* 💤 国内期现接入
-* 💤 风控插件（国内期现验资验券）
-* 💤 lmdb集成
-* 💤 **分布式研究回测平台**（这是一个比较大的系统，应该是一个独立项目）
+* 💤 Generic pub interface
+* 💤 Algorithmic trading interface
+* 💤 Implement a more friendly interface for metalworking, for example, metalworking only specifies long and short positions and target positions, and the rest is left to the system
+* 💤 Advanced Limit Order
+* 💤 Stop Loss and Take Profit order
+* 💤 Internal settlement
+* 💤 Internal matchmaking
+* 💤 On the basis of supporting the current secure multi-process architecture, the subsystem is compiled into a library into a single process to achieve nanosecond-level intra-system delay
+* 💤 One-way position in the system, net position management
+* 💤 Backtesting function
+* 💤 Mark Price & Spot Index Price Receive
+* 💤 Historical Quotes Query
+* 💤 C language strategy engine interface
+* 💤 Automatically switch high-quality quotes during operation
+* 💤 Options support
+* 💤 Manual intervention interface
+* 💤 Monitoring subsystem
+* 💤 Permission management
+* 💤 OrderBook performance optimization
+* 💤 web services and frontend
+* 💤 Decentralized exchange access
+* 💤 Access to more exchanges
+* 💤 Domestic futures access now
+* 💤 Risk control plug-in (domestic futures cash verification coupons)
+* 💤 **Distributed research backtesting platform** (this is a relatively large system and should be an independent project)

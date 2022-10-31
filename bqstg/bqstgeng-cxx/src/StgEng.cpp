@@ -20,7 +20,15 @@ namespace bq::stg {
 StgEng::StgEng(const std::string& configFilename)
     : stgEngImpl_(std::make_shared<StgEngImpl>(configFilename)) {}
 
-int StgEng::init() { return stgEngImpl_->init(); }
+int StgEng::init(const StgInstTaskHandlerBaseSPtr& taskHandler) {
+  const auto ret = stgEngImpl_->init();
+  if (ret != 0) {
+    return ret;
+  }
+  installStgInstTaskHandler(taskHandler);
+  return ret;
+}
+
 int StgEng::run() { return stgEngImpl_->run(); }
 
 void StgEng::installStgInstTaskHandler(
@@ -95,17 +103,18 @@ void StgEng::installStgInstTaskHandler(
   const auto stgInstTaskHandlerImpl = std::make_shared<StgInstTaskHandlerImpl>(
       stgEngImpl_.get(), stgInstTaskHandlerBundle);
   stgEngImpl_->installStgInstTaskHandler(stgInstTaskHandlerImpl);
+}
 
-}  // namespace bq::stg
-
-OrderId StgEng::order(const StgInstInfoSPtr& stgInstInfo, AcctId acctId,
-                      const std::string& symbolCode, Side side, PosSide posSide,
-                      Decimal orderPrice, Decimal orderSize) {
+std::tuple<int, OrderId> StgEng::order(const StgInstInfoSPtr& stgInstInfo,
+                                       AcctId acctId,
+                                       const std::string& symbolCode, Side side,
+                                       PosSide posSide, Decimal orderPrice,
+                                       Decimal orderSize) {
   return stgEngImpl_->order(stgInstInfo, acctId, symbolCode, side, posSide,
                             orderPrice, orderSize);
 }
 
-OrderId StgEng::order(OrderInfoSPtr& orderInfo) {
+std::tuple<int, OrderId> StgEng::order(OrderInfoSPtr& orderInfo) {
   return stgEngImpl_->order(orderInfo);
 }
 

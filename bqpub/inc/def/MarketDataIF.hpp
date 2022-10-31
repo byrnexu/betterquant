@@ -25,6 +25,7 @@ struct MDHeader {
   MDType mdType_;
   std::string toStr() const;
   std::string getTopicPrefix() const;
+  std::string toJson() const;
 };
 
 struct Trades {
@@ -38,6 +39,7 @@ struct Trades {
   std::uint16_t extDataLen_{0};
   char extData_[0];
   std::string toStr() const;
+  std::string toJson() const;
 };
 using TradesSPtr = std::shared_ptr<Trades>;
 using TradesUPtr = std::unique_ptr<Trades>;
@@ -56,6 +58,7 @@ struct Books {
   std::string toStr() const;
   std::uint16_t extDataLen_{0};
   char extData_[0];
+  std::string toJson() const;
 };
 using BooksSPtr = std::shared_ptr<Books>;
 using BooksUPtr = std::unique_ptr<Books>;
@@ -77,6 +80,7 @@ struct Tickers {
   std::uint16_t extDataLen_{0};
   char extData_[0];
   std::string toStr() const;
+  std::string toJson() const;
 };
 using TickersSPtr = std::shared_ptr<Tickers>;
 using TickersUPtr = std::unique_ptr<Tickers>;
@@ -94,8 +98,12 @@ struct Candle {
   std::uint16_t extDataLen_{0};
   char extData_[0];
   std::string toStr() const;
+  std::string toJson() const;
 };
 using CandleSPtr = std::shared_ptr<Candle>;
 using CandleUPtr = std::unique_ptr<Candle>;
+
+std::string MakeMarketData(const SHMHeader& shmHeader, const MDHeader& mdHeader,
+                           const std::string& data);
 
 }  // namespace bq

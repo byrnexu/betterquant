@@ -4,7 +4,6 @@ set -e
 
 . setting.sh
 
-SOLUTION_ROOT_DIR=$(pwd)
 sed -i "s/SOLUTION_ROOT_DIR=.*/SOLUTION_ROOT_DIR=${SOLUTION_ROOT_DIR//\//\\/}/g" \
  $(find . -type f | grep 'build-proj.sh')
 
@@ -26,7 +25,8 @@ cd bqstg/bqstgengimpl && bash build-proj.sh all && cd -
 cd bqstg/bqstgeng-cxx && bash build-proj.sh all && cd -
 cd bqstg/bqstgeng-cxx && bash build-proj.sh all && cd -
 cd bqstg/bqstgeng-cxx && bash build-proj.sh all && cd -
-cd bqstg/bqstgengdemo && bash build-proj.sh all && cd -
+cd bqstg/bqstgeng-cxx-demo && bash build-proj.sh all && cd -
+cd bqstg/bqstgeng-py  && bash build-proj.sh all && cd -
 cd bqtd/bqtd-pub      && bash build-proj.sh all && cd -
 
 cd bqtd/bqtd-srv-risk-plugin/            && bash build-proj.sh all && cd -

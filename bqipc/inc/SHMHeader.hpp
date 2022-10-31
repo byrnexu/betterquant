@@ -30,6 +30,7 @@ struct SHMHeader {
   char topicName_[MAX_TOPIC_NAME_LEN];
 
   std::string toStr() const;
+  std::string toJson() const;
 };
 
 }  // namespace bq

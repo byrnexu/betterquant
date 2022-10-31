@@ -40,18 +40,19 @@ class StgEng {
   explicit StgEng(const std::string& configFilename);
 
  public:
-  int init();
+  int init(const StgInstTaskHandlerBaseSPtr& taskHandler);
   int run();
 
- public:
+ private:
   void installStgInstTaskHandler(const StgInstTaskHandlerBaseSPtr& taskHandler);
 
  public:
-  OrderId order(const StgInstInfoSPtr& stgInstInfo, AcctId acctId,
-                const std::string& symbolCode, Side side, PosSide posSide,
-                Decimal orderPrice, Decimal orderSize);
+  std::tuple<int, OrderId> order(const StgInstInfoSPtr& stgInstInfo,
+                                 AcctId acctId, const std::string& symbolCode,
+                                 Side side, PosSide posSide, Decimal orderPrice,
+                                 Decimal orderSize);
 
-  OrderId order(OrderInfoSPtr& orderInfo);
+  std::tuple<int, OrderId> order(OrderInfoSPtr& orderInfo);
 
   int cancelOrder(OrderId orderId);
 

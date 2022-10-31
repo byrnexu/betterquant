@@ -32,6 +32,35 @@ std::string MDHeader::getTopicPrefix() const {
   return ret;
 }
 
+std::string MDHeader::toJson() const {
+  rapidjson::StringBuffer strBuf;
+  rapidjson::Writer<rapidjson::StringBuffer> writer(strBuf);
+  writer.StartObject();
+
+  writer.Key("exchTs");
+  writer.Uint64(exchTs_);
+
+  writer.Key("localTs");
+  writer.Uint64(localTs_);
+
+  writer.Key("marketCode");
+  writer.String(GetMarketName(marketCode_).data());
+
+  writer.Key("symbolType");
+  writer.String(std::string(magic_enum::enum_name(symbolType_)).data());
+
+  writer.Key("symbolCode");
+  writer.String(symbolCode_);
+
+  writer.Key("mdType");
+  writer.String(std::string(magic_enum::enum_name(mdType_)).data());
+
+  writer.EndObject();
+
+  const auto ret = strBuf.GetString();
+  return ret;
+}
+
 std::string Trades::toStr() const {
   const auto ret = fmt::format(
       "{} {} tradeTs: {}; tradeId: {}; "
@@ -41,10 +70,71 @@ std::string Trades::toStr() const {
   return ret;
 }
 
+std::string Trades::toJson() const {
+  rapidjson::StringBuffer strBuf;
+  rapidjson::Writer<rapidjson::StringBuffer> writer(strBuf);
+
+  writer.StartObject();
+  writer.Key("tradeTs");
+  writer.Uint64(tradeTs_);
+  writer.Key("tradeId");
+  writer.String(tradeId_);
+  writer.Key("price");
+  writer.Double(price_);
+  writer.Key("size");
+  writer.Double(size_);
+  writer.Key("side_");
+  writer.String(std::string(magic_enum::enum_name(side_)).data());
+  writer.EndObject();
+
+  const auto ret = MakeMarketData(shmHeader_, mdHeader_, strBuf.GetString());
+  return ret;
+}
+
 std::string Books::toStr() const {
   const auto ret =
       fmt::format("{} {} asks bids extDataLen: {}", shmHeader_.toStr(),
                   mdHeader_.toStr(), extDataLen_);
+  return ret;
+}
+
+std::string Books::toJson() const {
+  rapidjson::StringBuffer strBuf;
+  rapidjson::Writer<rapidjson::StringBuffer> writer(strBuf);
+
+  writer.StartObject();
+
+  writer.Key("asks");
+  writer.StartArray();
+  for (std::size_t i = 0; i < MAX_DEPTH_LEVEL; ++i) {
+    writer.StartObject();
+    writer.Key("price");
+    writer.Double(asks_[i].price_);
+    writer.Key("size");
+    writer.Double(asks_[i].size_);
+    writer.Key("orderNum");
+    writer.Uint(asks_[i].orderNum_);
+    writer.EndObject();
+  }
+  writer.EndArray();
+
+  writer.Key("bids");
+  writer.StartArray();
+  for (std::size_t i = 0; i < MAX_DEPTH_LEVEL; ++i) {
+    writer.StartObject();
+    writer.Key("price");
+    writer.Double(bids_[i].price_);
+    writer.Key("size");
+    writer.Double(bids_[i].size_);
+    writer.Key("orderNum");
+    writer.Uint(bids_[i].orderNum_);
+    writer.EndObject();
+  }
+  writer.EndArray();
+
+  writer.EndObject();
+
+  const auto ret = MakeMarketData(shmHeader_, mdHeader_, strBuf.GetString());
   return ret;
 }
 
@@ -59,12 +149,77 @@ std::string Tickers::toStr() const {
   return ret;
 }
 
+std::string Tickers::toJson() const {
+  rapidjson::StringBuffer strBuf;
+  rapidjson::Writer<rapidjson::StringBuffer> writer(strBuf);
+
+  writer.StartObject();
+  writer.Key("lastPrice");
+  writer.Double(lastPrice_);
+  writer.Key("lastSize");
+  writer.Double(lastSize_);
+  writer.Key("askPrice");
+  writer.Double(askPrice_);
+  writer.Key("askSize");
+  writer.Double(askSize_);
+  writer.Key("bidPrice");
+  writer.Double(bidPrice_);
+  writer.Key("bidSize");
+  writer.Double(bidSize_);
+  writer.Key("open24h");
+  writer.Double(open24h_);
+  writer.Key("high24h");
+  writer.Double(high24h_);
+  writer.Key("low24h");
+  writer.Double(low24h_);
+  writer.Key("vol24h");
+  writer.Double(vol24h_);
+  writer.Key("amt24h");
+  writer.Double(amt24h_);
+  writer.EndObject();
+
+  const auto ret = MakeMarketData(shmHeader_, mdHeader_, strBuf.GetString());
+  return ret;
+}
+
 std::string Candle::toStr() const {
   const auto ret = fmt::format(
       "{} {} startTs: {}; open {}; high: {}; "
       "low: {}; close: {}; vol: {}; amt: {}; extDataLen: {}",
       shmHeader_.toStr(), mdHeader_.toStr(), ConvertTsToPtime(startTs_), open_,
       high_, low_, close_, vol_, amt_, extDataLen_);
+  return ret;
+}
+
+std::string Candle::toJson() const {
+  rapidjson::StringBuffer strBuf;
+  rapidjson::Writer<rapidjson::StringBuffer> writer(strBuf);
+
+  writer.StartObject();
+  writer.Key("open");
+  writer.Double(open_);
+  writer.Key("high");
+  writer.Double(high_);
+  writer.Key("low");
+  writer.Double(low_);
+  writer.Key("close");
+  writer.Double(close_);
+  writer.Key("vol");
+  writer.Double(vol_);
+  writer.Key("amt");
+  writer.Double(amt_);
+  writer.EndObject();
+
+  const auto ret = MakeMarketData(shmHeader_, mdHeader_, strBuf.GetString());
+  return ret;
+}
+
+std::string MakeMarketData(const SHMHeader& shmHeader, const MDHeader& mdHeader,
+                           const std::string& data) {
+  std::string ret;
+  ret = R"({"shmHeader":)" + shmHeader.toJson() + ",";
+  ret = ret + R"("mdHeader":)" + mdHeader.toJson() + ",";
+  ret = ret + R"("data":)" + data + "}";
   return ret;
 }
 

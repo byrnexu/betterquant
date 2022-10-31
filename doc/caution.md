@@ -1,3 +1,3 @@
-# 注意事项
-* 🔥 目前为alpha.1版本，为方便定位问题，系统中还存在一些包含敏感信息的日志，对性能或者安全有一定的影响。
-* 🔥 目前交易的apikey是明码形式存放于数据库，很不安全，后续会增加加密插件加密后存放于数据库，或者自行修改GetApiInfo读取并解密。
+# WARNING
+* 🔥 To facilitate locating the problem, there are some logs containing sensitive information in the system, which have a certain impact on performance (several microseconds) or security.
+* 🔥 At present, the api key is stored in the database and not encrypted, which is very insecure. In the future, an encryption plug-in will be added to encrypt and store it in the database, or you can modify GetApiInfo to read and decrypt it yourself. Of course, if your apiKey is bound to an IP and the transfer function is turned off, There shouldn't be much of a safety issue.

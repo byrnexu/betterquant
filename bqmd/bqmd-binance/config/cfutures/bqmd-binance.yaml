@@ -12,7 +12,7 @@ wsTaskDispatcherParam: moduleName=wsCliTaskDispatcher; taskRandAssignedThreadPoo
 milliSecIntervalOfSymbolTableMaint: 30000
 timeoutOfQuerySymbolTableFromExch: 30000
 
-dbEngParam: svcName=dbEng; dbName=BetterQuant; host=0.0.0.0; port=3306; username=root; password=123456
+dbEngParam: svcName=dbEng; dbName=BetterQuant; host=0.0.0.0; port=3306; username=root; password=showmethemoney
 dbTaskDispatcherParam: moduleName=dbTaskDispatcher
 
 milliSecIntervalOfTBLMonitorOfSymbolInfo: 10000
@@ -52,6 +52,6 @@ logger:
       maxFiles: 10
       maxSize: 104857600
       outputDir: "data/logs/bqmd/bqmd-binance-cfutures"
-      outputFilename: "bqmd-binance-spot"
+      outputFilename: "bqmd-binance-cfutures"
       rotatingSinkPattern: "[%Y%m%d %T.%f] [%L] [%t] [%s:%#] %v"
       stdoutSinkPattern: "[%Y%m%d %T.%f] [%^%L%$] [%t] [%s:%#] %v"

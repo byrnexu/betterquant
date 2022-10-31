@@ -12,7 +12,7 @@ services:
     ports:
       - 3306:3306
     volumes:
-      - $ROOT_DIR_OF_SOLUTION/../test_sql:/docker-entrypoint-initdb.d
+      - $ROOT_DIR_OF_SOLUTION/bqdb/sql/:/docker-entrypoint-initdb.d
       - $ROOT_DIR_OF_INSTALLATION/mysql/data:/var/lib/mysql
       - $ROOT_DIR_OF_INSTALLATION/mysql/conf.d:/etc/mysql/conf.d
       - $ROOT_DIR_OF_INSTALLATION/mysql/logs:/logs

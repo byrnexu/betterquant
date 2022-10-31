@@ -57,66 +57,90 @@ void StgInstTaskHandlerImpl::handleAsyncTaskImpl(
       const auto ordRet = MakeMsgSPtrByTask<OrderInfo>(asyncTask->task_);
       LOG_I("Recv order ret {}", ordRet->toShortStr());
       beforeOnOrderRet(stgInstInfo, ordRet);
-      stgInstTaskHandlerBundle_.onOrderRet_(stgInstInfo, ordRet);
+      if (stgInstTaskHandlerBundle_.onOrderRet_) {
+        stgInstTaskHandlerBundle_.onOrderRet_(stgInstInfo, ordRet);
+      }
     } break;
 
     case MSG_ID_ON_CANCEL_ORDER_RET: {
       const auto ordRet = MakeMsgSPtrByTask<OrderInfo>(asyncTask->task_);
       LOG_I("Recv cancel order ret {}", ordRet->toShortStr());
-      stgInstTaskHandlerBundle_.onCancelOrderRet_(stgInstInfo, ordRet);
+      if (stgInstTaskHandlerBundle_.onCancelOrderRet_) {
+        stgInstTaskHandlerBundle_.onCancelOrderRet_(stgInstInfo, ordRet);
+      }
     } break;
 
     case MSG_ID_ON_MD_TRADES: {
       const auto trades = MakeMsgSPtrByTask<Trades>(asyncTask->task_);
       stgEng_->getMarketDataCache()->cache(trades);
-      stgInstTaskHandlerBundle_.onTrades_(stgInstInfo, trades);
+      if (stgInstTaskHandlerBundle_.onTrades_) {
+        stgInstTaskHandlerBundle_.onTrades_(stgInstInfo, trades);
+      }
     } break;
 
     case MSG_ID_ON_MD_TICKERS: {
       const auto tickers = MakeMsgSPtrByTask<Tickers>(asyncTask->task_);
-      stgInstTaskHandlerBundle_.onTickers_(stgInstInfo, tickers);
+      if (stgInstTaskHandlerBundle_.onTickers_) {
+        stgInstTaskHandlerBundle_.onTickers_(stgInstInfo, tickers);
+      }
     } break;
 
     case MSG_ID_ON_MD_CANDLE: {
       const auto candle = MakeMsgSPtrByTask<Candle>(asyncTask->task_);
-      stgInstTaskHandlerBundle_.onCandle_(stgInstInfo, candle);
+      if (stgInstTaskHandlerBundle_.onCandle_) {
+        stgInstTaskHandlerBundle_.onCandle_(stgInstInfo, candle);
+      }
     } break;
 
     case MSG_ID_ON_MD_BOOKS: {
       const auto books = MakeMsgSPtrByTask<Books>(asyncTask->task_);
-      stgInstTaskHandlerBundle_.onBooks_(stgInstInfo, books);
+      if (stgInstTaskHandlerBundle_.onBooks_) {
+        stgInstTaskHandlerBundle_.onBooks_(stgInstInfo, books);
+      }
     } break;
 
     case MSG_ID_ON_STG_START:
       LOG_I("On stg {} start trigged. ", stgInstInfo->stgId_);
-      stgInstTaskHandlerBundle_.onStgStart_();
+      if (stgInstTaskHandlerBundle_.onStgStart_) {
+        stgInstTaskHandlerBundle_.onStgStart_();
+      }
       getStgEngImpl()->getBarrierOfStgStartSignal()->set_value();
       break;
 
     case MSG_ID_ON_STG_INST_START:
       LOG_I("On stg inst start trigged. {}", stgInstInfo->toStr());
-      stgInstTaskHandlerBundle_.onStgInstStart_(stgInstInfo);
+      if (stgInstTaskHandlerBundle_.onStgInstStart_) {
+        stgInstTaskHandlerBundle_.onStgInstStart_(stgInstInfo);
+      }
       break;
 
     case MSG_ID_ON_STG_INST_ADD:
       LOG_I("On stg inst add trigged. {}", stgInstInfo->toStr());
-      stgInstTaskHandlerBundle_.onStgInstAdd_(stgInstInfo);
+      if (stgInstTaskHandlerBundle_.onStgInstAdd_) {
+        stgInstTaskHandlerBundle_.onStgInstAdd_(stgInstInfo);
+      }
       break;
 
     case MSG_ID_ON_STG_INST_DEL:
       LOG_I("On stg inst del trigged. {}", stgInstInfo->toStr());
-      stgInstTaskHandlerBundle_.onStgInstDel_(stgInstInfo);
+      if (stgInstTaskHandlerBundle_.onStgInstDel_) {
+        stgInstTaskHandlerBundle_.onStgInstDel_(stgInstInfo);
+      }
       break;
 
     case MSG_ID_ON_STG_INST_CHG:
       LOG_I("On stg inst chg trigged. {}", stgInstInfo->toStr());
-      stgInstTaskHandlerBundle_.onStgInstChg_(stgInstInfo);
+      if (stgInstTaskHandlerBundle_.onStgInstChg_) {
+        stgInstTaskHandlerBundle_.onStgInstChg_(stgInstInfo);
+      }
       break;
 
     case MSG_ID_ON_STG_INST_TIMER:
       LOG_D("On stg inst {} timer. {}", stgInstInfo->stgInstId_,
             stgInstInfo->toStr());
-      stgInstTaskHandlerBundle_.onStgInstTimer_(stgInstInfo);
+      if (stgInstTaskHandlerBundle_.onStgInstTimer_) {
+        stgInstTaskHandlerBundle_.onStgInstTimer_(stgInstInfo);
+      }
       break;
 
     case MSG_ID_ON_STG_REG:
@@ -130,7 +154,10 @@ void StgInstTaskHandlerImpl::handleAsyncTaskImpl(
           MakePosUpdateOfAcctId(posUpdateOfAcctIdForPub);
       const auto posSnapshot = std::make_shared<PosSnapshot>(
           std::move(posUpdateOfAcctId), stgEng_->getMarketDataCache());
-      stgInstTaskHandlerBundle_.onPosUpdateOfAcctId_(stgInstInfo, posSnapshot);
+      if (stgInstTaskHandlerBundle_.onPosUpdateOfAcctId_) {
+        stgInstTaskHandlerBundle_.onPosUpdateOfAcctId_(stgInstInfo,
+                                                       posSnapshot);
+      }
     } break;
 
     case MSG_ID_POS_SNAPSHOT_OF_ACCT_ID: {
@@ -140,8 +167,10 @@ void StgInstTaskHandlerImpl::handleAsyncTaskImpl(
           MakePosUpdateOfAcctId(posUpdateOfAcctIdForPub);
       const auto posSnapshot = std::make_shared<PosSnapshot>(
           std::move(posSnapshotOfAcctId), stgEng_->getMarketDataCache());
-      stgInstTaskHandlerBundle_.onPosSnapshotOfAcctId_(stgInstInfo,
-                                                       posSnapshot);
+      if (stgInstTaskHandlerBundle_.onPosSnapshotOfAcctId_) {
+        stgInstTaskHandlerBundle_.onPosSnapshotOfAcctId_(stgInstInfo,
+                                                         posSnapshot);
+      }
     } break;
 
     case MSG_ID_POS_UPDATE_OF_STG_ID: {
@@ -151,7 +180,9 @@ void StgInstTaskHandlerImpl::handleAsyncTaskImpl(
           MakePosUpdateOfStgId(posUpdateOfStgIdForPub);
       const auto posSnapshot = std::make_shared<PosSnapshot>(
           std::move(posUpdateOfStgId), stgEng_->getMarketDataCache());
-      stgInstTaskHandlerBundle_.onPosUpdateOfStgId_(stgInstInfo, posSnapshot);
+      if (stgInstTaskHandlerBundle_.onPosUpdateOfStgId_) {
+        stgInstTaskHandlerBundle_.onPosUpdateOfStgId_(stgInstInfo, posSnapshot);
+      }
     } break;
 
     case MSG_ID_POS_SNAPSHOT_OF_STG_ID: {
@@ -161,7 +192,10 @@ void StgInstTaskHandlerImpl::handleAsyncTaskImpl(
           MakePosUpdateOfStgId(posUpdateOfStgIdForPub);
       const auto posSnapshot = std::make_shared<PosSnapshot>(
           std::move(posSnapshotOfStgId), stgEng_->getMarketDataCache());
-      stgInstTaskHandlerBundle_.onPosSnapshotOfStgId_(stgInstInfo, posSnapshot);
+      if (stgInstTaskHandlerBundle_.onPosSnapshotOfStgId_) {
+        stgInstTaskHandlerBundle_.onPosSnapshotOfStgId_(stgInstInfo,
+                                                        posSnapshot);
+      }
     } break;
 
     case MSG_ID_POS_UPDATE_OF_STG_INST_ID: {
@@ -171,8 +205,10 @@ void StgInstTaskHandlerImpl::handleAsyncTaskImpl(
           MakePosUpdateOfStgInstId(posUpdateOfStgInstIdForPub);
       const auto posSnapshot = std::make_shared<PosSnapshot>(
           std::move(posUpdateOfStgInstId), stgEng_->getMarketDataCache());
-      stgInstTaskHandlerBundle_.onPosUpdateOfStgInstId_(stgInstInfo,
-                                                        posSnapshot);
+      if (stgInstTaskHandlerBundle_.onPosUpdateOfStgInstId_) {
+        stgInstTaskHandlerBundle_.onPosUpdateOfStgInstId_(stgInstInfo,
+                                                          posSnapshot);
+      }
     } break;
 
     case MSG_ID_POS_SNAPSHOT_OF_STG_INST_ID: {
@@ -182,26 +218,35 @@ void StgInstTaskHandlerImpl::handleAsyncTaskImpl(
           MakePosUpdateOfStgInstId(posUpdateOfStgInstIdForPub);
       const auto posSnapshot = std::make_shared<PosSnapshot>(
           std::move(posSnapshotOfStgInstId), stgEng_->getMarketDataCache());
-      stgInstTaskHandlerBundle_.onPosSnapshotOfStgInstId_(stgInstInfo,
-                                                          posSnapshot);
+      if (stgInstTaskHandlerBundle_.onPosSnapshotOfStgInstId_) {
+        stgInstTaskHandlerBundle_.onPosSnapshotOfStgInstId_(stgInstInfo,
+                                                            posSnapshot);
+      }
     } break;
 
     case MSG_ID_ASSETS_UPDATE: {
       const auto assetsUpdateForPub =
           MakeMsgSPtrByTask<AssetsUpdateForPub>(asyncTask->task_);
       const auto assetsUpdate = MakeAssetsUpdate(assetsUpdateForPub);
-      stgInstTaskHandlerBundle_.onAssetsUpdate_(stgInstInfo, assetsUpdate);
+      if (stgInstTaskHandlerBundle_.onAssetsUpdate_) {
+        stgInstTaskHandlerBundle_.onAssetsUpdate_(stgInstInfo, assetsUpdate);
+      }
     } break;
 
     case MSG_ID_ASSETS_SNAPSHOT: {
       const auto assetsUpdateForPub =
           MakeMsgSPtrByTask<AssetsUpdateForPub>(asyncTask->task_);
       const auto assetsSnapshot = MakeAssetsUpdate(assetsUpdateForPub);
-      stgInstTaskHandlerBundle_.onAssetsSnapshot_(stgInstInfo, assetsSnapshot);
+      if (stgInstTaskHandlerBundle_.onAssetsSnapshot_) {
+        stgInstTaskHandlerBundle_.onAssetsSnapshot_(stgInstInfo,
+                                                    assetsSnapshot);
+      }
     } break;
 
     default:
-      stgInstTaskHandlerBundle_.onOtherStgInstTask_(stgInstInfo, asyncTask);
+      if (stgInstTaskHandlerBundle_.onOtherStgInstTask_) {
+        stgInstTaskHandlerBundle_.onOtherStgInstTask_(stgInstInfo, asyncTask);
+      }
       break;
   }
 }

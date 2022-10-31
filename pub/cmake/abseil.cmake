@@ -12,7 +12,7 @@ set(ABSEIL_INC_DIR   /usr/local/include)
 set(ABSEIL_LIB_DIR   /usr/local/lib)
 
 set(ABSEIL_URL           https://github.com/abseil/abseil-cpp/archive/refs/tags/20220623.0.tar.gz)
-set(ABSEIL_CONFIGURE     cd ${ABSEIL_ROOT}/src/abseil-${ABSEIL_VER} && mkdir -p build && cd build && cmake -DCMAKE_CXX_STANDARD=17 ..)
+set(ABSEIL_CONFIGURE     cd ${ABSEIL_ROOT}/src/abseil-${ABSEIL_VER} && mkdir -p build && cd build && cmake -DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_CXX_STANDARD=17 ..)
 set(ABSEIL_BUILD         cd ${ABSEIL_ROOT}/src/abseil-${ABSEIL_VER} && cd build && cmake --build . --target all)
 set(ABSEIL_INSTALL       cd ${ABSEIL_ROOT}/src/abseil-${ABSEIL_VER} && cd build && make install)
 

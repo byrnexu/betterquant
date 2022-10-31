@@ -117,6 +117,9 @@ class StgInstTaskHandlerImpl {
 
  public:
   StgEngImpl* getStgEngImpl() const { return stgEng_; }
+  StgInstTaskHandlerBundle& getStgInstTaskHandlerBundle() {
+    return stgInstTaskHandlerBundle_;
+  }
 
  public:
   void handleAsyncTask(const SHMIPCAsyncTaskSPtr& asyncTask);

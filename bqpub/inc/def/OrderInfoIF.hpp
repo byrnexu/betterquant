@@ -88,4 +88,6 @@ struct OrderInfo {
   std::string getPosKeyOfAsk() const;
 };
 
+inline OrderInfoSPtr MakeOrderInfo() { return std::make_shared<OrderInfo>(); }
+
 }  // namespace bq

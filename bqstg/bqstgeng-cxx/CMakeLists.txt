@@ -79,7 +79,6 @@ target_include_directories(${PROJECT_NAME}
     PUBLIC "${MAGIC_ENUM_INC_DIR}"
     PUBLIC "${FMT_INC_DIR}"
     PUBLIC "${XXHASH_INC_DIR}"
-    PUBLIC "${MIMALLOC_INC_DIR}"
     )
 
 target_link_directories(${PROJECT_NAME}
@@ -98,7 +97,6 @@ target_link_directories(${PROJECT_NAME}
     PUBLIC "${MAGIC_ENUM_LIB_DIR}"
     PUBLIC "${FMT_LIB_DIR}"
     PUBLIC "${XXHASH_LIB_DIR}"
-    PUBLIC "${MIMALLOC_LIB_DIR}"
     )
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")

@@ -13,7 +13,7 @@ set(SPDLOG_LIB_DIR ${SPDLOG_ROOT}/src/spdlog-${SPDLOG_VER}-build)
 
 set(SPDLOG_URL https://github.com/gabime/spdlog/archive/refs/tags/v${SPDLOG_VER}.tar.gz)
 set(SPDLOG_CONFIGURE cd ${SPDLOG_ROOT}/src/spdlog-${SPDLOG_VER} && mkdir -p build && cd build && cmake ..)
-set(SPDLOG_BUILD     cd ${SPDLOG_ROOT}/src/spdlog-${SPDLOG_VER} && cd build && make CXXFLAGS+='-fPIC' -j4)
+set(SPDLOG_BUILD     cd ${SPDLOG_ROOT}/src/spdlog-${SPDLOG_VER} && cd build && make CXXFLAGS+='-fPIC')
 set(SPDLOG_INSTALL   echo "install spdlog")
 
 ExternalProject_Add(spdlog-${SPDLOG_VER}

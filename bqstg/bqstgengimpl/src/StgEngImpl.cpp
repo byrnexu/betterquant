@@ -477,16 +477,18 @@ void StgEngImpl::doExit(const boost::system::error_code* ec, int signalNum) {
   getDBEng()->stop();
 }
 
-OrderId StgEngImpl::order(const StgInstInfoSPtr& stgInstInfo, AcctId acctId,
-                          const std::string& symbolCode, Side side,
-                          PosSide posSide, Decimal orderPrice,
-                          Decimal orderSize) {
+std::tuple<int, OrderId> StgEngImpl::order(const StgInstInfoSPtr& stgInstInfo,
+                                           AcctId acctId,
+                                           const std::string& symbolCode,
+                                           Side side, PosSide posSide,
+                                           Decimal orderPrice,
+                                           Decimal orderSize) {
   auto orderInfo = MakeOrderInfo(stgInstInfo, acctId, symbolCode, side, posSide,
                                  orderPrice, orderSize);
   return order(orderInfo);
 }
 
-OrderId StgEngImpl::order(OrderInfoSPtr& orderInfo) {
+std::tuple<int, OrderId> StgEngImpl::order(OrderInfoSPtr& orderInfo) {
   int retOfGetMarketCodeAndSymbolType = 0;
   std::tie(retOfGetMarketCodeAndSymbolType, orderInfo->marketCode_,
            orderInfo->symbolType_) =
@@ -496,7 +498,7 @@ OrderId StgEngImpl::order(OrderInfoSPtr& orderInfo) {
     orderInfo->statusCode_ = retOfGetMarketCodeAndSymbolType;
     LOG_W("[{}] Order failed. [{} - {}] {}", appName_, orderInfo->statusCode_,
           GetStatusMsg(orderInfo->statusCode_), orderInfo->toShortStr());
-    return retOfGetMarketCodeAndSymbolType;
+    return {retOfGetMarketCodeAndSymbolType, 0};
   }
 
   const auto [retOfGetSym, recSymbolInfo] =
@@ -507,7 +509,7 @@ OrderId StgEngImpl::order(OrderInfoSPtr& orderInfo) {
     orderInfo->statusCode_ = retOfGetSym;
     LOG_W("[{}] Order failed. [{} - {}] {}", appName_, orderInfo->statusCode_,
           GetStatusMsg(orderInfo->statusCode_), orderInfo->toShortStr());
-    return retOfGetSym;
+    return {retOfGetSym, 0};
   }
 
   const auto [retOfGetStgInst, stgInstInfo] =
@@ -517,7 +519,7 @@ OrderId StgEngImpl::order(OrderInfoSPtr& orderInfo) {
     orderInfo->statusCode_ = retOfGetStgInst;
     LOG_W("[{}] Order failed. [{} - {}] {}", appName_, orderInfo->statusCode_,
           GetStatusMsg(orderInfo->statusCode_), orderInfo->toShortStr());
-    return retOfGetStgInst;
+    return {retOfGetStgInst, 0};
   }
 
   if (orderInfo->symbolType_ == SymbolType::Spot) {
@@ -535,7 +537,7 @@ OrderId StgEngImpl::order(OrderInfoSPtr& orderInfo) {
     orderInfo->statusCode_ = ret;
     LOG_W("[{}] Order failed. [{} - {}] {}", appName_, orderInfo->statusCode_,
           GetStatusMsg(orderInfo->statusCode_), orderInfo->toShortStr());
-    return ret;
+    return {ret, 0};
   }
 
 #ifdef PERF_TEST
@@ -557,7 +559,7 @@ OrderId StgEngImpl::order(OrderInfoSPtr& orderInfo) {
 #ifdef PERF_TEST
   EXEC_PERF_TEST("Order", orderInfo->orderTime_, 100, 10);
 #endif
-  return 0;
+  return {0, orderInfo->orderId_};
 }
 
 int StgEngImpl::cancelOrder(OrderId orderId) {

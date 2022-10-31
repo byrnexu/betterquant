@@ -1,5 +1,7 @@
 . setting.sh
 
+set -xue
+
 if [[ -z $(docker network ls | grep '\<bqnet\>') ]]; then
   docker network create bqnet
 fi

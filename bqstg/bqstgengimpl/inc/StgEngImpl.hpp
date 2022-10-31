@@ -121,6 +121,10 @@ class StgEngImpl : public SvcBase {
   void initScheduleTaskBundle();
 
  public:
+  StgInstTaskHandlerImplSPtr getStgInstTaskHandler() {
+    return stgInstTaskHandler_;
+  }
+
   void installStgInstTaskHandler(const StgInstTaskHandlerImplSPtr& value) {
     stgInstTaskHandler_ = value;
   }
@@ -137,11 +141,12 @@ class StgEngImpl : public SvcBase {
   void doExit(const boost::system::error_code* ec, int signalNum) final;
 
  public:
-  OrderId order(const StgInstInfoSPtr& stgInstInfo, AcctId acctId,
-                const std::string& symbolCode, Side side, PosSide posSide,
-                Decimal orderPrice, Decimal orderSize);
+  std::tuple<int, OrderId> order(const StgInstInfoSPtr& stgInstInfo,
+                                 AcctId acctId, const std::string& symbolCode,
+                                 Side side, PosSide posSide, Decimal orderPrice,
+                                 Decimal orderSize);
 
-  OrderId order(OrderInfoSPtr& orderInfo);
+  std::tuple<int, OrderId> order(OrderInfoSPtr& orderInfo);
 
   int cancelOrder(OrderId orderId);
 

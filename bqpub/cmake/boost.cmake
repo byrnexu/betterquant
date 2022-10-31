@@ -15,7 +15,7 @@ set(BOOST_LIB_DIR   /usr/local/lib)
 
 set(BOOST_URL           https://boostorg.jfrog.io/artifactory/main/release/${BOOST_VER}/source/${BOOST_DOWNLOAD_NAME})
 set(BOOST_CONFIGURE     cd ${BOOST_ROOT}/src/boost-${BOOST_VER} && ./bootstrap.sh)
-set(BOOST_BUILD         cd ${BOOST_ROOT}/src/boost-${BOOST_VER} && ./b2 variant=release link=static threading=multi runtime-link=shared address-model=64 cxxflags=-fPIC --without-python install -j4)
+set(BOOST_BUILD         cd ${BOOST_ROOT}/src/boost-${BOOST_VER} && ./b2 variant=release link=static threading=multi runtime-link=shared address-model=64 cxxflags=-fPIC install -j4)
 set(BOOST_INSTALL       echo "install boost")
 
 ExternalProject_Add(boost-${BOOST_VER}
