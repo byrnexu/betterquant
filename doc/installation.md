@@ -62,7 +62,7 @@
    bash stop.sh
 ```
 
-## 🔥 run (without docker)
+## 🔥 Run (without docker)
 
 &emsp;&emsp;If the compilation is successful, you can also directly run the compiled target file without using docker. This method can be considered for both development and testing. The database and IPC services are installed and started first, and there is no sequence requirement for others.
 * Install and start the database

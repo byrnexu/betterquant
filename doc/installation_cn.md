@@ -92,9 +92,6 @@ iox-roudi &
 # 运行币安币本位永续合约服务
 ./bqmd-binance --conf=config/bqmd-binance/cperp/bqmd-binance.yaml &
 
-# 运行币安币本位永续合约服务
-./bqmd-binance --conf=config/bqmd-binance/cperp/bqmd-binance.yaml &
-
 # 运行风控子系统
 ./bqriskmgr --conf=config/bqriskmgr/bqriskmgr.yaml
 

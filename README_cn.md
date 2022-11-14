@@ -1,15 +1,19 @@
+
+[**English version**](README.md)
+
 [![github](https://img.shields.io/badge/github-byrnexu-brightgreen.svg)](https://github.com/byrnexu)  
 
-
-<img src="https://github.com/byrnexu/betterquant/blob/master/assets/logo-big.png" width="15%" height="15%">
+[<img src="./assets/logo-big.png" width="180" />]()
 
 **Better quant today, best quant tomorrow.** 💪  
 
+欢迎fork/star，你的支持是这个项目越来越好的最大动力，BetterQuant 沟通交流群 431100199
+
 ## 前言
-&emsp;&emsp;**最近在外面看机会，上海地区私募机构需要技术总监/合伙人或者主力研发请邮件联系：28645861@qqcom**   
+&emsp;&emsp;**最近在外面看机会，上海地区私募机构需要技术总监/合伙人或者架构师请邮件联系：28645861@qqcom**   
 
 &emsp;&emsp;目前交易所只接了数字货币的币安，但是国内现货和其他衍生品的仓位管理、盈亏计算、资产管理的算法及订单的状态维护基本都类似，稍加修改即可同时支持国内的二级市场，这些功能就暂时放在todo list里了。另外如果要接入更多的交易所，基于目前良好的行情和交易网关的接口，也可以逐个快速接入。betterquant的主要功能和特点包括：<br/>
-* 🔥 支持c++和python两种语言编写交易策略。<br/>
+* 🔥 支持c++和python两种语言编写交易策略，整个系统几个命令即可完成安装部署。<br/>
 &nbsp;
 * 🔥 目前的设计中只需要柜台或者交易所提供了委托回报和查询订单信息两个接口（实际理论上也只需要这两个接口），系统就可以帮你精确计算账户、策略、子策略等各个层面的pnl和手续费信息，系统崩溃后的各种信息的恢复，无视各种类型的交易所或者柜台接口，只需这两个接口即可。<br/>
 &nbsp;

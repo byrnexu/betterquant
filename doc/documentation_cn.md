@@ -325,7 +325,7 @@ topicGroup:
   - BTC-USDT@Trades     # 成交明细
   - BTC-USDT@Tickers    # tickers
   - BTC-USDT@Candle     # k线
-  - BTC-USDT@Books@400  # 订单部（目前只支持400档）
+  - BTC-USDT@Books@400  # 订单簿（目前只支持400档）
 ```
 如果没有这个配置，即使策略订阅了BTC-USDT成交明细，也收不到行情，之所以这么做的原因是因为以前我工作的时候有同事订阅了很多品种，也不取消订阅，对系统的性能产生了一定的影响。  
 <br/>

@@ -1,17 +1,18 @@
-[中文版](README_cn.md)
+[**中文版**](README_cn.md)
 
 [![github](https://img.shields.io/badge/github-byrnexu-brightgreen.svg)](https://github.com/byrnexu)  
 
-
-<img src="https://github.com/byrnexu/betterquant/blob/master/assets/logo-big.png" width="15%" height="15%">
+[<img src="./assets/logo-big.png" width="180" />]()
 
 **Better quant today, best quant tomorrow.** 💪  
+
+Welcome to fork/star, your support is the greatest motivation for this project to get better and better.
 
 ## Overview
 &emsp;&emsp;**I'm looking for job opportunities recently, if you need a technical director/partner or architect for a quantitative hedge fund in Shanghai, China, please email: 28645861@qqcom. Of course, if you support telecommuting, It doesn't matter where the job is.**   
 
 &emsp;&emsp;The main functions and features of betterquant include:<br/>
-* 🔥 It supports C++ and Python to write trading strategies.<br/>
+* 🔥 It supports C++ and Python to write trading strategies. A few shell commands can complete the installation and deployment of the entire system.<br/>
 &nbsp;
 * 🔥 In the current design, only the exchange needs to provide two interfaces: order status push and order information query (in fact, as long as the field information is perfect for the two interfaces is enough), the system can help you accurately calculate accounts, strategies, sub strategies, etc. The level of pnl and fee information, the recovery of various information after the system crashes, ignores various types of exchanges or counter interfaces, only these two interfaces are required.<br/>
 &nbsp;
