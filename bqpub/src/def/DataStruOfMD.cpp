@@ -11,6 +11,7 @@
 #include "def/DataStruOfMD.hpp"
 
 #include "util/Datetime.hpp"
+#include "util/Float.hpp"
 #include "util/String.hpp"
 
 namespace bq {
@@ -71,6 +72,11 @@ std::string Trades::toStr() const {
 }
 
 std::string Trades::toJson() const {
+  const auto ret = MakeMarketData(shmHeader_, mdHeader_, data());
+  return ret;
+}
+
+std::string Trades::data() const {
   rapidjson::StringBuffer strBuf;
   rapidjson::Writer<rapidjson::StringBuffer> writer(strBuf);
 
@@ -83,11 +89,16 @@ std::string Trades::toJson() const {
   writer.Double(price_);
   writer.Key("size");
   writer.Double(size_);
-  writer.Key("side_");
+  writer.Key("side");
   writer.String(std::string(magic_enum::enum_name(side_)).data());
   writer.EndObject();
 
-  const auto ret = MakeMarketData(shmHeader_, mdHeader_, strBuf.GetString());
+  return strBuf.GetString();
+}
+
+std::string Trades::dataOfUnifiedFmt() const {
+  const auto ret =
+      fmt::format(R"({{"mdHeader":{},"data":{}}})", mdHeader_.toJson(), data());
   return ret;
 }
 
@@ -98,7 +109,12 @@ std::string Books::toStr() const {
   return ret;
 }
 
-std::string Books::toJson() const {
+std::string Books::toJson(std::uint32_t level) const {
+  const auto ret = MakeMarketData(shmHeader_, mdHeader_, data(level));
+  return ret;
+}
+
+std::string Books::data(std::uint32_t level) const {
   rapidjson::StringBuffer strBuf;
   rapidjson::Writer<rapidjson::StringBuffer> writer(strBuf);
 
@@ -107,6 +123,11 @@ std::string Books::toJson() const {
   writer.Key("asks");
   writer.StartArray();
   for (std::size_t i = 0; i < MAX_DEPTH_LEVEL; ++i) {
+    if (i >= level) break;
+    if (isApproximatelyZero(asks_[i].price_) &&
+        isApproximatelyZero(asks_[i].size_) && asks_[i].orderNum_ == 0) {
+      break;
+    }
     writer.StartObject();
     writer.Key("price");
     writer.Double(asks_[i].price_);
@@ -121,6 +142,11 @@ std::string Books::toJson() const {
   writer.Key("bids");
   writer.StartArray();
   for (std::size_t i = 0; i < MAX_DEPTH_LEVEL; ++i) {
+    if (i >= level) break;
+    if (isApproximatelyZero(bids_[i].price_) &&
+        isApproximatelyZero(bids_[i].size_) && bids_[i].orderNum_ == 0) {
+      break;
+    }
     writer.StartObject();
     writer.Key("price");
     writer.Double(bids_[i].price_);
@@ -134,7 +160,12 @@ std::string Books::toJson() const {
 
   writer.EndObject();
 
-  const auto ret = MakeMarketData(shmHeader_, mdHeader_, strBuf.GetString());
+  return strBuf.GetString();
+}
+
+std::string Books::dataOfUnifiedFmt(std::uint32_t level) const {
+  const auto ret = fmt::format(R"({{"mdHeader":{},"data":{}}})",
+                               mdHeader_.toJson(), data(level));
   return ret;
 }
 
@@ -150,6 +181,11 @@ std::string Tickers::toStr() const {
 }
 
 std::string Tickers::toJson() const {
+  const auto ret = MakeMarketData(shmHeader_, mdHeader_, data());
+  return ret;
+}
+
+std::string Tickers::data() const {
   rapidjson::StringBuffer strBuf;
   rapidjson::Writer<rapidjson::StringBuffer> writer(strBuf);
 
@@ -178,7 +214,12 @@ std::string Tickers::toJson() const {
   writer.Double(amt24h_);
   writer.EndObject();
 
-  const auto ret = MakeMarketData(shmHeader_, mdHeader_, strBuf.GetString());
+  return strBuf.GetString();
+}
+
+std::string Tickers::dataOfUnifiedFmt() const {
+  const auto ret =
+      fmt::format(R"({{"mdHeader":{},"data":{}}})", mdHeader_.toJson(), data());
   return ret;
 }
 
@@ -192,10 +233,17 @@ std::string Candle::toStr() const {
 }
 
 std::string Candle::toJson() const {
+  const auto ret = MakeMarketData(shmHeader_, mdHeader_, data());
+  return ret;
+}
+
+std::string Candle::data() const {
   rapidjson::StringBuffer strBuf;
   rapidjson::Writer<rapidjson::StringBuffer> writer(strBuf);
 
   writer.StartObject();
+  writer.Key("startTs");
+  writer.Uint64(startTs_);
   writer.Key("open");
   writer.Double(open_);
   writer.Key("high");
@@ -210,7 +258,12 @@ std::string Candle::toJson() const {
   writer.Double(amt_);
   writer.EndObject();
 
-  const auto ret = MakeMarketData(shmHeader_, mdHeader_, strBuf.GetString());
+  return strBuf.GetString();
+}
+
+std::string Candle::dataOfUnifiedFmt() const {
+  const auto ret =
+      fmt::format(R"({{"mdHeader":{},"data":{}}})", mdHeader_.toJson(), data());
   return ret;
 }
 

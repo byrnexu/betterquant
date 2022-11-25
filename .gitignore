@@ -3,8 +3,10 @@ bin
 lib
 build
 /inc/
-*.so
 data/
+*.so
+time-consuming.log
+
 __pycache__
 
 bqtd/bqtd-binance/config/spot/bqtd-binance-10001.yaml
@@ -20,3 +22,5 @@ docker/docker-compose-tdgw/docker-compose-tdgw-10002.yaml
 docker/docker-compose-tdgw/docker-compose-tdgw-10003.yaml
 docker/docker-compose-tdgw/docker-compose-tdgw-10004.yaml
 docker/docker-compose-tdgw/docker-compose-tdgw-10005.yaml
+
+drogon/

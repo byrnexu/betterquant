@@ -355,7 +355,6 @@ int RiskMgr::doRun() {
     LOG_E("Run failed.");
     return ret;
   }
-  subMgr_->start();
   riskMgrTaskDispatcher_->start();
   shmSrvOfTDGW_->start();
   shmSrvOfStgEng_->start();
@@ -375,7 +374,6 @@ void RiskMgr::doExit(const boost::system::error_code* ec, int signalNum) {
   shmSrvOfStgEng_->stop();
   shmSrvOfTDGW_->stop();
   riskMgrTaskDispatcher_->stop();
-  subMgr_->stop();
   tblMonitorOfSymbolInfo_->stop();
   getDBEng()->stop();
 }

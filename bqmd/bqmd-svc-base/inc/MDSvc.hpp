@@ -40,9 +40,6 @@ using ReqParserSPtr = std::shared_ptr<ReqParser>;
 class RspParser;
 using RspParserSPtr = std::shared_ptr<RspParser>;
 
-class MDStorage;
-using MDStorageSPtr = std::shared_ptr<MDStorage>;
-
 class SymbolTableMaint;
 using SymbolTableMaintSPtr = std::shared_ptr<SymbolTableMaint>;
 
@@ -57,6 +54,9 @@ using WSCliOfExchSPtr = std::shared_ptr<WSCliOfExch>;
 
 class SHMSrvMsgHandler;
 using SHMSrvMsgHandlerSPtr = std::shared_ptr<SHMSrvMsgHandler>;
+
+class MDStorageSvc;
+using MDStorageSvcSPtr = std::shared_ptr<MDStorageSvc>;
 
 class MDSvc : public SvcBase {
  public:
@@ -88,13 +88,18 @@ class MDSvc : public SvcBase {
   MarketCode getMarketCodeEnum() const { return marketCodeEnum_; }
   SymbolType getSymbolTypeEnum() const { return symbolTypeEnum_; }
 
+  bool saveMarketData() const { return saveMarketData_; }
+  std::uint32_t getBooksDepthLevelOfSave() const {
+    return booksDepthLevelOfSave_;
+  }
+
  public:
   db::DBEngSPtr getDBEng() const { return dbEng_; }
 
   ReqParserSPtr getReqParser() const { return ReqParser_; }
   RspParserSPtr getRspParser() const { return RspParser_; }
 
-  MDStorageSPtr getMDStorage() const { return mdStorage_; }
+  MDStorageSvcSPtr getMDStorageSvc() const { return mdStorageSvc_; }
 
   db::TBLMonitorOfSymbolInfoSPtr getTBLMonitorOfSymbolInfo() const {
     return tblMonitorOfSymbolInfo_;
@@ -140,7 +145,9 @@ class MDSvc : public SvcBase {
   ReqParserSPtr ReqParser_{nullptr};
   RspParserSPtr RspParser_{nullptr};
 
-  MDStorageSPtr mdStorage_{nullptr};
+  bool saveMarketData_{false};
+  std::uint32_t booksDepthLevelOfSave_{10};
+  MDStorageSvcSPtr mdStorageSvc_{nullptr};
 
   SymbolTableMaintSPtr symbolTableMaint_{nullptr};
 

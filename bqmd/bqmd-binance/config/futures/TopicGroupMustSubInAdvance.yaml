@@ -1,9 +1,9 @@
 topicGroup:
-  - BTC-USDT-ThisQuarter@Trades
-  - ETH-USDT-ThisQuarter@Trades
-  - BTC-USDT-ThisQuarter@Tickers
-  - ETH-USDT-ThisQuarter@Tickers
-  - BTC-USDT-ThisQuarter@Candle
-  - ETH-USDT-ThisQuarter@Candle
-  - BTC-USDT-ThisQuarter@Books@400
-  - ETH-USDT-ThisQuarter@Books@400
+  - {name: BTC-USDT-ThisQuarter@Trades, saveToDisk: true}
+  - {name: ETH-USDT-ThisQuarter@Trades, saveToDisk: true}
+  - {name: BTC-USDT-ThisQuarter@Tickers, saveToDisk: true}
+  - {name: ETH-USDT-ThisQuarter@Tickers, saveToDisk: true}
+  - {name: BTC-USDT-ThisQuarter@Candle, saveToDisk: true}
+  - {name: ETH-USDT-ThisQuarter@Candle, saveToDisk: true}
+  - {name: BTC-USDT-ThisQuarter@Books@400, saveToDisk: true}
+  - {name: ETH-USDT-ThisQuarter@Books@400, saveToDisk: true}

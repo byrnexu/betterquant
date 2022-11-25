@@ -13,6 +13,7 @@
 #include "SHMIPCMsgId.hpp"
 #include "def/BQConstIF.hpp"
 #include "def/BQDefIF.hpp"
+#include "util/Pch.hpp"
 #include "util/StdExt.hpp"
 #include "util/SvcBase.hpp"
 
@@ -155,6 +156,34 @@ class StgEngImpl : public SvcBase {
   int unSub(StgInstId subscriber, const std::string& topic);
 
  public:
+  std::tuple<int, std::string> queryHisMDBetween2Ts(
+      const std::string& topic, std::uint64_t tsBegin, std::uint64_t tsEnd,
+      std::uint32_t level = DEFAULT_DEPTH_LEVEL);
+
+  std::tuple<int, std::string> queryHisMDBetween2Ts(
+      MarketCode marketCode, SymbolType symbolType,
+      const std::string& symbolCode, MDType mdType, std::uint64_t tsBegin,
+      std::uint64_t tsEnd, std::uint32_t level = DEFAULT_DEPTH_LEVEL);
+
+  std::tuple<int, std::string> querySpecificNumOfHisMDBeforeTs(
+      const std::string& topic, std::uint64_t ts, int num,
+      std::uint32_t level = DEFAULT_DEPTH_LEVEL);
+
+  std::tuple<int, std::string> querySpecificNumOfHisMDBeforeTs(
+      MarketCode marketCode, SymbolType symbolType,
+      const std::string& symbolCode, MDType mdType, std::uint64_t ts, int num,
+      std::uint32_t level = DEFAULT_DEPTH_LEVEL);
+
+  std::tuple<int, std::string> querySpecificNumOfHisMDAfterTs(
+      const std::string& topic, std::uint64_t ts, int num,
+      std::uint32_t level = DEFAULT_DEPTH_LEVEL);
+
+  std::tuple<int, std::string> querySpecificNumOfHisMDAfterTs(
+      MarketCode marketCode, SymbolType symbolType,
+      const std::string& symbolCode, MDType mdType, std::uint64_t ts, int num,
+      std::uint32_t level = DEFAULT_DEPTH_LEVEL);
+
+ public:
   void installStgInstTimer(StgInstId stgInstId, const std::string& timerName,
                            ExecAtStartup execAtStartUp,
                            std::uint32_t milliSecInterval,
@@ -168,7 +197,8 @@ class StgEngImpl : public SvcBase {
   void saveToDB(const PnlSPtr& pnl);
 
  public:
-  YAML::NodeSPtr getConfig() { return config_; }
+  const YAML::Node& getConfig() { return config_; }
+
   StgId getStgId() const { return stgId_; }
   std::string getAppName() const { return appName_; }
 
@@ -203,7 +233,7 @@ class StgEngImpl : public SvcBase {
   ScheduleTaskBundleSPtr getScheduleTaskBundle();
 
  private:
-  YAML::NodeSPtr config_;
+  YAML::Node config_;
 
   StgId stgId_{1};
   std::string appName_;

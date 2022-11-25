@@ -16,6 +16,8 @@ namespace bq {
 
 using MsgId = std::uint16_t;
 
+constexpr static MsgId MSG_ID_ON_PUSH_TOPIC = 10000;
+
 constexpr static MsgId MSG_ID_ON_MD_TRADES = 10001;
 constexpr static MsgId MSG_ID_ON_MD_TICKERS = 10002;
 constexpr static MsgId MSG_ID_ON_MD_CANDLE = 10003;
@@ -59,6 +61,8 @@ constexpr static MsgId MSG_ID_ASSETS_SNAPSHOT = 10208;
 
 inline std::string GetMsgName(MsgId msgId) {
   switch (msgId) {
+    case MSG_ID_ON_PUSH_TOPIC:
+      return "onPushTopic";
     case MSG_ID_ON_MD_TRADES:
       return "onTrades";
     case MSG_ID_ON_MD_TICKERS:

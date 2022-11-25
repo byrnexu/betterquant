@@ -25,4 +25,7 @@ std::uint64_t ConvertDBTimeToTS(std::string dbTime);
 std::tuple<int, std::uint64_t> ConvertISODatetimeToTs(
     const std::string& isoDatetime);
 
+std::string GetDateInStrFmtFromTs(std::uint64_t ts);
+boost::gregorian::date GetDateFromTs(std::uint64_t ts);
+
 }  // namespace bq

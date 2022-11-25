@@ -103,6 +103,7 @@ enum class WSMsgType : std::uint8_t {
 enum class IsTheAssetInfoUpdated { True = 1, False = 2 };
 
 constexpr static std::uint32_t MAX_DEPTH_LEVEL = 400;
+constexpr static std::uint32_t DEFAULT_DEPTH_LEVEL = 20;
 
 constexpr static std::uint16_t DEFAULT_PRODUCT_ID = 0xFFFF;
 constexpr static std::uint32_t DEFAULT_ALGO_ID = 0xFFFFFFFF;
@@ -140,5 +141,11 @@ const static std::uint64_t UNDEFINED_FIELD_MIN_TS = 946684800000000;
 const static std::uint64_t UNDEFINED_FIELD_MAX_TS = 1893456000000000;
 
 const static std::size_t MAX_TD_SRV_RISK_PLUGIN_NUM = 32;
+
+const static std::string HIS_MD_FILE_EXT = "dat";
+const static std::string SEP_OF_HIS_MD_DATA = ":";
+
+const static std::string MIN_DATE_OF_HIS_MD = "20180101";
+const static std::string SUB_DIR_OF_CANDLE_DETAIL = "detail";
 
 }  // namespace bq

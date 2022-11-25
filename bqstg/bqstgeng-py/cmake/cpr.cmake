@@ -12,8 +12,8 @@ set(CPR_INC_DIR   ${CPR_ROOT}/src/cpr-${CPR_VER}/include)
 set(CPR_LIB_DIR   ${CPR_ROOT}/src/cpr-${CPR_VER}/build/lib)
 
 set(CPR_URL       https://github.com/libcpr/cpr/archive/refs/tags/${CPR_VER}.tar.gz)
-set(CPR_CONFIGURE cd ${CPR_ROOT}/src/cpr-${CPR_VER} && mkdir -p build && cd build && cmake ..)
-set(CPR_BUILD     cd ${CPR_ROOT}/src/cpr-${CPR_VER} && cd build && make && make install)
+set(CPR_CONFIGURE cd ${CPR_ROOT}/src/cpr-${CPR_VER} && mkdir -p build && cd build && cmake .. -DBUILD_SHARED_LIBS:BOOL=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS=-fPIC)
+set(CPR_BUILD     cd ${CPR_ROOT}/src/cpr-${CPR_VER} && cd build && make CXXFLAGS+='-fPIC' && make install)
 set(CPR_INSTALL   echo  "install cpr")
 
 ExternalProject_Add(cpr-${CPR_VER}

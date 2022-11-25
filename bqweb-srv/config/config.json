@@ -1,0 +1,36 @@
+{
+
+"listeners": [
+  {
+    "address": "0.0.0.0",
+    "port": 80,
+    "https": false
+  },
+  {
+    "address": "0.0.0.0",
+    "port": 443,
+    "https": false,
+    "cert": "",
+    "key": ""
+  }
+],
+
+"document_root": "./html",
+"upload_path":"data/uploads",
+"idle_connection_timeout":60,
+"threads_num": 4,
+"max_connections": 100000,
+"max_connections_per_ip": 0,
+"use_gzip": true,
+"keepalive_requests": 0,
+"pipelining_requests": 0,
+
+
+"log": {
+  "log_path": "data/logs/bqweb-srv/drogon",
+  "logfile_base_name": "",
+  "log_size_limit": 100000000,
+  "log_level": "TRACE"
+}
+
+}

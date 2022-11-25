@@ -79,4 +79,16 @@ std::tuple<int, std::uint64_t> ConvertISODatetimeToTs(
   }
 }
 
+std::string GetDateInStrFmtFromTs(std::uint64_t ts) {
+  const auto datetime = ConvertTsToPtime(ts);
+  const auto ret = datetime.substr(0, 8);
+  return ret;
+}
+
+boost::gregorian::date GetDateFromTs(std::uint64_t ts) {
+  const auto datetime = boost::posix_time::from_time_t(ts);
+  const auto ret = datetime.date();
+  return ret;
+}
+
 }  // namespace bq

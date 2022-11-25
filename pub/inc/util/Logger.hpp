@@ -11,7 +11,9 @@
 #pragma once
 
 #include "PchBase.hpp"
-#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_TRACE
+#ifndef SPDLOG_ACTIVE_LEVEL
+#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVESPDL_TRACE
+#endif
 #include <spdlog/async.h>
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/rotating_file_sink.h>
@@ -32,51 +34,51 @@ std::shared_ptr<spdlog::async_logger> makeLogger(const YAML::Node& config);
 
 }  // namespace bq
 
-#define LOG_TRACE(logger_name, ...)                           \
+#define SPDL_T(logger_name, ...)                              \
   {                                                           \
     auto logger = spdlog::get((logger_name));                 \
     if (logger == nullptr) logger = spdlog::default_logger(); \
     SPDLOG_LOGGER_TRACE(logger, __VA_ARGS__);                 \
   }
 
-#define LOG_DEBUG(logger_name, ...)                           \
+#define SPDL_D(logger_name, ...)                              \
   {                                                           \
     auto logger = spdlog::get((logger_name));                 \
     if (logger == nullptr) logger = spdlog::default_logger(); \
     SPDLOG_LOGGER_DEBUG(logger, __VA_ARGS__);                 \
   }
 
-#define LOG_INFO(logger_name, ...)                            \
+#define SPDL_I(logger_name, ...)                              \
   {                                                           \
     auto logger = spdlog::get((logger_name));                 \
     if (logger == nullptr) logger = spdlog::default_logger(); \
     SPDLOG_LOGGER_INFO(logger, __VA_ARGS__);                  \
   }
 
-#define LOG_WARN(logger_name, ...)                            \
+#define SPDL_W(logger_name, ...)                              \
   {                                                           \
     auto logger = spdlog::get((logger_name));                 \
     if (logger == nullptr) logger = spdlog::default_logger(); \
     SPDLOG_LOGGER_WARN(logger, __VA_ARGS__);                  \
   }
 
-#define LOG_ERROR(logger_name, ...)                           \
+#define SPDL_E(logger_name, ...)                              \
   {                                                           \
     auto logger = spdlog::get((logger_name));                 \
     if (logger == nullptr) logger = spdlog::default_logger(); \
     SPDLOG_LOGGER_ERROR(logger, __VA_ARGS__);                 \
   }
 
-#define LOG_CRITICAL(logger_name, ...)                        \
+#define SPDL_C(logger_name, ...)                              \
   {                                                           \
     auto logger = spdlog::get((logger_name));                 \
     if (logger == nullptr) logger = spdlog::default_logger(); \
     SPDLOG_LOGGER_CRITICAL(logger, __VA_ARGS__);              \
   }
 
-#define LOG_T(...) LOG_TRACE("", __VA_ARGS__)
-#define LOG_D(...) LOG_DEBUG("", __VA_ARGS__)
-#define LOG_I(...) LOG_INFO("", __VA_ARGS__)
-#define LOG_W(...) LOG_WARN("", __VA_ARGS__)
-#define LOG_E(...) LOG_ERROR("", __VA_ARGS__)
-#define LOG_C(...) LOG_CRITICAL("", __VA_ARGS__)
+#define LOG_T(...) SPDL_T("", __VA_ARGS__)
+#define LOG_D(...) SPDL_D("", __VA_ARGS__)
+#define LOG_I(...) SPDL_I("", __VA_ARGS__)
+#define LOG_W(...) SPDL_W("", __VA_ARGS__)
+#define LOG_E(...) SPDL_E("", __VA_ARGS__)
+#define LOG_C(...) SPDL_C("", __VA_ARGS__)

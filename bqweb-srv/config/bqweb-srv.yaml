@@ -1,0 +1,20 @@
+tdGWChannel: "WEBSRV@PubChannel@Trade"
+
+dbEngParam: svcName=dbEng; dbName=BetterQuant; host=0.0.0.0; port=3306; username=root; password=showmethemoney
+dbTaskDispatcherParam: moduleName=dbTaskDispatcher
+
+storageRootPath: data
+
+logger: 
+  queueSize: 128
+  backingThreadsCount: 1
+  defaultLoggerName: defaultLogger
+  loggerGroup: 
+    - 
+      loggerName: "defaultLogger"
+      maxFiles: 10
+      maxSize: 104857600
+      outputDir: "data/logs/bqweb-srv"
+      outputFilename: "bqweb-srv"
+      rotatingSinkPattern: "[%Y%m%d %T.%f] [%L] [%t] [%s:%#] %v"
+      stdoutSinkPattern: "[%Y%m%d %T.%f] [%^%L%$] [%t] [%s:%#] %v"

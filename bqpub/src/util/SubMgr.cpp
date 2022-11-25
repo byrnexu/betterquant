@@ -18,13 +18,12 @@
 
 namespace bq {
 
-SubMgr::SubMgr(const std::string& appName,
+SubMgr::SubMgr(const std::string& appNameOfSubscriber,
                const DataRecvCallback& dataRecvCallback)
-    : appName_(appName), dataRecvCallback_(dataRecvCallback) {}
+    : appNameOfSubscriber_(appNameOfSubscriber),
+      dataRecvCallback_(dataRecvCallback) {}
 
-void SubMgr::start() {}
-
-void SubMgr::stop() {
+SubMgr::~SubMgr() {
   std::map<std::string, SHMCliSPtr> addr2SHMCliGroupCopy;
   {
     std::lock_guard<std::ext::spin_mutex> guard(mtxAddr2SHMCliGroup_);
@@ -69,7 +68,7 @@ int SubMgr::sub(ClientChannel subscriber, const std::string& topic) {
 }
 
 int SubMgr::startSHMCliIfNotExists(const std::string& topic) {
-  const auto [ret, addr] = GetAddrFromTopic(appName_, topic);
+  const auto [ret, addr] = GetAddrFromTopic(appNameOfSubscriber_, topic);
   if (ret != 0) {
     return ret;
   }

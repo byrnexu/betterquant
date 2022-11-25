@@ -1,28 +1,28 @@
 topicGroup:
-  - BTC-USDT@Trades
-  - BTC-USDT@Tickers
-  - BTC-USDT@Candle
-  - BTC-USDT@Books@400
-  - ETH-USDT@Trades
-  - ETH-USDT@Tickers
-  - ETH-USDT@Candle
-  - ETH-USDT@Books@400
-  - SOL-USDT@Trades
-  - SOL-USDT@Tickers
-  - SOL-USDT@Candle
-  - BNB-USDT@Trades
-  - BNB-USDT@Tickers
-  - BNB-USDT@Candle
-  - BNB-USDT@Books@400
-  - DOGE-USDT@Trades
-  - DOGE-USDT@Tickers
-  - DOGE-USDT@Candle
-  - DOGE-USDT@Books@400
-  - DOT-USDT@Trades
-  - DOT-USDT@Tickers
-  - DOT-USDT@Candle
-  - DOT-USDT@Books@400
-  - ADA-USDT@Trades
-  - ADA-USDT@Tickers
-  - ADA-USDT@Candle
-  - ADA-USDT@Books@400
+  - {name: BTC-USDT@Trades, saveToDisk: true}
+  - {name: BTC-USDT@Tickers, saveToDisk: true}
+  - {name: BTC-USDT@Candle, saveToDisk: true}
+  - {name: BTC-USDT@Books@400, saveToDisk: true}
+  - {name: ETH-USDT@Trades, saveToDisk: true}
+  - {name: ETH-USDT@Tickers, saveToDisk: false}
+  - {name: ETH-USDT@Candle, saveToDisk: true}
+  - {name: ETH-USDT@Books@400, saveToDisk: false}
+  - {name: SOL-USDT@Trades, saveToDisk: false}
+  - {name: SOL-USDT@Tickers, saveToDisk: false}
+  - {name: SOL-USDT@Candle, saveToDisk: false}
+  - {name: BNB-USDT@Trades, saveToDisk: false}
+  - {name: BNB-USDT@Tickers, saveToDisk: false}
+  - {name: BNB-USDT@Candle, saveToDisk: false}
+  - {name: BNB-USDT@Books@400, saveToDisk: false}
+  - {name: DOGE-USDT@Trades, saveToDisk: false}
+  - {name: DOGE-USDT@Tickers, saveToDisk: false}
+  - {name: DOGE-USDT@Candle, saveToDisk: false}
+  - {name: DOGE-USDT@Books@400, saveToDisk: false}
+  - {name: DOT-USDT@Trades, saveToDisk: false}
+  - {name: DOT-USDT@Tickers, saveToDisk: false}
+  - {name: DOT-USDT@Candle, saveToDisk: false}
+  - {name: DOT-USDT@Books@400, saveToDisk: false}
+  - {name: ADA-USDT@Trades, saveToDisk: false}
+  - {name: ADA-USDT@Tickers, saveToDisk: false}
+  - {name: ADA-USDT@Candle, saveToDisk: false}
+  - {name: ADA-USDT@Books@400, saveToDisk: false}

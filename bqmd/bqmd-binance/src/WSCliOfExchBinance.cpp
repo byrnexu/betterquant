@@ -19,6 +19,7 @@
 #include "MDSvcUtil.hpp"
 #include "SHMIPCConst.hpp"
 #include "SHMIPCMsgId.hpp"
+#include "SHMIPCUtil.hpp"
 #include "SHMSrv.hpp"
 #include "TopicGroupMustSubMaint.hpp"
 #include "WSTask.hpp"
@@ -80,7 +81,7 @@ WSCliAsyncTaskArgSPtr WSCliOfExchBinance::MakeWSCliAsyncTaskArg(
  *
  */
 std::string WSCliOfExchBinance::handleMDTrades(WSCliAsyncTaskSPtr& asyncTask) {
-  const auto arg = std::any_cast<WSCliAsyncTaskArgSPtr>(asyncTask->arg_);
+  auto arg = std::any_cast<WSCliAsyncTaskArgSPtr>(asyncTask->arg_);
   const auto& marketCode = mdSvc_->getMarketCode();
   const auto& symbolType = mdSvc_->getSymbolType();
 
@@ -138,7 +139,7 @@ std::string WSCliOfExchBinance::handleMDTrades(WSCliAsyncTaskSPtr& asyncTask) {
   const auto f = yyjson_get_uint(valf);
   const auto l = yyjson_get_uint(vall);
 
-  const auto exchTs = yyjson_get_uint(valExchTs);
+  const auto exchTs = yyjson_get_uint(valExchTs) * 1000;
   const auto tradeTs = yyjson_get_uint(valTradeTs);
   const auto price = yyjson_get_str(valPrice);
   const auto size = yyjson_get_str(valSize);
@@ -150,7 +151,7 @@ std::string WSCliOfExchBinance::handleMDTrades(WSCliAsyncTaskSPtr& asyncTask) {
       [&](void* shmBuf) {
         auto trades = static_cast<Trades*>(shmBuf);
         trades->shmHeader_.topicHash_ = topicHash;
-        trades->mdHeader_.exchTs_ = exchTs * 1000;
+        trades->mdHeader_.exchTs_ = exchTs;
         trades->mdHeader_.localTs_ = asyncTask->task_->localTs_;
         trades->mdHeader_.marketCode_ = mdSvc_->getMarketCodeEnum();
         trades->mdHeader_.symbolType_ = mdSvc_->getSymbolTypeEnum();
@@ -163,6 +164,11 @@ std::string WSCliOfExchBinance::handleMDTrades(WSCliAsyncTaskSPtr& asyncTask) {
         trades->price_ = CONV(Decimal, price);
         trades->size_ = CONV(Decimal, size);
         trades->side_ = GetSide(exchSide);
+        if (mdSvc_->saveMarketData()) {
+          arg->topic_ = topic;
+          arg->exchTs_ = exchTs;
+          arg->marketDataOfUnifiedFmt_ = trades->dataOfUnifiedFmt();
+        }
       },
       PUB_CHANNEL, MSG_ID_ON_MD_TRADES, sizeof(Trades));
 
@@ -186,7 +192,7 @@ std::string WSCliOfExchBinance::handleMDTrades(WSCliAsyncTaskSPtr& asyncTask) {
 }
  */
 std::string WSCliOfExchBinance::handleMDTickers(WSCliAsyncTaskSPtr& asyncTask) {
-  const auto arg = std::any_cast<WSCliAsyncTaskArgSPtr>(asyncTask->arg_);
+  auto arg = std::any_cast<WSCliAsyncTaskArgSPtr>(asyncTask->arg_);
   const auto& marketCode = mdSvc_->getMarketCode();
   const auto& symbolType = mdSvc_->getSymbolType();
 
@@ -236,7 +242,7 @@ std::string WSCliOfExchBinance::handleMDTickers(WSCliAsyncTaskSPtr& asyncTask) {
     return "";
   }
 
-  const auto exchTs = yyjson_get_uint(valExchTs);
+  const auto exchTs = yyjson_get_uint(valExchTs) * 1000;
   const auto lastPrice = yyjson_get_str(valLastPrice);
   const auto open24h = yyjson_get_str(valOpen24h);
   const auto high24h = yyjson_get_str(valHigh24h);
@@ -251,7 +257,7 @@ std::string WSCliOfExchBinance::handleMDTickers(WSCliAsyncTaskSPtr& asyncTask) {
       [&](void* shmBuf) {
         auto tickers = static_cast<Tickers*>(shmBuf);
         tickers->shmHeader_.topicHash_ = topicHash;
-        tickers->mdHeader_.exchTs_ = exchTs * 1000;
+        tickers->mdHeader_.exchTs_ = exchTs;
         tickers->mdHeader_.localTs_ = asyncTask->task_->localTs_;
         tickers->mdHeader_.marketCode_ = mdSvc_->getMarketCodeEnum();
         tickers->mdHeader_.symbolType_ = mdSvc_->getSymbolTypeEnum();
@@ -264,6 +270,11 @@ std::string WSCliOfExchBinance::handleMDTickers(WSCliAsyncTaskSPtr& asyncTask) {
         tickers->low24h_ = CONV(Decimal, low24h);
         tickers->vol24h_ = CONV(Decimal, vol24h);
         tickers->amt24h_ = CONV(Decimal, amt24h);
+        if (mdSvc_->saveMarketData()) {
+          arg->topic_ = topic;
+          arg->exchTs_ = exchTs;
+          arg->marketDataOfUnifiedFmt_ = tickers->dataOfUnifiedFmt();
+        }
       },
       PUB_CHANNEL, MSG_ID_ON_MD_TICKERS, sizeof(Tickers));
 
@@ -304,12 +315,12 @@ std::string WSCliOfExchBinance::handleMDTickers(WSCliAsyncTaskSPtr& asyncTask) {
  *
  */
 std::string WSCliOfExchBinance::handleMDCandle(WSCliAsyncTaskSPtr& asyncTask) {
-  const auto arg = std::any_cast<WSCliAsyncTaskArgSPtr>(asyncTask->arg_);
+  auto arg = std::any_cast<WSCliAsyncTaskArgSPtr>(asyncTask->arg_);
   const auto& marketCode = mdSvc_->getMarketCode();
   const auto& symbolType = mdSvc_->getSymbolType();
 
   yyjson_val* valExchTs = yyjson_obj_get(arg->root_, "E");
-  const auto exchTs = yyjson_get_uint(valExchTs);
+  const auto exchTs = yyjson_get_uint(valExchTs) * 1000;
 
   yyjson_val* vals = nullptr;
   yyjson_val* valStartTs = nullptr;
@@ -366,7 +377,7 @@ std::string WSCliOfExchBinance::handleMDCandle(WSCliAsyncTaskSPtr& asyncTask) {
       [&](void* shmBuf) {
         auto candle = static_cast<Candle*>(shmBuf);
         candle->shmHeader_.topicHash_ = topicHash;
-        candle->mdHeader_.exchTs_ = exchTs * 1000;
+        candle->mdHeader_.exchTs_ = exchTs;
         candle->mdHeader_.localTs_ = asyncTask->task_->localTs_;
         candle->mdHeader_.marketCode_ = mdSvc_->getMarketCodeEnum();
         candle->mdHeader_.symbolType_ = mdSvc_->getSymbolTypeEnum();
@@ -380,6 +391,11 @@ std::string WSCliOfExchBinance::handleMDCandle(WSCliAsyncTaskSPtr& asyncTask) {
         candle->close_ = CONV(Decimal, yyjson_get_str(valClose));
         candle->vol_ = CONV(Decimal, yyjson_get_str(valVol));
         candle->amt_ = CONV(Decimal, yyjson_get_str(valAmt));
+        if (mdSvc_->saveMarketData()) {
+          arg->topic_ = topic;
+          arg->exchTs_ = exchTs;
+          arg->marketDataOfUnifiedFmt_ = candle->dataOfUnifiedFmt();
+        }
       },
       PUB_CHANNEL, MSG_ID_ON_MD_CANDLE, sizeof(Candle));
 
@@ -411,7 +427,7 @@ std::string WSCliOfExchBinance::handleMDCandle(WSCliAsyncTaskSPtr& asyncTask) {
 }
 */
 std::string WSCliOfExchBinance::handleMDBooks(WSCliAsyncTaskSPtr& asyncTask) {
-  const auto arg = std::any_cast<WSCliAsyncTaskArgSPtr>(asyncTask->arg_);
+  auto arg = std::any_cast<WSCliAsyncTaskArgSPtr>(asyncTask->arg_);
   const auto& marketCode = mdSvc_->getMarketCode();
   const auto& symbolType = mdSvc_->getSymbolType();
 
@@ -437,7 +453,7 @@ std::string WSCliOfExchBinance::handleMDBooks(WSCliAsyncTaskSPtr& asyncTask) {
     return "";
   }
   const auto valExchTs = yyjson_obj_get(arg->root_, "E");
-  const auto exchTs = yyjson_get_uint(valExchTs);
+  const auto exchTs = yyjson_get_uint(valExchTs) * 1000;
 
   const auto [topic, topicHash] =
       MakeTopicInfo(marketCode, symbolType, symbolCode, MDType::Books,
@@ -447,7 +463,7 @@ std::string WSCliOfExchBinance::handleMDBooks(WSCliAsyncTaskSPtr& asyncTask) {
       [&](void* shmBuf) {
         auto books = static_cast<Books*>(shmBuf);
         books->shmHeader_.topicHash_ = topicHash;
-        books->mdHeader_.exchTs_ = exchTs * 1000;
+        books->mdHeader_.exchTs_ = exchTs;
         books->mdHeader_.localTs_ = asyncTask->task_->localTs_;
         books->mdHeader_.marketCode_ = mdSvc_->getMarketCodeEnum();
         books->mdHeader_.symbolType_ = mdSvc_->getSymbolTypeEnum();
@@ -471,6 +487,12 @@ std::string WSCliOfExchBinance::handleMDBooks(WSCliAsyncTaskSPtr& asyncTask) {
           const auto& depthData = iter->second;
           books->bids_[bidsLvl].price_ = depthData->price_;
           books->bids_[bidsLvl].size_ = depthData->size_;
+        }
+        if (mdSvc_->saveMarketData()) {
+          arg->topic_ = topic;
+          arg->exchTs_ = exchTs;
+          arg->marketDataOfUnifiedFmt_ =
+              books->dataOfUnifiedFmt(mdSvc_->getBooksDepthLevelOfSave());
         }
       },
       PUB_CHANNEL, MSG_ID_ON_MD_BOOKS, sizeof(Books));

@@ -14,6 +14,7 @@
 #include "PosMgr.hpp"
 #include "SHMHeader.hpp"
 #include "SHMIPCTask.hpp"
+#include "SHMIPCUtil.hpp"
 #include "StgEngImpl.hpp"
 #include "StgEngUtil.hpp"
 #include "db/TBLMonitorOfStgInstInfo.hpp"
@@ -53,6 +54,14 @@ void StgInstTaskHandlerImpl::handleAsyncTaskImpl(
   const auto data = asyncTask->task_->data_;
   const auto msgId = static_cast<const SHMHeader*>(data)->msgId_;
   switch (msgId) {
+    case MSG_ID_ON_PUSH_TOPIC: {
+      const auto topicContent =
+          MakeMsgSPtrByTask<TopicContent>(asyncTask->task_);
+      if (stgInstTaskHandlerBundle_.onPushTopic_) {
+        stgInstTaskHandlerBundle_.onPushTopic_(stgInstInfo, topicContent);
+      }
+    } break;
+
     case MSG_ID_ON_ORDER_RET: {
       const auto ordRet = MakeMsgSPtrByTask<OrderInfo>(asyncTask->task_);
       LOG_I("Recv order ret {}", ordRet->toShortStr());

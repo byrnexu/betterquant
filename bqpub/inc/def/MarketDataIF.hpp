@@ -40,6 +40,8 @@ struct Trades {
   char extData_[0];
   std::string toStr() const;
   std::string toJson() const;
+  std::string data() const;
+  std::string dataOfUnifiedFmt() const;
 };
 using TradesSPtr = std::shared_ptr<Trades>;
 using TradesUPtr = std::unique_ptr<Trades>;
@@ -58,7 +60,9 @@ struct Books {
   std::string toStr() const;
   std::uint16_t extDataLen_{0};
   char extData_[0];
-  std::string toJson() const;
+  std::string toJson(std::uint32_t level = MAX_DEPTH_LEVEL) const;
+  std::string data(std::uint32_t level = MAX_DEPTH_LEVEL) const;
+  std::string dataOfUnifiedFmt(std::uint32_t level = MAX_DEPTH_LEVEL) const;
 };
 using BooksSPtr = std::shared_ptr<Books>;
 using BooksUPtr = std::unique_ptr<Books>;
@@ -81,6 +85,8 @@ struct Tickers {
   char extData_[0];
   std::string toStr() const;
   std::string toJson() const;
+  std::string data() const;
+  std::string dataOfUnifiedFmt() const;
 };
 using TickersSPtr = std::shared_ptr<Tickers>;
 using TickersUPtr = std::unique_ptr<Tickers>;
@@ -99,6 +105,8 @@ struct Candle {
   char extData_[0];
   std::string toStr() const;
   std::string toJson() const;
+  std::string data() const;
+  std::string dataOfUnifiedFmt() const;
 };
 using CandleSPtr = std::shared_ptr<Candle>;
 using CandleUPtr = std::unique_ptr<Candle>;

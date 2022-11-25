@@ -13,6 +13,7 @@
 #include "OrdMgr.hpp"
 #include "PosMgr.hpp"
 #include "SHMIPC.hpp"
+#include "StgEngConst.hpp"
 #include "StgEngUtil.hpp"
 #include "StgInstTaskHandlerImpl.hpp"
 #include "db/DBE.hpp"
@@ -33,6 +34,7 @@
 #include "util/File.hpp"
 #include "util/Literal.hpp"
 #include "util/MarketDataCache.hpp"
+#include "util/MarketDataCond.hpp"
 #include "util/Random.hpp"
 #include "util/ScheduleTaskBundle.hpp"
 #include "util/Scheduler.hpp"
@@ -50,7 +52,7 @@ int StgEngImpl::prepareInit() {
   taskOfSyncGroup_.reserve(1024);
 
   try {
-    config_ = std::make_shared<YAML::Node>(YAML::LoadFile(configFilename_));
+    config_ = YAML::LoadFile(configFilename_);
   } catch (const std::exception& e) {
     std::cerr << fmt::format("Open config filename {} failed. [{}]",
                              configFilename_, e.what())
@@ -71,10 +73,10 @@ int StgEngImpl::prepareInit() {
 }
 
 int StgEngImpl::doInit() {
-  stgId_ = (*getConfig())["stgId"].as<StgId>();
+  stgId_ = getConfig()["stgId"].as<StgId>();
   appName_ = fmt::format("Stg-{}", getStgId());
   rootDirOfStgPrivateData_ = fmt::format(
-      "{}/{}", (*getConfig())["rootDirOfStgPrivateData"].as<std::string>(),
+      "{}/{}", getConfig()["rootDirOfStgPrivateData"].as<std::string>(),
       getStgId());
 
   if (auto ret = initDBEng(); ret != 0) {
@@ -111,8 +113,8 @@ int StgEngImpl::doInit() {
 }
 
 int StgEngImpl::initDBEng() {
-  const auto dbEngParam = SetParam(
-      db::DEFAULT_DB_ENG_PARAM, (*getConfig())["dbEngParam"].as<std::string>());
+  const auto dbEngParam = SetParam(db::DEFAULT_DB_ENG_PARAM,
+                                   getConfig()["dbEngParam"].as<std::string>());
   int retOfMakeDBEng = 0;
   std::tie(retOfMakeDBEng, dbEng_) = db::MakeDBEng(
       dbEngParam, [this](db::DBTaskSPtr& dbTask, const StringSPtr& dbExecRet) {
@@ -134,7 +136,7 @@ int StgEngImpl::initDBEng() {
 
 void StgEngImpl::initTBLMonitorOfSymbolInfo() {
   const auto milliSecIntervalOfTBLMonitorOfSymbolInfo =
-      (*getConfig())["milliSecIntervalOfTBLMonitorOfSymbolInfo"]
+      getConfig()["milliSecIntervalOfTBLMonitorOfSymbolInfo"]
           .as<std::uint32_t>();
   const auto sql = fmt::format("SELECT * FROM {}", TBLSymbolInfo::TableName);
   tblMonitorOfSymbolInfo_ = std::make_shared<db::TBLMonitorOfSymbolInfo>(
@@ -163,7 +165,7 @@ void StgEngImpl::initTBLMonitorOfStgInstInfo() {
   };
 
   const auto milliSecIntervalOfTBLMonitorOfStgInstInfo =
-      (*getConfig())["milliSecIntervalOfTBLMonitorOfStgInstInfo"]
+      getConfig()["milliSecIntervalOfTBLMonitorOfStgInstInfo"]
           .as<std::uint32_t>();
   const auto sql = fmt::format(
       "SELECT a.`productId`, a.`stgId`, a.`stgName`, a.`userIdOfAuthor`, "
@@ -193,7 +195,7 @@ void StgEngImpl::initSubMgr() {
 
 void StgEngImpl::initSHMCliOfTDSrv() {
   const auto stgEngChannelOfTDSrv =
-      (*getConfig())["stgEngChannelOfTDSrv"].as<std::string>();
+      getConfig()["stgEngChannelOfTDSrv"].as<std::string>();
   const auto addr =
       fmt::format("{}{}{}", appName_, SEP_OF_SHM_SVC, stgEngChannelOfTDSrv);
 
@@ -215,7 +217,7 @@ void StgEngImpl::initSHMCliOfTDSrv() {
 
 void StgEngImpl::initSHMCliOfRiskMgr() {
   const auto stgEngChannelOfRiskMgr =
-      (*getConfig())["stgEngChannelOfRiskMgr"].as<std::string>();
+      getConfig()["stgEngChannelOfRiskMgr"].as<std::string>();
   const auto addr =
       fmt::format("{}{}{}", appName_, SEP_OF_SHM_SVC, stgEngChannelOfRiskMgr);
 
@@ -241,20 +243,20 @@ void StgEngImpl::initOrdMgr() {
   const auto sql = fmt::format(
       "SELECT * FROM `orderInfo` WHERE `stgId` = {} AND `orderStatus` < {}; ",
       getStgId(), filled);
-  getOrdMgr()->init(*getConfig(), getDBEng(), sql);
+  getOrdMgr()->init(getConfig(), getDBEng(), sql);
 }
 
 void StgEngImpl::initPosMgr() {
   const auto sql =
       fmt::format("SELECT * FROM `posInfo` WHERE `stgId` = {}", getStgId());
   posMgr_ = std::make_shared<PosMgr>();
-  getPosMgr()->init(*getConfig(), getDBEng(), sql);
+  getPosMgr()->init(getConfig(), getDBEng(), sql);
 }
 
 int StgEngImpl::initStgInstTaskDispatcher() {
   const auto stgInstTaskDispatcherParamInStrFmt =
       SetParam(DEFAULT_TASK_DISPATCHER_PARAM,
-               (*getConfig())["stgInstTaskDispatcherParam"].as<std::string>());
+               getConfig()["stgInstTaskDispatcherParam"].as<std::string>());
   const auto [ret, stgInstTaskDispatcherParam] =
       MakeTaskDispatcherParam(stgInstTaskDispatcherParamInStrFmt);
   if (ret != 0) {
@@ -310,7 +312,7 @@ void StgEngImpl::initScheduleTaskBundle() {
         ExecAtStartup::False, MilliSecInterval(3000)));
 
     const auto milliSecIntervalOfSyncTask =
-        (*getConfig())["milliSecIntervalOfSyncTask"].as<std::uint32_t>();
+        getConfig()["milliSecIntervalOfSyncTask"].as<std::uint32_t>();
     scheduleTaskBundle_->emplace_back(std::make_shared<ScheduleTask>(
         "syncTask",
         [this]() {
@@ -357,7 +359,6 @@ int StgEngImpl::doRun() {
     return SCODE_STG_INST_ID_MUST_START_FROM_1;
   }
 
-  subMgr_->start();
   stgInstTaskDispatcher_->start();
   shmCliOfTDSrv_->start();
   shmCliOfRiskMgr_->start();
@@ -471,7 +472,6 @@ void StgEngImpl::doExit(const boost::system::error_code* ec, int signalNum) {
   shmCliOfRiskMgr_->stop();
   shmCliOfTDSrv_->stop();
   stgInstTaskDispatcher_->stop();
-  subMgr_->stop();
   tblMonitorOfSymbolInfo_->stop();
   tblMonitorOfStgInstInfo_->stop();
   getDBEng()->stop();
@@ -591,6 +591,146 @@ int StgEngImpl::sub(StgInstId subscriber, const std::string& topic) {
 
 int StgEngImpl::unSub(StgInstId subscriber, const std::string& topic) {
   return subMgr_->unSub(subscriber, topic);
+}
+
+std::tuple<int, std::string> StgEngImpl::queryHisMDBetween2Ts(
+    const std::string& topic, std::uint64_t tsBegin, std::uint64_t tsEnd,
+    std::uint32_t level) {
+  const auto [statusCode, marketDataCond] = getMarketDataCondFromTopic(topic);
+  if (statusCode != 0) return {statusCode, ""};
+  return queryHisMDBetween2Ts(
+      marketDataCond->marketCode_, marketDataCond->symbolType_,
+      marketDataCond->symbolCode_, marketDataCond->mdType_, tsBegin, tsEnd,
+      marketDataCond->level_);
+}
+
+//
+// http://192.168.19.113/v1/QueryHisMD/between/Binance/Spot/BTC-USDT/Trades?tsBegin=1668989747663000&tsEnd=1668989747697000
+// http://192.168.19.113/v1/QueryHisMD/between/Binance/Spot/BTC-USDT/Books?level=20&tsBegin=1669032414507000&tsEnd=1669032415008000
+//
+std::tuple<int, std::string> StgEngImpl::queryHisMDBetween2Ts(
+    MarketCode marketCode, SymbolType symbolType, const std::string& symbolCode,
+    MDType mdType, std::uint64_t tsBegin, std::uint64_t tsEnd,
+    std::uint32_t level) {
+  std::string addr;
+  if (mdType != MDType::Books) {
+    addr = fmt::format(
+        "{}/{}/{}/{}/{}?tsBegin={}&tsEnd={}", prefixOfQueryHisMDBetween,
+        magic_enum::enum_name(marketCode), magic_enum::enum_name(symbolType),
+        symbolCode, magic_enum::enum_name(mdType), tsBegin, tsEnd);
+  } else {
+    addr = fmt::format("{}/{}/{}/{}/{}?level={}&tsBegin={}&tsEnd={}",
+                       prefixOfQueryHisMDBetween,
+                       magic_enum::enum_name(marketCode),
+                       magic_enum::enum_name(symbolType), symbolCode,
+                       magic_enum::enum_name(mdType), level, tsBegin, tsEnd);
+  }
+
+  const auto timeoutOfQueryHisMD =
+      getConfig()["timeoutOfQueryHisMD"].as<std::uint32_t>(60000);
+  cpr::Response rsp =
+      cpr::Get(cpr::Url{addr}, cpr::Timeout(timeoutOfQueryHisMD));
+  if (rsp.status_code != cpr::status::HTTP_OK) {
+    const auto statusMsg =
+        fmt::format("Query his market data between 2 ts failed. [{}:{}] {} {}",
+                    rsp.status_code, rsp.reason, rsp.text, rsp.url.str());
+    LOG_W(statusMsg);
+    return {SCODE_STG_SEND_HTTP_REQ_TO_QUERY_HIS_MD_FAILED, ""};
+  } else {
+    LOG_D("Send http req success. {}", addr);
+  }
+
+  return {0, rsp.text};
+}
+
+std::tuple<int, std::string> StgEngImpl::querySpecificNumOfHisMDBeforeTs(
+    const std::string& topic, std::uint64_t ts, int num, std::uint32_t level) {
+  const auto [statusCode, marketDataCond] = getMarketDataCondFromTopic(topic);
+  if (statusCode != 0) return {statusCode, ""};
+  return querySpecificNumOfHisMDBeforeTs(
+      marketDataCond->marketCode_, marketDataCond->symbolType_,
+      marketDataCond->symbolCode_, marketDataCond->mdType_, ts, num,
+      marketDataCond->level_);
+}
+
+// http://192.168.19.113/v1/QueryHisMD/offset/Binance/Spot/BTC-USDT/Trades?ts=1668989747697000&offset=1
+// http://192.168.19.113/v1/QueryHisMD/offset/Binance/Spot/BTC-USDT/Books?level=20&ts=1669032414507000&offset=1000
+std::tuple<int, std::string> StgEngImpl::querySpecificNumOfHisMDBeforeTs(
+    MarketCode marketCode, SymbolType symbolType, const std::string& symbolCode,
+    MDType mdType, std::uint64_t ts, int num, std::uint32_t level) {
+  std::string addr;
+  if (mdType != MDType::Books) {
+    addr = fmt::format(
+        "{}/{}/{}/{}/{}?ts={}&offset={}", prefixOfQueryHisMDOffset,
+        magic_enum::enum_name(marketCode), magic_enum::enum_name(symbolType),
+        symbolCode, magic_enum::enum_name(mdType), ts, -1 * num);
+  } else {
+    addr = fmt::format(
+        "{}/{}/{}/{}/{}?level={}&ts={}&offset={}", prefixOfQueryHisMDOffset,
+        magic_enum::enum_name(marketCode), magic_enum::enum_name(symbolType),
+        symbolCode, magic_enum::enum_name(mdType), level, ts, -1 * num);
+  }
+
+  const auto timeoutOfQueryHisMD =
+      getConfig()["timeoutOfQueryHisMD"].as<std::uint32_t>(60000);
+  cpr::Response rsp =
+      cpr::Get(cpr::Url{addr}, cpr::Timeout(timeoutOfQueryHisMD));
+  if (rsp.status_code != cpr::status::HTTP_OK) {
+    const auto statusMsg = fmt::format(
+        "Query specific num of his market data before ts failed. [{}:{}] {} {}",
+        rsp.status_code, rsp.reason, rsp.text, rsp.url.str());
+    LOG_W(statusMsg);
+    return {SCODE_STG_SEND_HTTP_REQ_TO_QUERY_HIS_MD_FAILED, ""};
+  } else {
+    LOG_D("Send http req success. {}", addr);
+  }
+
+  return {0, rsp.text};
+}
+
+std::tuple<int, std::string> StgEngImpl::querySpecificNumOfHisMDAfterTs(
+    const std::string& topic, std::uint64_t ts, int num, std::uint32_t level) {
+  const auto [statusCode, marketDataCond] = getMarketDataCondFromTopic(topic);
+  if (statusCode != 0) return {statusCode, ""};
+  return querySpecificNumOfHisMDAfterTs(
+      marketDataCond->marketCode_, marketDataCond->symbolType_,
+      marketDataCond->symbolCode_, marketDataCond->mdType_, ts, num,
+      marketDataCond->level_);
+}
+
+// http://192.168.19.113/v1/QueryHisMD/offset/Binance/Spot/BTC-USDT/Trades?ts=1668989747697000&offset=1
+// http://192.168.19.113/v1/QueryHisMD/offset/Binance/Spot/BTC-USDT/Books?level=20&ts=1669032414507000&offset=1000
+std::tuple<int, std::string> StgEngImpl::querySpecificNumOfHisMDAfterTs(
+    MarketCode marketCode, SymbolType symbolType, const std::string& symbolCode,
+    MDType mdType, std::uint64_t ts, int num, std::uint32_t level) {
+  std::string addr;
+  if (mdType != MDType::Books) {
+    addr = fmt::format(
+        "{}/{}/{}/{}/{}?ts={}&offset={}", prefixOfQueryHisMDOffset,
+        magic_enum::enum_name(marketCode), magic_enum::enum_name(symbolType),
+        symbolCode, magic_enum::enum_name(mdType), ts, num);
+  } else {
+    addr = fmt::format(
+        "{}/{}/{}/{}/{}?level={}&ts={}&offset={}", prefixOfQueryHisMDOffset,
+        magic_enum::enum_name(marketCode), magic_enum::enum_name(symbolType),
+        symbolCode, magic_enum::enum_name(mdType), level, ts, num);
+  }
+
+  const auto timeoutOfQueryHisMD =
+      getConfig()["timeoutOfQueryHisMD"].as<std::uint32_t>(60000);
+  cpr::Response rsp =
+      cpr::Get(cpr::Url{addr}, cpr::Timeout(timeoutOfQueryHisMD));
+  if (rsp.status_code != cpr::status::HTTP_OK) {
+    const auto statusMsg = fmt::format(
+        "Query specific num of his market data after ts failed. [{}:{}] {} {}",
+        rsp.status_code, rsp.reason, rsp.text, rsp.url.str());
+    LOG_W(statusMsg);
+    return {SCODE_STG_SEND_HTTP_REQ_TO_QUERY_HIS_MD_FAILED, ""};
+  } else {
+    LOG_D("Send http req success. {}", addr);
+  }
+
+  return {0, rsp.text};
 }
 
 void StgEngImpl::installStgInstTimer(StgInstId stgInstId,

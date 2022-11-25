@@ -70,6 +70,7 @@ else()
 endif()
 
 target_link_libraries(${TEST_PROJECT_NAME}
+    libxxhash.a
     iceoryx_posh
     iceoryx_hoofs
     iceoryx_platform

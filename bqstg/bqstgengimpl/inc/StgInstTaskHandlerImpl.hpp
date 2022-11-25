@@ -51,11 +51,17 @@ using OrderInfoSPtr = std::shared_ptr<OrderInfo>;
 
 struct StgInstInfo;
 using StgInstInfoSPtr = std::shared_ptr<StgInstInfo>;
+
+struct TopicContent;
+using TopicContentSPtr = std::shared_ptr<TopicContent>;
 }  // namespace bq
 
 namespace bq::stg {
 
 struct StgInstTaskHandlerBundle {
+  std::function<void(const StgInstInfoSPtr&, const TopicContentSPtr&)>
+      onPushTopic_{nullptr};
+
   std::function<void(const StgInstInfoSPtr&, const OrderInfoSPtr&)> onOrderRet_{
       nullptr};
   std::function<void(const StgInstInfoSPtr&, const OrderInfoSPtr&)>

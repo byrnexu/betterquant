@@ -8,4 +8,6 @@
  * \brief
  */
 
+#pragma once
+
 #include "PnlIF.hpp"

@@ -18,6 +18,7 @@
 #include <memory>
 #include <thread>
 
+#include "SHMIPCUtil.hpp"
 #include "StgEngImpl.hpp"
 #include "StgEngPYUtil.hpp"
 #include "StgInstTaskHandlerImpl.hpp"
@@ -34,6 +35,7 @@
 #include "def/PosInfo.hpp"
 #include "def/StgInstInfo.hpp"
 #include "def/SymbolInfo.hpp"
+#include "util/BQUtil.hpp"
 #include "util/Logger.hpp"
 #include "util/PosSnapshot.hpp"
 
@@ -57,6 +59,26 @@ int StgEng::init(PyObject* stgInstTaskHandler) {
 
 void StgEng::installStgInstTaskHandler(PyObject* value) {
   stgInstTaskHandler_ = value;
+
+  stgEngImpl_->getStgInstTaskHandler()
+      ->getStgInstTaskHandlerBundle()
+      .onPushTopic_ = [this](const StgInstInfoSPtr& stgInstInfo,
+                             const TopicContentSPtr& topicContent) {
+    {
+      std::lock_guard<std::mutex> guard(mtxPY_);
+      try {
+        boost::python::call_method<void>(stgInstTaskHandler_, "on_push_topic",
+                                         stgInstInfo, topicContent->toJson());
+      } catch (const boost::python::error_already_set& e) {
+        if (PyErr_Occurred()) {
+          const auto msg = handlePYErr();
+          LOG_E("Python interpreter error: \n {}", msg);
+        }
+        boost::python::handle_exception();
+        PyErr_Clear();
+      }
+    }
+  };
 
   stgEngImpl_->getStgInstTaskHandler()
       ->getStgInstTaskHandlerBundle()
@@ -121,7 +143,13 @@ void StgEng::installStgInstTaskHandler(PyObject* value) {
 
   stgEngImpl_->getStgInstTaskHandler()->getStgInstTaskHandlerBundle().onBooks_ =
       [this](const StgInstInfoSPtr& stgInstInfo, const BooksSPtr& books) {
-        const auto marketData = books->toJson();
+        std::uint32_t realDepthLevel{0};
+        {
+          std::lock_guard<std::mutex> guard(mtxStgInstId2RealDepthLevel_);
+          realDepthLevel = stgInstId2RealDepthLevel_[stgInstInfo->stgInstId_];
+        }
+
+        const auto marketData = books->toJson(realDepthLevel);
         {
           std::lock_guard<std::mutex> guard(mtxPY_);
           try {
@@ -201,304 +229,19 @@ void StgEng::installStgInstTaskHandler(PyObject* value) {
   stgEngImpl_->getStgInstTaskHandler()
       ->getStgInstTaskHandlerBundle()
       .onStgInstStart_ = [this](const auto& stgInstInfo) {
-    for (int i = 0; i < 1; ++i) {
-      {
-        std::lock_guard<std::mutex> guard(mtxPY_);
-        try {
-          boost::python::call_method<void>(stgInstTaskHandler_,
-                                           "on_stg_inst_start", stgInstInfo);
-        } catch (const boost::python::error_already_set& e) {
-          if (PyErr_Occurred()) {
-            const auto msg = handlePYErr();
-            LOG_E("Python interpreter error: \n {}", msg);
-          }
-          boost::python::handle_exception();
-          PyErr_Clear();
+    {
+      std::lock_guard<std::mutex> guard(mtxPY_);
+      try {
+        boost::python::call_method<void>(stgInstTaskHandler_,
+                                         "on_stg_inst_start", stgInstInfo);
+      } catch (const boost::python::error_already_set& e) {
+        if (PyErr_Occurred()) {
+          const auto msg = handlePYErr();
+          LOG_E("Python interpreter error: \n {}", msg);
         }
+        boost::python::handle_exception();
+        PyErr_Clear();
       }
-
-      /*
-      const auto orderInfo = MakeOrderInfo();
-
-      {
-        std::lock_guard<std::mutex> guard(mtxPY_);
-        try {
-          boost::python::call_method<void>(stgInstTaskHandler_, "on_order_ret",
-                                           stgInstInfo, orderInfo);
-        } catch (const boost::python::error_already_set& e) {
-          if (PyErr_Occurred()) {
-            const auto msg = handlePYErr();
-            LOG_E("Python interpreter error: \n {}", msg);
-          }
-          boost::python::handle_exception();
-          PyErr_Clear();
-        }
-      }
-
-      {
-        std::lock_guard<std::mutex> guard(mtxPY_);
-        try {
-          boost::python::call_method<void>(stgInstTaskHandler_,
-                                           "on_cancel_order_ret", stgInstInfo,
-                                           orderInfo);
-        } catch (const boost::python::error_already_set& e) {
-          if (PyErr_Occurred()) {
-            const auto msg = handlePYErr();
-            LOG_E("Python interpreter error: \n {}", msg);
-          }
-          boost::python::handle_exception();
-          PyErr_Clear();
-        }
-      }
-
-      const auto trades = std::make_shared<Trades>();
-      {
-        std::lock_guard<std::mutex> guard(mtxPY_);
-        try {
-          boost::python::call_method<void>(stgInstTaskHandler_, "on_trades",
-                                           stgInstInfo, trades->toJson());
-        } catch (const boost::python::error_already_set& e) {
-          if (PyErr_Occurred()) {
-            const auto msg = handlePYErr();
-            LOG_E("Python interpreter error: \n {}", msg);
-          }
-          boost::python::handle_exception();
-          PyErr_Clear();
-        }
-      }
-
-      const auto books = std::make_shared<Books>();
-      {
-        std::lock_guard<std::mutex> guard(mtxPY_);
-        try {
-          boost::python::call_method<void>(stgInstTaskHandler_, "on_books",
-                                           stgInstInfo, books->toJson());
-        } catch (const boost::python::error_already_set& e) {
-          if (PyErr_Occurred()) {
-            const auto msg = handlePYErr();
-            LOG_E("Python interpreter error: \n {}", msg);
-          }
-          boost::python::handle_exception();
-          PyErr_Clear();
-        }
-      }
-
-      const auto tickers = std::make_shared<Tickers>();
-      {
-        std::lock_guard<std::mutex> guard(mtxPY_);
-        try {
-          boost::python::call_method<void>(stgInstTaskHandler_, "on_tickers",
-                                           stgInstInfo, tickers->toJson());
-        } catch (const boost::python::error_already_set& e) {
-          if (PyErr_Occurred()) {
-            const auto msg = handlePYErr();
-            LOG_E("Python interpreter error: \n {}", msg);
-          }
-          boost::python::handle_exception();
-          PyErr_Clear();
-        }
-      }
-
-      const auto candle = std::make_shared<Candle>();
-      {
-        std::lock_guard<std::mutex> guard(mtxPY_);
-        try {
-          boost::python::call_method<void>(stgInstTaskHandler_, "on_candle",
-                                           stgInstInfo, candle->toJson());
-        } catch (const boost::python::error_already_set& e) {
-          if (PyErr_Occurred()) {
-            const auto msg = handlePYErr();
-            LOG_E("Python interpreter error: \n {}", msg);
-          }
-          boost::python::handle_exception();
-          PyErr_Clear();
-        }
-      }
-
-      {
-        std::lock_guard<std::mutex> guard(mtxPY_);
-        try {
-          boost::python::call_method<void>(stgInstTaskHandler_,
-                                           "on_stg_inst_add", stgInstInfo);
-        } catch (const boost::python::error_already_set& e) {
-          if (PyErr_Occurred()) {
-            const auto msg = handlePYErr();
-            LOG_E("Python interpreter error: \n {}", msg);
-          }
-          boost::python::handle_exception();
-          PyErr_Clear();
-        }
-      }
-
-      {
-        std::lock_guard<std::mutex> guard(mtxPY_);
-        try {
-          boost::python::call_method<void>(stgInstTaskHandler_,
-                                           "on_stg_inst_del", stgInstInfo);
-        } catch (const boost::python::error_already_set& e) {
-          if (PyErr_Occurred()) {
-            const auto msg = handlePYErr();
-            LOG_E("Python interpreter error: \n {}", msg);
-          }
-          boost::python::handle_exception();
-          PyErr_Clear();
-        }
-      }
-
-      {
-        std::lock_guard<std::mutex> guard(mtxPY_);
-        try {
-          boost::python::call_method<void>(stgInstTaskHandler_,
-                                           "on_stg_inst_chg", stgInstInfo);
-        } catch (const boost::python::error_already_set& e) {
-          if (PyErr_Occurred()) {
-            const auto msg = handlePYErr();
-            LOG_E("Python interpreter error: \n {}", msg);
-          }
-          boost::python::handle_exception();
-          PyErr_Clear();
-        }
-      }
-
-      auto posSnapshot =
-          std::make_shared<PosSnapshot>(std::map<std::string, PosInfoSPtr>(),
-                                        std::make_shared<MarketDataCache>());
-      {
-        std::lock_guard<std::mutex> guard(mtxPY_);
-        try {
-          boost::python::call_method<void>(stgInstTaskHandler_,
-                                           "on_pos_update_of_acct_id",
-                                           stgInstInfo, posSnapshot);
-        } catch (const boost::python::error_already_set& e) {
-          if (PyErr_Occurred()) {
-            const auto msg = handlePYErr();
-            LOG_E("Python interpreter error: \n {}", msg);
-          }
-          boost::python::handle_exception();
-          PyErr_Clear();
-        }
-      }
-
-      {
-        std::lock_guard<std::mutex> guard(mtxPY_);
-        try {
-          boost::python::call_method<void>(stgInstTaskHandler_,
-                                           "on_pos_snapshot_of_acct_id",
-                                           stgInstInfo, posSnapshot);
-        } catch (const boost::python::error_already_set& e) {
-          if (PyErr_Occurred()) {
-            const auto msg = handlePYErr();
-            LOG_E("Python interpreter error: \n {}", msg);
-          }
-          boost::python::handle_exception();
-          PyErr_Clear();
-        }
-      }
-
-      {
-        std::lock_guard<std::mutex> guard(mtxPY_);
-        try {
-          boost::python::call_method<void>(stgInstTaskHandler_,
-                                           "on_pos_update_of_stg_id",
-                                           stgInstInfo, posSnapshot);
-        } catch (const boost::python::error_already_set& e) {
-          if (PyErr_Occurred()) {
-            const auto msg = handlePYErr();
-            LOG_E("Python interpreter error: \n {}", msg);
-          }
-          boost::python::handle_exception();
-          PyErr_Clear();
-        }
-      }
-
-      {
-        std::lock_guard<std::mutex> guard(mtxPY_);
-        try {
-          boost::python::call_method<void>(stgInstTaskHandler_,
-                                           "on_pos_snapshot_of_stg_id",
-                                           stgInstInfo, posSnapshot);
-        } catch (const boost::python::error_already_set& e) {
-          if (PyErr_Occurred()) {
-            const auto msg = handlePYErr();
-            LOG_E("Python interpreter error: \n {}", msg);
-          }
-          boost::python::handle_exception();
-          PyErr_Clear();
-        }
-      }
-
-      {
-        std::lock_guard<std::mutex> guard(mtxPY_);
-        try {
-          boost::python::call_method<void>(stgInstTaskHandler_,
-                                           "on_pos_update_of_stg_inst_id",
-                                           stgInstInfo, posSnapshot);
-        } catch (const boost::python::error_already_set& e) {
-          if (PyErr_Occurred()) {
-            const auto msg = handlePYErr();
-            LOG_E("Python interpreter error: \n {}", msg);
-          }
-          boost::python::handle_exception();
-          PyErr_Clear();
-        }
-      }
-
-      {
-        std::lock_guard<std::mutex> guard(mtxPY_);
-        try {
-          boost::python::call_method<void>(stgInstTaskHandler_,
-                                           "on_pos_snapshot_of_stg_inst_id",
-                                           stgInstInfo, posSnapshot);
-        } catch (const boost::python::error_already_set& e) {
-          if (PyErr_Occurred()) {
-            const auto msg = handlePYErr();
-            LOG_E("Python interpreter error: \n {}", msg);
-          }
-          boost::python::handle_exception();
-          PyErr_Clear();
-        }
-      }
-
-      const auto assetInfoUpdate = std::make_shared<AssetInfo>();
-      auto assetsUpdate = std::make_shared<AssetsUpdate>();
-      assetsUpdate->emplace(assetInfoUpdate->getKey(), assetInfoUpdate);
-      {
-        std::lock_guard<std::mutex> guard(mtxPY_);
-        try {
-          boost::python::call_method<void>(stgInstTaskHandler_,
-                                           "on_assets_update", stgInstInfo,
-                                           assetsUpdate);
-        } catch (const boost::python::error_already_set& e) {
-          if (PyErr_Occurred()) {
-            const auto msg = handlePYErr();
-            LOG_E("Python interpreter error: \n {}", msg);
-          }
-          boost::python::handle_exception();
-          PyErr_Clear();
-        }
-      }
-
-      const auto assetInfoSnapshot = std::make_shared<AssetInfo>();
-      auto assetsSnapshot = std::make_shared<AssetsSnapshot>();
-      assetsSnapshot->emplace(assetInfoSnapshot->getKey(), assetInfoSnapshot);
-      {
-        std::lock_guard<std::mutex> guard(mtxPY_);
-        try {
-          boost::python::call_method<void>(stgInstTaskHandler_,
-                                           "on_assets_snapshot", stgInstInfo,
-                                           assetsSnapshot);
-        } catch (const boost::python::error_already_set& e) {
-          if (PyErr_Occurred()) {
-            const auto msg = handlePYErr();
-            LOG_E("Python interpreter error: \n {}", msg);
-          }
-          boost::python::handle_exception();
-          PyErr_Clear();
-        }
-      }
-      */
-
-      // end of test
     }
   };
 
@@ -779,11 +522,68 @@ std::tuple<int, OrderInfoSPtr> StgEng::getOrderInfo(OrderId orderId) const {
 }
 
 int StgEng::sub(StgInstId subscriber, const std::string& topic) {
-  return stgEngImpl_->sub(subscriber, topic);
+  const auto internalTopic = convertTopic(topic);
+  std::vector<std::string> fieldGroup;
+  boost::algorithm::split(fieldGroup, internalTopic,
+                          boost::is_any_of(SEP_OF_TOPIC));
+  if (fieldGroup.size() == 6 &&
+      fieldGroup[4] == std::string(magic_enum::enum_name(MDType::Books)) &&
+      fieldGroup[0] == TOPIC_PREFIX_OF_MARKET_DATA) {
+    {
+      std::lock_guard<std::mutex> guard(mtxStgInstId2RealDepthLevel_);
+      stgInstId2RealDepthLevel_[subscriber] =
+          CONV(std::uint32_t, fieldGroup[5]);
+    }
+    fieldGroup.pop_back();
+    const auto topicOfMaxDepthLevel =
+        fmt::format("{}{}{}", boost::join(fieldGroup, SEP_OF_TOPIC),
+                    SEP_OF_TOPIC, MAX_DEPTH_LEVEL);
+    return stgEngImpl_->sub(subscriber, topicOfMaxDepthLevel);
+  } else {
+    return stgEngImpl_->sub(subscriber, internalTopic);
+  }
 }
 
 int StgEng::unSub(StgInstId subscriber, const std::string& topic) {
   return stgEngImpl_->unSub(subscriber, topic);
+}
+
+std::tuple<int, std::string> StgEng::queryHisMDBetween2Ts(
+    MarketCode marketCode, SymbolType symbolType, const std::string& symbolCode,
+    MDType mdType, std::uint64_t tsBegin, std::uint64_t tsEnd,
+    std::uint32_t level) {
+  return stgEngImpl_->queryHisMDBetween2Ts(marketCode, symbolType, symbolCode,
+                                           mdType, tsBegin, tsEnd, level);
+}
+
+std::tuple<int, std::string> StgEng::queryHisMDBetween2Ts(
+    const std::string& topic, std::uint64_t tsBegin, std::uint64_t tsEnd,
+    std::uint32_t level) {
+  return stgEngImpl_->queryHisMDBetween2Ts(topic, tsBegin, tsEnd, level);
+}
+
+std::tuple<int, std::string> StgEng::querySpecificNumOfHisMDBeforeTs(
+    MarketCode marketCode, SymbolType symbolType, const std::string& symbolCode,
+    MDType mdType, std::uint64_t ts, int num, std::uint32_t level) {
+  return stgEngImpl_->querySpecificNumOfHisMDBeforeTs(
+      marketCode, symbolType, symbolCode, mdType, ts, num, level);
+}
+
+std::tuple<int, std::string> StgEng::querySpecificNumOfHisMDBeforeTs(
+    const std::string& topic, std::uint64_t ts, int num, std::uint32_t level) {
+  return stgEngImpl_->querySpecificNumOfHisMDBeforeTs(topic, ts, num, level);
+}
+
+std::tuple<int, std::string> StgEng::querySpecificNumOfHisMDAfterTs(
+    MarketCode marketCode, SymbolType symbolType, const std::string& symbolCode,
+    MDType mdType, std::uint64_t ts, int num, std::uint32_t level) {
+  return stgEngImpl_->querySpecificNumOfHisMDAfterTs(
+      marketCode, symbolType, symbolCode, mdType, ts, num, level);
+}
+
+std::tuple<int, std::string> StgEng::querySpecificNumOfHisMDAfterTs(
+    const std::string& topic, std::uint64_t ts, int num, std::uint32_t level) {
+  return stgEngImpl_->querySpecificNumOfHisMDAfterTs(topic, ts, num, level);
 }
 
 bool StgEng::saveStgPrivateData(StgInstId stgInstId,

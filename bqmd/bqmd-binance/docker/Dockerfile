@@ -4,5 +4,4 @@ RUN apt install -y openssl > /dev/null 2> /dev/null
 RUN apt install -y libcurl4
 WORKDIR /usr/bin
 ADD bin/ /usr/bin
-ADD lib/ /usr/lib
 RUN ldconfig

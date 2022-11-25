@@ -12,7 +12,7 @@ set(BENCHMARK_INC_DIR   ${BENCHMARK_ROOT}/src/benchmark-${BENCHMARK_VER}/include
 set(BENCHMARK_LIB_DIR   ${BENCHMARK_ROOT}/src/benchmark-${BENCHMARK_VER}/build/src/)
 
 set(BENCHMARK_URL       https://github.com/google/benchmark/archive/v${BENCHMARK_VER}.tar.gz)
-set(BENCHMARK_CONFIGURE cd ${BENCHMARK_ROOT}/src/benchmark-${BENCHMARK_VER} && mkdir -p build && cd build && cmake .. -DCMAKE_BUILD_TYPE=release -DBENCHMARK_ENABLE_TESTING=OFF)
+set(BENCHMARK_CONFIGURE cd ${BENCHMARK_ROOT}/src/benchmark-${BENCHMARK_VER} && mkdir -p build && cd build && cmake .. -DCMAKE_BUILD_TYPE=Release -DBENCHMARK_ENABLE_TESTING=OFF)
 set(BENCHMARK_BUILD     cd ${BENCHMARK_ROOT}/src/benchmark-${BENCHMARK_VER} && cd build && make)
 set(BENCHMARK_INSTALL   echo "install benchmark")
 

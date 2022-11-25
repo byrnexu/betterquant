@@ -8,6 +8,8 @@
  * \brief
  */
 
+#pragma once
+
 #include "def/BQDefIF.hpp"
 #include "util/PchBase.hpp"
 

@@ -4,4 +4,5 @@ set print vtbl on
 cd ../../bin
 pwd
 file bqstgeng-cxx-demo-d
-set args --conf=config/bqstgengdemo/bqstgeng-cxx-demo.yaml
+set args --conf=config/bqstgeng-cxx-demo/bqstgeng-cxx-demo.yaml
+

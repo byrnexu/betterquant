@@ -11,9 +11,13 @@
 #pragma once
 
 #include "SHMHeader.hpp"
+#include "SHMIPCConst.hpp"
+#include "SHMIPCDef.hpp"
 #include "util/PchBase.hpp"
 
 namespace bq {
+
+std::once_flag& GetOnceFlagOfAssignAppName();
 
 template <typename T>
 void InitMsgBody(void* target, const T source) {
@@ -23,5 +27,15 @@ void InitMsgBody(void* target, const T source) {
   const auto len = sizeof(T) - sizeof(SHMHeader);
   memcpy(targetAddr, sourceAddr, len);
 }
+
+struct TopicContent {
+  SHMHeader shmHeader_;
+  char data_[MAX_TOPIC_DATA_LEN];
+  std::string toJson() const;
+};
+using TopicContentSPtr = std::shared_ptr<TopicContent>;
+
+void PubTopic(const SHMSrvSPtr& shmSrv, const std::string& topic,
+              const std::string& data_);
 
 }  // namespace bq

@@ -15,6 +15,7 @@
 #include "BQPub.hpp"
 #include "Pub.hpp"
 #include "SHMIPCPub.hpp"
+#include "util/Pch.hpp"
 
 namespace bq {
 struct Pnl;
@@ -71,6 +72,35 @@ class StgEng {
   int sub(StgInstId subscriber, const std::string& topic);
   int unSub(StgInstId subscriber, const std::string& topic);
 
+ public:
+  std::tuple<int, std::string> queryHisMDBetween2Ts(
+      MarketCode marketCode, SymbolType symbolType,
+      const std::string& symbolCode, MDType mdType, std::uint64_t tsBegin,
+      std::uint64_t tsEnd, std::uint32_t level = DEFAULT_DEPTH_LEVEL);
+
+  std::tuple<int, std::string> queryHisMDBetween2Ts(
+      const std::string& topic, std::uint64_t tsBegin, std::uint64_t tsEnd,
+      std::uint32_t level = DEFAULT_DEPTH_LEVEL);
+
+  std::tuple<int, std::string> querySpecificNumOfHisMDBeforeTs(
+      MarketCode marketCode, SymbolType symbolType,
+      const std::string& symbolCode, MDType mdType, std::uint64_t ts, int num,
+      std::uint32_t level = DEFAULT_DEPTH_LEVEL);
+
+  std::tuple<int, std::string> querySpecificNumOfHisMDBeforeTs(
+      const std::string& topic, std::uint64_t ts, int num,
+      std::uint32_t level = DEFAULT_DEPTH_LEVEL);
+
+  std::tuple<int, std::string> querySpecificNumOfHisMDAfterTs(
+      MarketCode marketCode, SymbolType symbolType,
+      const std::string& symbolCode, MDType mdType, std::uint64_t ts, int num,
+      std::uint32_t level = DEFAULT_DEPTH_LEVEL);
+
+  std::tuple<int, std::string> querySpecificNumOfHisMDAfterTs(
+      const std::string& topic, std::uint64_t ts, int num,
+      std::uint32_t level = DEFAULT_DEPTH_LEVEL);
+
+ public:
   bool saveStgPrivateData(StgInstId stgInstId, const std::string& jsonStr);
   std::string loadStgPrivateData(StgInstId stgInstId);
 
@@ -81,6 +111,9 @@ class StgEng {
 
   PyObject* stgInstTaskHandler_;
   mutable std::mutex mtxPY_;
+
+  absl::node_hash_map<StgInstId, std::uint32_t> stgInstId2RealDepthLevel_;
+  mutable std::mutex mtxStgInstId2RealDepthLevel_;
 };
 
 }  // namespace bq::stg

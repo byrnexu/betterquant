@@ -28,11 +28,9 @@ class SubMgr {
   SubMgr(const SubMgr&&) = delete;
   SubMgr& operator=(const SubMgr&&) = delete;
 
-  SubMgr(const std::string& appName, const DataRecvCallback& dataRecvCallback);
-
- public:
-  void start();
-  void stop();
+  SubMgr(const std::string& appNameOfSubscriber,
+         const DataRecvCallback& dataRecvCallback);
+  ~SubMgr();
 
  public:
   int sub(ClientChannel subscriber, const std::string& topic);
@@ -48,7 +46,7 @@ class SubMgr {
   void initSHMCli(const std::string& addr);
 
  private:
-  std::string appName_;
+  std::string appNameOfSubscriber_;
   DataRecvCallback dataRecvCallback_{nullptr};
 
   TopicHash2SubscriberGroup topicHash2SubscriberGroup_;

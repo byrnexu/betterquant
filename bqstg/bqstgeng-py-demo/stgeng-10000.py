@@ -4,6 +4,7 @@
 import sys
 import getopt
 import datetime
+import time
 import json
 from stgeng import *
 
@@ -17,8 +18,58 @@ class StgInstTaskHandler(StgInstTaskHandlerBase):
             1, "testTimer", ExecAtStartup.IsFalse, 3000, 1
         )
 
+        now = int(time.time() * 1000000)
+
+        ret_of_qry = self.stg_eng.query_his_md_between_2_ts(
+            "MD@Binance@Spot@BTC-USDT@Trades", now - 60 * 1000000, now, 1
+        )
+
+        ret_of_qry = self.stg_eng.query_his_md_between_2_ts(
+            MarketCode.Binance,
+            SymbolType.Spot,
+            "BTC-USDT",
+            MDType.Trades,
+            now - 60 * 1000000,
+            now,
+            1,
+        )
+
+        ret_of_qry = self.stg_eng.query_specific_num_of_his_md_before_ts(
+            "MD@Binance@Spot@BTC-USDT@Trades", now, 1, 1
+        )
+
+        ret_of_qry = self.stg_eng.query_specific_num_of_his_md_before_ts(
+            MarketCode.Binance, SymbolType.Spot, "BTC-USDT", MDType.Trades, now, 1, 1
+        )
+
+        ret_of_qry = self.stg_eng.query_specific_num_of_his_md_after_ts(
+            "MD@Binance@Spot@BTC-USDT@Trades", now - 60 * 1000000, 2, 1
+        )
+
+        ret_of_qry = self.stg_eng.query_specific_num_of_his_md_after_ts(
+            MarketCode.Binance,
+            SymbolType.Spot,
+            "BTC-USDT",
+            MDType.Trades,
+            now - 60 * 1000000,
+            2,
+            1,
+        )
+
+        ret_of_qry = self.stg_eng.query_specific_num_of_his_md_before_ts(
+            "MD@Binance@Spot@BTC-USDT@Books", now - 60 * 1000000, 2, 20
+        )
+
+        print(ret_of_qry[0])
+        print(ret_of_qry[1])
+
     def on_stg_inst_start(self, stg_inst_info):
         if stg_inst_info.stg_inst_id == 1:
+            # sub topic
+            self.stg_eng.sub(
+                stg_inst_info.stg_inst_id, "shm://MD.Binance.Spot/NewSymbol"
+            )
+
             # sub market data of trades, note that the topic is case sensitive.
             self.stg_eng.sub(
                 stg_inst_info.stg_inst_id, "shm://MD.Binance.Spot/ADA-USDT/Trades"
@@ -29,7 +80,7 @@ class StgInstTaskHandler(StgInstTaskHandlerBase):
             )
             # sub market data of books
             self.stg_eng.sub(
-                stg_inst_info.stg_inst_id, "shm://MD.Binance.Spot/ADA-USDT/Books/400"
+                stg_inst_info.stg_inst_id, "shm://MD.Binance.Spot/BTC-USDT/Books/1"
             )
             # sub market data of candle
             self.stg_eng.sub(
@@ -96,6 +147,9 @@ class StgInstTaskHandler(StgInstTaskHandlerBase):
         print(f"Get order info of {order_id} success. {order_info.to_short_str()}")
         print(f'order_info.symbol_code = {"".join(order_info.symbol_code)}')
         print(f'order_info.exch_symbol_code = {"".join(order_info.exch_symbol_code)}')
+
+    def on_push_topic(self, stg_inst_info, topic_data):
+        print(topic_data)
 
     def on_order_ret(self, stg_inst_info, order_info):
         print(f"on order ret {order_info.to_short_str()}")

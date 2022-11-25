@@ -69,6 +69,7 @@ target_include_directories(${PROJECT_NAME}
     PUBLIC "${RAPIDJSON_INC_DIR}"
     PUBLIC "${NLOHMANN_JSON_INC_DIR}"
     PUBLIC "${CPR_INC_DIR}"
+    PUBLIC "${CURL_INC_DIR}"
     PUBLIC "${YAMLCPP_INC_DIR}"
     PUBLIC "${WEBSOCKETPP_INC_DIR}"
     PUBLIC "${SPDLOG_INC_DIR}"
@@ -88,6 +89,7 @@ target_link_directories(${PROJECT_NAME}
     PUBLIC "${YYJSON_LIB_DIR}"
     PUBLIC "${NLOHMANN_JSON_LIB_DIR}"
     PUBLIC "${CPR_LIB_DIR}"
+    PUBLIC "${CURL_LIB_DIR}"
     PUBLIC "${YAMLCPP_LIB_DIR}"
     PUBLIC "${WEBSOCKETPP_LIB_DIR}"
     PUBLIC "${SPDLOG_LIB_DIR}"
@@ -121,7 +123,8 @@ else()
 endif()
 
 target_link_libraries(${PROJECT_NAME}
-    cpr
+    libcpr.a
+    libcurl.a
     libxxhash.a
     iceoryx_posh
     iceoryx_hoofs

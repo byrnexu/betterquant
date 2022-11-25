@@ -13,6 +13,8 @@ milliSecIntervalOfTBLMonitorOfStgInstInfo: 10000
 
 milliSecIntervalOfSyncTask: 5
 
+timeoutOfQueryHisMD: 60000
+
 rootDirOfStgPrivateData: /dev/shm
 
 logger: 

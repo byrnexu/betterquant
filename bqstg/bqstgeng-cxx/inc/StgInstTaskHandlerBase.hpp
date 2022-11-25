@@ -14,6 +14,11 @@
 #include "Pub.hpp"
 #include "SHMIPCPub.hpp"
 
+namespace bq {
+struct TopicContent;
+using TopicContentSPtr = std::shared_ptr<TopicContent>;
+}  // namespace bq
+
 namespace bq::stg {
 
 class StgEng;
@@ -33,6 +38,9 @@ class StgInstTaskHandlerBase {
   StgEng* getStgEng() const { return stgEng_; }
 
  private:
+  virtual void onPushTopic(const StgInstInfoSPtr& stgInstInfo,
+                           const TopicContentSPtr& topicContent) {}
+
   virtual void onOrderRet(const StgInstInfoSPtr& stgInstInfo,
                           const OrderInfoSPtr& orderInfo) {}
 

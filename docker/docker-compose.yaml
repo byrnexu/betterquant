@@ -210,3 +210,28 @@ services:
         condition: service_healthy
       mysql:
         condition: service_healthy
+
+  bqweb-srv:
+    image: bqweb-srv:${TAG}
+    container_name: bqweb-srv
+    ports:
+      - 80:80
+      - 443:443
+    build:
+      context: ./bqweb-srv
+      dockerfile: ../../bqweb-srv/docker/Dockerfile
+    volumes:
+      - $ROOT_DIR_OF_INSTALLATION/betterquant/data:/usr/bin/data
+      - $ROOT_DIR_OF_INSTALLATION/betterquant/config:/usr/bin/config
+      - /dev:/dev
+      - /tmp:/tmp
+    restart: always
+    stop_signal: SIGINT
+    networks:
+      - bqnet
+    depends_on: 
+      roudi:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+    command: ['bqweb-srv', '--conf=config/bqweb-srv/bqweb-srv.yaml']

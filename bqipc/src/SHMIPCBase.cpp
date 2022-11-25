@@ -12,7 +12,7 @@
 
 #include "SHMHeader.hpp"
 #include "SHMIPCConst.hpp"
-#include "SHMUtil.hpp"
+#include "SHMIPCUtil.hpp"
 #include "util/Logger.hpp"
 
 namespace bq {

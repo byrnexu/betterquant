@@ -26,6 +26,11 @@ const static int SCODE_TD_SVC_EXCEED_FLOW_CTRL = -3501;
 
 const static int SCODE_TD_SRV_TDGW_NOT_EXISTS = -4001;
 
+const static int SCODE_HIS_MD_INVALID_TS = -4501;
+const static int SCODE_HIS_MD_INVALID_NUM = -4502;
+const static int SCODE_HIS_MD_RECORDS_LESS_THAN_NUM_OF_QURIES = -4503;
+const static int SCODE_HIS_MD_NUM_OF_RECORDS_GREATER_THAN_LIMIT = -4504;
+
 const static int SCODE_DB_CAN_NOT_FIND_SYM_CODE = -5001;
 const static int SCODE_DB_CAN_NOT_FIND_EXCH_SYM_CODE = -5002;
 const static int SCODE_DB_CAN_NOT_FIND_STG_INST = -5003;
@@ -36,6 +41,8 @@ const static int SCODE_STG_INST_ID_MUST_START_FROM_1 = -6003;
 
 const static int SCODE_STG_ENG_INVALID_CONFIG_FILENAME = -6041;
 const static int SCODE_STG_INST_TASK_HANDLER_NOT_INSTALL = -6051;
+
+const static int SCODE_STG_SEND_HTTP_REQ_TO_QUERY_HIS_MD_FAILED = -6061;
 
 const static int SCODE_ORD_MGR_ADD_ORDER_INFO_FAILED = -7001;
 const static int SCODE_ORD_MGR_REMOVE_ORDER_INFO_FAILED = -7002;
@@ -74,6 +81,14 @@ inline std::string GetStatusMsg(int statusCode) {
     return "TDSvc exceed flow control";
   } else if (statusCode == SCODE_TD_SRV_TDGW_NOT_EXISTS) {
     return "TDGW not exists";
+  } else if (statusCode == SCODE_HIS_MD_INVALID_TS) {
+    return "Invalid ts in query condition";
+  } else if (statusCode == SCODE_HIS_MD_INVALID_NUM) {
+    return "Invalid num in query condition";
+  } else if (statusCode == SCODE_HIS_MD_RECORDS_LESS_THAN_NUM_OF_QURIES) {
+    return "The number of records is less than the number of queries";
+  } else if (statusCode == SCODE_HIS_MD_NUM_OF_RECORDS_GREATER_THAN_LIMIT) {
+    return "The number of returned records is greater than the limit";
   } else if (statusCode == SCODE_DB_CAN_NOT_FIND_SYM_CODE) {
     return "Can not find symbolcode";
   } else if (statusCode == SCODE_DB_CAN_NOT_FIND_EXCH_SYM_CODE) {
@@ -90,6 +105,8 @@ inline std::string GetStatusMsg(int statusCode) {
     return "Invalid config filename";
   } else if (statusCode == SCODE_STG_INST_TASK_HANDLER_NOT_INSTALL) {
     return "StgInstTaskHandler not install";
+  } else if (statusCode == SCODE_STG_SEND_HTTP_REQ_TO_QUERY_HIS_MD_FAILED) {
+    return "Stg send http request to query his market data failed";
   } else if (statusCode == SCODE_ORD_MGR_ADD_ORDER_INFO_FAILED) {
     return "Add orderinfo failed";
   } else if (statusCode == SCODE_ORD_MGR_REMOVE_ORDER_INFO_FAILED) {

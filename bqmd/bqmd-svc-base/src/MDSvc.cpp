@@ -11,6 +11,7 @@
 #include "MDSvc.hpp"
 
 #include "Config.hpp"
+#include "MDStorageSvc.hpp"
 #include "SHMIPCConst.hpp"
 #include "SHMSrv.hpp"
 #include "SHMSrvMsgHandler.hpp"
@@ -78,6 +79,17 @@ int MDSvc::doInit() {
     return ret;
   }
 
+  saveMarketData_ = CONFIG["saveMarketData"].as<bool>(false);
+  if (saveMarketData()) {
+    mdStorageSvc_ = std::make_shared<MDStorageSvc>(this);
+    if (auto ret = mdStorageSvc_->init(); ret != 0) {
+      LOG_E("Do init failed.");
+      return ret;
+    }
+  }
+  booksDepthLevelOfSave_ =
+      CONFIG["booksDepthLevelOfSave"].as<std::uint32_t>(MAX_DEPTH_LEVEL);
+
   topicGroupMustSubMaint_ = std::make_shared<TopicGroupMustSubMaint>(this);
 
   assert(subAndUnSubSvc_ != nullptr && "subAndUnSubSvc_ != nullptr");
@@ -141,6 +153,10 @@ int MDSvc::doRun() {
     }
   }
 
+  if (saveMarketData()) {
+    mdStorageSvc_->start();
+  }
+
   if (auto ret = tblMonitorOfSymbolInfo_->start(); ret != 0) {
     LOG_E("Run failed.");
     return ret;
@@ -176,6 +192,9 @@ void MDSvc::doExit(const boost::system::error_code* ec, int signalNum) {
   wsCliOfExch_->stop();
   shmSrv_->stop();
   tblMonitorOfSymbolInfo_->stop();
+  if (saveMarketData()) {
+    mdStorageSvc_->stop();
+  }
   if (CONFIG["enableSymbolTableMaint"].as<bool>()) {
     symbolTableMaint_->stop();
   }

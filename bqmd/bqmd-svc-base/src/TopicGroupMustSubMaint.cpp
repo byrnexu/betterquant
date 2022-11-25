@@ -46,15 +46,15 @@ int TopicGroupMustSubMaint::start() {
 int TopicGroupMustSubMaint::execTopicGroupMustSubMaint() {
   LOG_T("Begin to exec topic group must sub maintainment.");
 
-  auto [retOfMustSubInAdvance, topicGroupMustSubInAdvance] =
-      Config::get_mutable_instance().topicGroupMustSubInAdvance();
+  auto [retOfMustSubInAdvance, topicGroupMustSubInAdvance, topicGroupMustSave] =
+      Config::get_mutable_instance().refreshTopicGroupMustSubAndSave();
   if (retOfMustSubInAdvance != 0) {
     LOG_W("Exec topic group must sub maintainment failed.");
     return retOfMustSubInAdvance;
   }
 
   auto [retOfInBlackList, topicGroupInBlackList] =
-      Config::get_mutable_instance().topicGroupInBlackList();
+      Config::get_mutable_instance().refreshTopicGroupInBlackList();
   if (retOfInBlackList != 0) {
     LOG_W("Exec topic group must sub maintainment failed.");
     return retOfInBlackList;

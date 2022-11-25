@@ -22,7 +22,7 @@ cp $ROOT_DIR_OF_3RDPARTY/iceoryx/src/iceoryx-2.0.2/build/iox-roudi ./roudi/
 make_inst_pkg() {
   rm -rf $1 && mkdir -p $1
   tar -cvzf $1.tar.gz \
-    $(find ../bin | grep -v logs | grep $1 | grep -v '/config/\|/plugin/')
+    $(find ../bin | grep -v logs | grep $1 | grep -v '\-d \|\-d\-v' | grep -v '/config/\|/plugin/')
   tar -xvzf $1.tar.gz -C $1
   rm -rf $1.tar.gz
 }
@@ -30,14 +30,10 @@ make_inst_pkg() {
 # Create an installation file for use by the Add command in the Dockerfile
 readonly BQMD_BINANCE=bqmd-binance
 make_inst_pkg $BQMD_BINANCE
-mkdir -p $BQMD_BINANCE/lib
-cp -r $ROOT_DIR_OF_3RDPARTY/cpr/src/cpr-1.7.2/build/lib/ $BQMD_BINANCE/
 
 # Create an installation file for use by the Add command in the Dockerfile
 readonly BQTD_BINANCE=bqtd-binance
 make_inst_pkg $BQTD_BINANCE
-mkdir -p $BQTD_BINANCE/lib
-cp -r $ROOT_DIR_OF_3RDPARTY/cpr/src/cpr-1.7.2/build/lib/ $BQTD_BINANCE/
 
 # Create an installation file for use by the Add command in the Dockerfile
 readonly BQTD_SRV=bqtd-srv
@@ -46,6 +42,10 @@ make_inst_pkg $BQTD_SRV
 # Create an installation file for use by the Add command in the Dockerfile
 readonly BQRISK_MGR=bqriskmgr
 make_inst_pkg $BQRISK_MGR
+
+# Create an installation file for use by the Add command in the Dockerfile
+readonly BQWEB_SRV=bqweb-srv
+make_inst_pkg $BQWEB_SRV
 
 mkdir -p $ROOT_DIR_OF_INSTALLATION/betterquant/
 cp -r $ROOT_DIR_OF_SOLUTION/bin/config $ROOT_DIR_OF_INSTALLATION/betterquant/
@@ -74,3 +74,4 @@ rm -rf $BQTD_SRV
 rm -rf $BQRISK_MGR
 rm -rf $BQMD_BINANCE
 rm -rf $BQTD_BINANCE
+rm -rf $BQWEB_SRV

@@ -23,6 +23,29 @@ void StgInstTaskHandlerOfSpotTest::onStgStart() {
 
   getStgEng()->installStgInstTimer(1, "stgInst1Timer", ExecAtStartup::True,
                                    MilliSecInterval(1000), ExecTimes(100));
+
+  const auto now = static_cast<std::uint64_t>(time(nullptr)) * 1000000;
+
+  int statusCode = 0;
+  std::string data;
+
+  std::tie(statusCode, data) = getStgEng()->queryHisMDBetween2Ts(
+      "MD@Binance@Spot@BTC-USDT@Trades", now - 60 * 1000000, now);
+  std::tie(statusCode, data) = getStgEng()->queryHisMDBetween2Ts(
+      MarketCode::Binance, SymbolType::Spot, "BTC-USDT", MDType::Trades,
+      now - 60 * 1000000, now);
+
+  std::tie(statusCode, data) = getStgEng()->querySpecificNumOfHisMDBeforeTs(
+      "MD@Binance@Spot@BTC-USDT@Trades", now, 2);
+  std::tie(statusCode, data) = getStgEng()->querySpecificNumOfHisMDBeforeTs(
+      MarketCode::Binance, SymbolType::Spot, "BTC-USDT", MDType::Trades, now,
+      2);
+
+  std::tie(statusCode, data) = getStgEng()->querySpecificNumOfHisMDAfterTs(
+      "MD@Binance@Spot@BTC-USDT@Trades", now - 60 * 1000000, 1);
+  std::tie(statusCode, data) = getStgEng()->querySpecificNumOfHisMDAfterTs(
+      MarketCode::Binance, SymbolType::Spot, "BTC-USDT", MDType::Trades,
+      now - 60 * 1000000, 1);
 }
 
 void StgInstTaskHandlerOfSpotTest::onStgInstStart(

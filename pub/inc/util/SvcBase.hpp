@@ -8,6 +8,8 @@
  * \brief
  */
 
+#pragma once
+
 #include "util/PchBase.hpp"
 
 namespace boost::system {

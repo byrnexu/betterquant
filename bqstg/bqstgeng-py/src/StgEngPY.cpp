@@ -364,6 +364,36 @@ BOOST_PYTHON_MODULE(bqstgeng) {
       .def("__len__", &tuple_length<RetOfGetOrderInfo>)
       .def("__getitem__", &get_tuple_item<RetOfGetOrderInfo>);
 
+  using RetOfQryHisMD = std::tuple<int, std::string>;
+  class_<RetOfQryHisMD>("ret_of_qry_his_md", init<int, std::string>())
+      .def("__len__", &tuple_length<RetOfQryHisMD>)
+      .def("__getitem__", &get_tuple_item<RetOfQryHisMD>);
+
+  using QryHisMDBetweenTsByFields = RetOfQryHisMD (StgEng::*)(
+      MarketCode marketCode, SymbolType symbolType,
+      const std::string& symbolCode, MDType mdType, std::uint64_t tsBegin,
+      std::uint64_t tsEnd, std::uint32_t level);
+
+  using QryHisMDBetweenTsByTopic =
+      RetOfQryHisMD (StgEng::*)(const std::string& topic, std::uint64_t tsBegin,
+                                std::uint64_t tsEnd, std::uint32_t level);
+
+  using QryHisMDBeforeTsByFields =
+      RetOfQryHisMD (StgEng::*)(MarketCode marketCode, SymbolType symbolType,
+                                const std::string& symbolCode, MDType mdType,
+                                std::uint64_t ts, int num, std::uint32_t level);
+
+  using QryHisMDBeforeTsByTopic = RetOfQryHisMD (StgEng::*)(
+      const std::string& topic, std::uint64_t ts, int num, std::uint32_t level);
+
+  using QryHisMDAfterTsByFields =
+      RetOfQryHisMD (StgEng::*)(MarketCode marketCode, SymbolType symbolType,
+                                const std::string& symbolCode, MDType mdType,
+                                std::uint64_t ts, int num, std::uint32_t level);
+
+  using QryHisMDAfterTsByTopic = RetOfQryHisMD (StgEng::*)(
+      const std::string& topic, std::uint64_t ts, int num, std::uint32_t level);
+
   // StgEng
   class_<StgEng, boost::noncopyable>("StgEng", init<std::string>())
       .def("init", &StgEng::init, args("stg_inst_task_handler"))
@@ -376,6 +406,29 @@ BOOST_PYTHON_MODULE(bqstgeng) {
       .def("get_order_info", &StgEng::getOrderInfo, args("order_id"))
       .def("sub", &StgEng::sub, args("subscriber", "topic"))
       .def("unsub", &StgEng::sub, args("subscriber", "topic"))
+      .def<QryHisMDBetweenTsByFields>(
+          "query_his_md_between_2_ts", &StgEng::queryHisMDBetween2Ts,
+          args("market_code", "symbol_type", "symbol_code", "mdtype",
+               "ts_begin", "ts_end", "level"))
+      .def<QryHisMDBetweenTsByTopic>(
+          "query_his_md_between_2_ts", &StgEng::queryHisMDBetween2Ts,
+          args("topic", "ts_begin", "ts_end", "level"))
+      .def<QryHisMDBeforeTsByFields>(
+          "query_specific_num_of_his_md_before_ts",
+          &StgEng::querySpecificNumOfHisMDBeforeTs,
+          args("market_code", "symbol_type", "symbol_code", "mdtype", "ts",
+               "num", "level"))
+      .def<QryHisMDBeforeTsByTopic>("query_specific_num_of_his_md_before_ts",
+                                    &StgEng::querySpecificNumOfHisMDBeforeTs,
+                                    args("topic", "ts", "num", "level"))
+      .def<QryHisMDAfterTsByFields>(
+          "query_specific_num_of_his_md_after_ts",
+          &StgEng::querySpecificNumOfHisMDAfterTs,
+          args("market_code", "symbol_type", "symbol_code", "mdtype", "ts",
+               "num", "level"))
+      .def<QryHisMDAfterTsByTopic>("query_specific_num_of_his_md_after_ts",
+                                   &StgEng::querySpecificNumOfHisMDAfterTs,
+                                   args("topic", "ts", "num", "level"))
       .def("install_stg_inst_timer", &StgEng::installStgInstTimer,
            args("stg_inst_id", "timer_name", "exec_at_startup",
                 "milli_sec_interval", "max_exec_times"))

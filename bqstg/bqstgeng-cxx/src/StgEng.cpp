@@ -34,6 +34,9 @@ int StgEng::run() { return stgEngImpl_->run(); }
 void StgEng::installStgInstTaskHandler(
     const StgInstTaskHandlerBaseSPtr& taskHandler) {
   StgInstTaskHandlerBundle stgInstTaskHandlerBundle = {
+      [&](const auto& stgInstInfo, const auto& topicContent) {
+        taskHandler->onPushTopic(stgInstInfo, topicContent);
+      },
 
       [&](const auto& stgInstInfo, const auto& orderInfo) {
         taskHandler->onOrderRet(stgInstInfo, orderInfo);
@@ -136,6 +139,44 @@ int StgEng::sub(StgInstId subscriber, const std::string& topic) {
 
 int StgEng::unSub(StgInstId subscriber, const std::string& topic) {
   return stgEngImpl_->unSub(subscriber, topic);
+}
+
+std::tuple<int, std::string> StgEng::queryHisMDBetween2Ts(
+    const std::string& topic, std::uint64_t tsBegin, std::uint64_t tsEnd,
+    std::uint32_t level) {
+  return stgEngImpl_->queryHisMDBetween2Ts(topic, tsBegin, tsEnd, level);
+}
+
+std::tuple<int, std::string> StgEng::queryHisMDBetween2Ts(
+    MarketCode marketCode, SymbolType symbolType, const std::string& symbolCode,
+    MDType mdType, std::uint64_t tsBegin, std::uint64_t tsEnd,
+    std::uint32_t level) {
+  return stgEngImpl_->queryHisMDBetween2Ts(marketCode, symbolType, symbolCode,
+                                           mdType, tsBegin, tsEnd, level);
+}
+
+std::tuple<int, std::string> StgEng::querySpecificNumOfHisMDBeforeTs(
+    const std::string& topic, std::uint64_t ts, int num, std::uint32_t level) {
+  return stgEngImpl_->querySpecificNumOfHisMDBeforeTs(topic, ts, num, level);
+}
+
+std::tuple<int, std::string> StgEng::querySpecificNumOfHisMDBeforeTs(
+    MarketCode marketCode, SymbolType symbolType, const std::string& symbolCode,
+    MDType mdType, std::uint64_t ts, int num, std::uint32_t level) {
+  return stgEngImpl_->querySpecificNumOfHisMDBeforeTs(
+      marketCode, symbolType, symbolCode, mdType, ts, num, level);
+}
+
+std::tuple<int, std::string> StgEng::querySpecificNumOfHisMDAfterTs(
+    const std::string& topic, std::uint64_t ts, int num, std::uint32_t level) {
+  return stgEngImpl_->querySpecificNumOfHisMDAfterTs(topic, ts, num, level);
+}
+
+std::tuple<int, std::string> StgEng::querySpecificNumOfHisMDAfterTs(
+    MarketCode marketCode, SymbolType symbolType, const std::string& symbolCode,
+    MDType mdType, std::uint64_t ts, int num, std::uint32_t level) {
+  return stgEngImpl_->querySpecificNumOfHisMDAfterTs(
+      marketCode, symbolType, symbolCode, mdType, ts, num, level);
 }
 
 void StgEng::installStgInstTimer(StgInstId stgInstId,

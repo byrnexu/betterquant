@@ -69,6 +69,7 @@ target_include_directories(${PROJECT_NAME}
     PUBLIC "${RAPIDJSON_INC_DIR}"
     PUBLIC "${NLOHMANN_JSON_INC_DIR}"
     PUBLIC "${CPR_INC_DIR}"
+    PUBLIC "${CURL_INC_DIR}"
     PUBLIC "${YAMLCPP_INC_DIR}"
     PUBLIC "${WEBSOCKETPP_INC_DIR}"
     PUBLIC "${SPDLOG_INC_DIR}"
@@ -88,6 +89,7 @@ target_link_directories(${PROJECT_NAME}
     PUBLIC "${YYJSON_LIB_DIR}"
     PUBLIC "${NLOHMANN_JSON_LIB_DIR}"
     PUBLIC "${CPR_LIB_DIR}"
+    PUBLIC "${CURL_LIB_DIR}"
     PUBLIC "${YAMLCPP_LIB_DIR}"
     PUBLIC "${WEBSOCKETPP_LIB_DIR}"
     PUBLIC "${SPDLOG_LIB_DIR}"
@@ -116,7 +118,8 @@ else()
 endif()
 
 target_link_libraries(${PROJECT_NAME}
-    PUBLIC cpr
+    PUBLIC libcpr.a
+    PUBLIC libcurl.a
     PUBLIC iceoryx_posh
     PUBLIC iceoryx_hoofs
     PUBLIC iceoryx_platform
@@ -176,6 +179,8 @@ ar -M << EOM
     ADDLIB ${SOLUTION_ROOT_DIR}/lib/libbqpub-d.a
     ADDLIB ${SOLUTION_ROOT_DIR}/lib/libbqipc-d.a
     ADDLIB ${SOLUTION_ROOT_DIR}/lib/libpub-d.a
+    ADDLIB ${CPR_LIB_DIR}/libcpr.a
+    ADDLIB ${CURL_LIB_DIR}/libcurl.a
     ADDLIB ${ABSEIL_LIB_DIR}/libabsl_raw_hash_set.a
     ADDLIB ${ABSEIL_LIB_DIR}/libabsl_flags_reflection.a
     ADDLIB ${ABSEIL_LIB_DIR}/libabsl_hash.a
@@ -210,6 +215,8 @@ ar -M << EOM
     ADDLIB ${SOLUTION_ROOT_DIR}/lib/libbqpub.a
     ADDLIB ${SOLUTION_ROOT_DIR}/lib/libbqipc.a
     ADDLIB ${SOLUTION_ROOT_DIR}/lib/libpub.a
+    ADDLIB ${CPR_LIB_DIR}/libcpr.a
+    ADDLIB ${CURL_LIB_DIR}/libcurl.a
     ADDLIB ${ABSEIL_LIB_DIR}/libabsl_raw_hash_set.a
     ADDLIB ${ABSEIL_LIB_DIR}/libabsl_flags_reflection.a
     ADDLIB ${ABSEIL_LIB_DIR}/libabsl_hash.a

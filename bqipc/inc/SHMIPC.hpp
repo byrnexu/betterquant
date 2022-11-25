@@ -18,4 +18,3 @@
 #include "SHMIPCTask.hpp"
 #include "SHMIPCUtil.hpp"
 #include "SHMSrv.hpp"
-#include "SHMUtil.hpp"

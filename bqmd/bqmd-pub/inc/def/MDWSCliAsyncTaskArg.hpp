@@ -20,8 +20,14 @@ using WSCliAsyncTaskArgSPtr = std::shared_ptr<WSCliAsyncTaskArg>;
 
 struct WSCliAsyncTaskArg {
   WSMsgType wsMsgType_;
+
   yyjson_doc *doc_{nullptr};
   yyjson_val *root_{nullptr};
+
+  std::string topic_;
+  std::uint64_t exchTs_;
+  std::string marketDataOfUnifiedFmt_;
+
   ~WSCliAsyncTaskArg() {
     if (doc_) {
       yyjson_doc_free(doc_);

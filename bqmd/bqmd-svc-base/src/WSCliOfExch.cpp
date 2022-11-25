@@ -12,6 +12,7 @@
 
 #include "Config.hpp"
 #include "ConnMetadata.hpp"
+#include "MDStorageSvc.hpp"
 #include "MDSvc.hpp"
 #include "RspParser.hpp"
 #include "SubAndUnSubSvc.hpp"
@@ -182,6 +183,10 @@ void WSCliOfExch::handleAsyncTask(WSCliAsyncTaskSPtr& asyncTask) {
 #ifdef PERF_TEST
   EXEC_PERF_TEST("HandleAsyncTask", asyncTask->task_->localTs_, 10000, 100);
 #endif
+
+  if (!topic.empty() && mdSvc_->saveMarketData()) {
+    mdSvc_->getMDStorageSvc()->handle(asyncTask);
+  }
 }
 
 void WSCliOfExch::handleMDOthers(WSCliAsyncTaskSPtr& asyncTask) {

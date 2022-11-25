@@ -65,6 +65,34 @@ class StgEng {
   int unSub(StgInstId subscriber, const std::string& topic);
 
  public:
+  std::tuple<int, std::string> queryHisMDBetween2Ts(
+      const std::string& topic, std::uint64_t tsBegin, std::uint64_t tsEnd,
+      std::uint32_t level = DEFAULT_DEPTH_LEVEL);
+
+  std::tuple<int, std::string> queryHisMDBetween2Ts(
+      MarketCode marketCode, SymbolType symbolType,
+      const std::string& symbolCode, MDType mdType, std::uint64_t tsBegin,
+      std::uint64_t tsEnd, std::uint32_t level = DEFAULT_DEPTH_LEVEL);
+
+  std::tuple<int, std::string> querySpecificNumOfHisMDBeforeTs(
+      const std::string& topic, std::uint64_t ts, int num,
+      std::uint32_t level = DEFAULT_DEPTH_LEVEL);
+
+  std::tuple<int, std::string> querySpecificNumOfHisMDBeforeTs(
+      MarketCode marketCode, SymbolType symbolType,
+      const std::string& symbolCode, MDType mdType, std::uint64_t ts, int num,
+      std::uint32_t level = DEFAULT_DEPTH_LEVEL);
+
+  std::tuple<int, std::string> querySpecificNumOfHisMDAfterTs(
+      const std::string& topic, std::uint64_t ts, int num,
+      std::uint32_t level = DEFAULT_DEPTH_LEVEL);
+
+  std::tuple<int, std::string> querySpecificNumOfHisMDAfterTs(
+      MarketCode marketCode, SymbolType symbolType,
+      const std::string& symbolCode, MDType mdType, std::uint64_t ts, int num,
+      std::uint32_t level = DEFAULT_DEPTH_LEVEL);
+
+ public:
   void installStgInstTimer(StgInstId stgInstId, const std::string& timerName,
                            ExecAtStartup execAtStartUp,
                            std::uint32_t milliSecInterval,

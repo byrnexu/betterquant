@@ -19,13 +19,17 @@ namespace bq::md::svc {
 class Config : public ConfigBase,
                public boost::serialization::singleton<Config> {
  public:
-  std::tuple<int, TopicGroupSPtr> topicGroupMustSubInAdvance();
-  std::tuple<int, TopicGroupSPtr> topicGroupInBlackList();
+  std::tuple<int, TopicGroupSPtr, TopicGroupSPtr>
+  refreshTopicGroupMustSubAndSave();
+  std::tuple<int, TopicGroupSPtr> refreshTopicGroupInBlackList();
 
-  bool topicMustSubInAdvance(const std::string& topic) const;
+  bool topicMustSaveToDisk(const std::string& topic) const;
   bool topicInBlackList(const std::string& topic) const;
 
  private:
+  std::tuple<int, TopicGroupSPtr, TopicGroupSPtr>
+  getTopicGroupMustSubAndSaveInConf(const std::string& nodeName) const;
+
   std::tuple<int, TopicGroupSPtr> getTopicGroupInConf(
       const std::string& nodeName) const;
 
@@ -34,6 +38,10 @@ class Config : public ConfigBase,
   TopicGroupSPtr cacheOfTopicGroupMustSubInAdvance_{
       std::make_shared<TopicGroup>()};
   mutable std::mutex mtxCacheOfTopicGroupMustSubInAdvance_;
+
+  TopicGroupSPtr topicGroupMustSave_{std::make_shared<TopicGroup>()};
+  TopicGroupSPtr cacheOfTopicGroupMustSave_{std::make_shared<TopicGroup>()};
+  mutable std::mutex mtxCacheOfTopicGroupMustSave_;
 
   TopicGroupSPtr topicGroupInBlackList_{std::make_shared<TopicGroup>()};
   TopicGroupSPtr cacheOfTopicGroupInBlackList_{std::make_shared<TopicGroup>()};

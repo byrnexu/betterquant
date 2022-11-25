@@ -24,6 +24,9 @@ class StgInstTaskHandlerBase(object):
     def on_stg_inst_timer(self, stg_inst_info):
         pass
 
+    def on_push_topic(self, stg_inst_info, topic_content):
+        pass
+
     def on_order_ret(self, stg_inst_info, order_info):
         pass
 

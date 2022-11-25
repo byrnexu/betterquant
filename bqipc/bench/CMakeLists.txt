@@ -52,6 +52,7 @@ target_link_directories(${BENCH_PROJECT_NAME}
     )
 
 target_link_libraries(${BENCH_PROJECT_NAME}
+    libxxhash.a
     libyyjson.a
     libfmt.a
     libbenchmark.a

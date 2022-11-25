@@ -13,7 +13,7 @@
 #include "SHMHeader.hpp"
 #include "SHMIPCConst.hpp"
 #include "SHMIPCMsgId.hpp"
-#include "SHMUtil.hpp"
+#include "SHMIPCUtil.hpp"
 #include "util/Datetime.hpp"
 #include "util/Logger.hpp"
 
