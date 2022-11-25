@@ -116,6 +116,7 @@ class StgEngImpl : public SvcBase {
   void initSubMgr();
   void initSHMCliOfTDSrv();
   void initSHMCliOfRiskMgr();
+  void initSHMCliOfWebSrv();
   void initOrdMgr();
   void initPosMgr();
   int initStgInstTaskDispatcher();
@@ -254,6 +255,7 @@ class StgEngImpl : public SvcBase {
 
   SHMCliSPtr shmCliOfTDSrv_{nullptr};
   SHMCliSPtr shmCliOfRiskMgr_{nullptr};
+  SHMCliSPtr shmCliOfWebSrv_{nullptr};
 
   StgInstTaskHandlerImplSPtr stgInstTaskHandler_{nullptr};
   TaskDispatcherSPtr<SHMIPCTaskSPtr> stgInstTaskDispatcher_{nullptr};

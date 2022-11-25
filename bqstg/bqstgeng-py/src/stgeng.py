@@ -24,6 +24,9 @@ class StgInstTaskHandlerBase(object):
     def on_stg_inst_timer(self, stg_inst_info):
         pass
 
+    def on_stg_manual_intervention(self, stg_inst_info, stg_manual_intervention):
+        pass
+
     def on_push_topic(self, stg_inst_info, topic_content):
         pass
 
@@ -34,16 +37,16 @@ class StgInstTaskHandlerBase(object):
         pass
 
     def on_trades(self, stg_inst_info, trades):
-        market_data = json.dumps(trades)
+        pass
 
     def on_books(self, stg_inst_info, books):
-        market_data = json.dumps(books)
+        pass
 
     def on_tickers(self, stg_inst_info, tickers):
-        market_data = json.dumps(tickers)
+        pass
 
     def on_candle(self, stg_inst_info, candle):
-        market_data = json.dumps(candle)
+        pass
 
     def on_stg_inst_add(self, stg_inst_info):
         pass

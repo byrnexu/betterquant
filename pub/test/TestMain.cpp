@@ -13,13 +13,31 @@
 
 #include <string>
 
+#include "util/String.hpp"
+
 class global_event : public testing::Environment {
  public:
   virtual void SetUp() {}
   virtual void TearDown() {}
 };
 
-TEST(test, test1) {}
+TEST(test, test1) {
+  std::string str;
+  str = bq::ReplaceSubStrBetween2Str("abcdefghi", "123", "abc", "ghi");
+  EXPECT_TRUE(str == "abc123ghi");
+
+  str = bq::ReplaceSubStrBetween2Str("abcdefghi", "123", "", "def");
+  EXPECT_TRUE(str == "123defghi");
+
+  str = bq::ReplaceSubStrBetween2Str("abcdefghi", "123", "de", "i");
+  EXPECT_TRUE(str == "abcde123i");
+
+  str = bq::ReplaceSubStrBetween2Str("abcdefghi", "12", "d", "f");
+  EXPECT_TRUE(str == "abcd12fghi");
+
+  str = bq::ReplaceSubStrBetween2Str("abcdefghi", "12", "cd", "fg");
+  EXPECT_TRUE(str == "abcd12fghi");
+}
 
 int main(int argc, char** argv) {
   testing::AddGlobalTestEnvironment(new global_event);

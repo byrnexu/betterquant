@@ -4,6 +4,7 @@ rsync -avzPcR ./bqpub/inc/def/BQDefIF.hpp inc/cxx/
 rsync -avzPcR ./bqpub/inc/def/MarketDataIF.hpp inc/cxx/
 rsync -avzPcR ./bqpub/inc/def/OrderInfoIF.hpp inc/cxx/
 rsync -avzPcR ./bqpub/inc/def/PosInfoIF.hpp inc/cxx/
+rsync -avzPcR ./bqpub/inc/def/CommonIPCData.hpp inc/cxx/
 rsync -avzPcR ./bqpub/inc/def/PnlIF.hpp inc/cxx/
 rsync -avzPcR ./bqpub/inc/def/StgInstInfoIF.hpp inc/cxx/
 rsync -avzPcR ./bqpub/inc/def/SymbolInfoIF.hpp inc/cxx/

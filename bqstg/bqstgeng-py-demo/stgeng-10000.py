@@ -21,36 +21,36 @@ class StgInstTaskHandler(StgInstTaskHandlerBase):
         now = int(time.time() * 1000000)
 
         ret_of_qry = self.stg_eng.query_his_md_between_2_ts(
-            "MD@Binance@Spot@BTC-USDT@Trades", now - 60 * 1000000, now, 1
+            "MD@Binance@Spot@BTC-USDT@Candle", now - 60 * 1000000, now, 1
         )
 
         ret_of_qry = self.stg_eng.query_his_md_between_2_ts(
             MarketCode.Binance,
             SymbolType.Spot,
             "BTC-USDT",
-            MDType.Trades,
+            MDType.Candle,
             now - 60 * 1000000,
             now,
             1,
         )
 
         ret_of_qry = self.stg_eng.query_specific_num_of_his_md_before_ts(
-            "MD@Binance@Spot@BTC-USDT@Trades", now, 1, 1
+            "MD@Binance@Spot@BTC-USDT@Candle", now, 1, 1
         )
 
         ret_of_qry = self.stg_eng.query_specific_num_of_his_md_before_ts(
-            MarketCode.Binance, SymbolType.Spot, "BTC-USDT", MDType.Trades, now, 1, 1
+            MarketCode.Binance, SymbolType.Spot, "BTC-USDT", MDType.Candle, now, 1, 1
         )
 
         ret_of_qry = self.stg_eng.query_specific_num_of_his_md_after_ts(
-            "MD@Binance@Spot@BTC-USDT@Trades", now - 60 * 1000000, 2, 1
+            "MD@Binance@Spot@BTC-USDT@Candle", now - 60 * 1000000, 2, 1
         )
 
         ret_of_qry = self.stg_eng.query_specific_num_of_his_md_after_ts(
             MarketCode.Binance,
             SymbolType.Spot,
             "BTC-USDT",
-            MDType.Trades,
+            MDType.Candle,
             now - 60 * 1000000,
             2,
             1,
@@ -147,6 +147,12 @@ class StgInstTaskHandler(StgInstTaskHandlerBase):
         print(f"Get order info of {order_id} success. {order_info.to_short_str()}")
         print(f'order_info.symbol_code = {"".join(order_info.symbol_code)}')
         print(f'order_info.exch_symbol_code = {"".join(order_info.exch_symbol_code)}')
+
+    def on_stg_manual_intervention(self, stg_inst_info, stg_manual_intervention):
+        instr = json.dumps(stg_manual_intervention)
+
+    def on_stg_manual_intervention(self, stg_inst_info, stg_manual_intervention):
+        print(stg_manual_intervention)
 
     def on_push_topic(self, stg_inst_info, topic_data):
         print(topic_data)

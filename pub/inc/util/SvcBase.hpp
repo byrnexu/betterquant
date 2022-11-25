@@ -30,12 +30,15 @@ class SvcBase {
   SvcBase(const SvcBase&&) = delete;
   SvcBase& operator=(const SvcBase&&) = delete;
 
+  SvcBase() = default;
   SvcBase(
       const std::string& configFilename,
       InstallSignalHandler installSignalHandler = InstallSignalHandler::True);
 
  public:
-  int init();
+  int init(
+      const std::string& configFilename = "",
+      InstallSignalHandler installSignalHandler = InstallSignalHandler::True);
 
  private:
   virtual int prepareInit() { return 0; }

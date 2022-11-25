@@ -20,13 +20,12 @@ int main(int argc, char** argv) {
   bq::GFlagsHolder gflagsHolder(argc, argv, PROJ_VER, "--conf=filename");
   bq::PrintLogo();
 
-  const auto svc = std::make_shared<bq::WebSrv>(bq::FLAGS_conf);
-
-  if (const auto ret = svc->init(); ret != 0) {
+  if (const auto ret = bq::WebSrv::get_mutable_instance().init(bq::FLAGS_conf);
+      ret != 0) {
     return EXIT_FAILURE;
   }
 
-  if (const auto ret = svc->run(); ret != 0) {
+  if (const auto ret = bq::WebSrv::get_mutable_instance().run(); ret != 0) {
     return EXIT_FAILURE;
   }
 

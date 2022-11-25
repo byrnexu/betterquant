@@ -75,6 +75,19 @@ std::string ToPrettyStr(Decimal value) {
   return RemoveTrailingZero(ret);
 }
 
+std::string MakeCommonHttpBody(int statusCode, std::string data) {
+  const auto statusMsg = GetStatusMsg(statusCode);
+  auto ret = fmt::format(R"({{"statusCode":{},"stausMsg":"{}")", statusCode,
+                         statusMsg);
+  if (!data.empty()) {
+    data[0] = ',';
+  } else {
+    data = "}";
+  }
+  ret = ret + data;
+  return ret;
+}
+
 // clang-format off
 void PrintLogo() {
   std::cout <<

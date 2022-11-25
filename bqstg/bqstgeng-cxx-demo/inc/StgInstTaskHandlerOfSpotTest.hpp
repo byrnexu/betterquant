@@ -50,6 +50,9 @@ class StgInstTaskHandlerOfSpotTest : public StgInstTaskHandlerBase {
                  const TickersSPtr& tickers) final;
 
  private:
+  void onStgManualIntervention(const StgInstInfoSPtr& stgInstInfo,
+                               const CommonIPCDataSPtr& commonIPCData) final;
+
   void onOrderRet(const StgInstInfoSPtr& stgInstInfo,
                   const OrderInfoSPtr& orderInfo) final;
 

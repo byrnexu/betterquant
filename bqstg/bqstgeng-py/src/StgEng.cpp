@@ -25,6 +25,7 @@
 #include "def/AssetInfo.hpp"
 #include "def/BQConst.hpp"
 #include "def/BQDef.hpp"
+#include "def/CommonIPCData.hpp"
 #include "def/Const.hpp"
 #include "def/DataStruOfMD.hpp"
 #include "def/DataStruOfOthers.hpp"
@@ -59,6 +60,28 @@ int StgEng::init(PyObject* stgInstTaskHandler) {
 
 void StgEng::installStgInstTaskHandler(PyObject* value) {
   stgInstTaskHandler_ = value;
+
+  stgEngImpl_->getStgInstTaskHandler()
+      ->getStgInstTaskHandlerBundle()
+      .onStgManualIntervention_ = [this](
+                                      const StgInstInfoSPtr& stgInstInfo,
+                                      const CommonIPCDataSPtr& commonIPCData) {
+    {
+      std::lock_guard<std::mutex> guard(mtxPY_);
+      try {
+        boost::python::call_method<void>(stgInstTaskHandler_,
+                                         "on_stg_manual_intervention",
+                                         stgInstInfo, commonIPCData->toJson());
+      } catch (const boost::python::error_already_set& e) {
+        if (PyErr_Occurred()) {
+          const auto msg = handlePYErr();
+          LOG_E("Python interpreter error: \n {}", msg);
+        }
+        boost::python::handle_exception();
+        PyErr_Clear();
+      }
+    }
+  };
 
   stgEngImpl_->getStgInstTaskHandler()
       ->getStgInstTaskHandlerBundle()

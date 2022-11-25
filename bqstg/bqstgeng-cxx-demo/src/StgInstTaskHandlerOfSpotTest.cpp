@@ -11,6 +11,7 @@
 #include "StgInstTaskHandlerOfSpotTest.hpp"
 
 #include "StgEng.hpp"
+#include "def/CommonIPCData.hpp"
 #include "util/Literal.hpp"
 #include "util/Logger.hpp"
 #include "util/PosSnapshot.hpp"
@@ -30,21 +31,21 @@ void StgInstTaskHandlerOfSpotTest::onStgStart() {
   std::string data;
 
   std::tie(statusCode, data) = getStgEng()->queryHisMDBetween2Ts(
-      "MD@Binance@Spot@BTC-USDT@Trades", now - 60 * 1000000, now);
+      "MD@Binance@Spot@BTC-USDT@Candle", now - 60 * 1000000, now);
   std::tie(statusCode, data) = getStgEng()->queryHisMDBetween2Ts(
-      MarketCode::Binance, SymbolType::Spot, "BTC-USDT", MDType::Trades,
+      MarketCode::Binance, SymbolType::Spot, "BTC-USDT", MDType::Candle,
       now - 60 * 1000000, now);
 
   std::tie(statusCode, data) = getStgEng()->querySpecificNumOfHisMDBeforeTs(
-      "MD@Binance@Spot@BTC-USDT@Trades", now, 2);
+      "MD@Binance@Spot@BTC-USDT@Candle", now, 2);
   std::tie(statusCode, data) = getStgEng()->querySpecificNumOfHisMDBeforeTs(
-      MarketCode::Binance, SymbolType::Spot, "BTC-USDT", MDType::Trades, now,
+      MarketCode::Binance, SymbolType::Spot, "BTC-USDT", MDType::Candle, now,
       2);
 
   std::tie(statusCode, data) = getStgEng()->querySpecificNumOfHisMDAfterTs(
-      "MD@Binance@Spot@BTC-USDT@Trades", now - 60 * 1000000, 1);
+      "MD@Binance@Spot@BTC-USDT@Candle", now - 60 * 1000000, 1);
   std::tie(statusCode, data) = getStgEng()->querySpecificNumOfHisMDAfterTs(
-      MarketCode::Binance, SymbolType::Spot, "BTC-USDT", MDType::Trades,
+      MarketCode::Binance, SymbolType::Spot, "BTC-USDT", MDType::Candle,
       now - 60 * 1000000, 1);
 }
 
@@ -214,6 +215,12 @@ void StgInstTaskHandlerOfSpotTest::onTickers(const StgInstInfoSPtr& stgInstInfo,
   return;
 #endif
   LOG_D("{}: {}", stgInstInfo->stgInstId_, tickers->toStr());
+}
+
+void StgInstTaskHandlerOfSpotTest::onStgManualIntervention(
+    const StgInstInfoSPtr& stgInstInfo,
+    const CommonIPCDataSPtr& commonIPCData) {
+  LOG_I("On stg manual intervention. {}", commonIPCData->data_);
 }
 
 void StgInstTaskHandlerOfSpotTest::onOrderRet(

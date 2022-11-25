@@ -20,6 +20,7 @@
 #include "db/TBLMonitorOfStgInstInfo.hpp"
 #include "db/TBLMonitorOfSymbolInfo.hpp"
 #include "def/BQDef.hpp"
+#include "def/CommonIPCData.hpp"
 #include "def/DataStruOfAssets.hpp"
 #include "def/DataStruOfMD.hpp"
 #include "def/DataStruOfStg.hpp"
@@ -54,6 +55,16 @@ void StgInstTaskHandlerImpl::handleAsyncTaskImpl(
   const auto data = asyncTask->task_->data_;
   const auto msgId = static_cast<const SHMHeader*>(data)->msgId_;
   switch (msgId) {
+    case MSG_ID_ON_STG_MANUAL_INTERVENTION: {
+      const auto commonIPCData =
+          MakeMsgSPtrByTask<CommonIPCData>(asyncTask->task_);
+      LOG_I("Handle manual intervention: {}", commonIPCData->data_);
+      if (stgInstTaskHandlerBundle_.onStgManualIntervention_) {
+        stgInstTaskHandlerBundle_.onStgManualIntervention_(stgInstInfo,
+                                                           commonIPCData);
+      }
+    } break;
+
     case MSG_ID_ON_PUSH_TOPIC: {
       const auto topicContent =
           MakeMsgSPtrByTask<TopicContent>(asyncTask->task_);

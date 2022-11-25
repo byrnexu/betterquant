@@ -1,3 +1,13 @@
+/*!
+ * \file HisMD.cpp
+ * \project BetterQuant
+ *
+ * \author byrnexu
+ * \date 2022/11/25
+ *
+ * \brief
+ */
+
 #pragma once
 
 #include "def/BQConst.hpp"

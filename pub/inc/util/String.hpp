@@ -69,4 +69,9 @@ struct Int2StrInCompileTime {
       typename Int2StrInCompileTimeBase<N<10, N>::type>::type type;
 };
 
+std::string ReplaceSubStrBetween2Str(const std::string& str,
+                                     const std::string& replaceStr,
+                                     std::string_view leftStr,
+                                     std::string_view rightStr);
+
 }  // namespace bq

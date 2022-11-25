@@ -23,6 +23,7 @@
 #include "def/AssetInfo.hpp"
 #include "def/BQConst.hpp"
 #include "def/BQDef.hpp"
+#include "def/CommonIPCData.hpp"
 #include "def/Const.hpp"
 #include "def/DataStruOfOthers.hpp"
 #include "def/DataStruOfStg.hpp"
@@ -98,6 +99,7 @@ int StgEngImpl::doInit() {
 
   initSHMCliOfTDSrv();
   initSHMCliOfRiskMgr();
+  initSHMCliOfWebSrv();
 
   scheduleTaskBundle_ = std::make_shared<ScheduleTaskBundle>();
   initScheduleTaskBundle();
@@ -237,6 +239,40 @@ void StgEngImpl::initSHMCliOfRiskMgr() {
   shmCliOfRiskMgr_->setClientChannel(getStgId());
 }
 
+void StgEngImpl::initSHMCliOfWebSrv() {
+  const auto stgEngChannelOfWebSrv =
+      getConfig()["stgEngChannelOfWebSrv"].as<std::string>();
+  const auto addr =
+      fmt::format("{}{}{}", appName_, SEP_OF_SHM_SVC, stgEngChannelOfWebSrv);
+
+  const auto onSHMDataRecv = [this](const void* shmBuf, std::size_t shmBufLen) {
+    const auto msgId = static_cast<const SHMHeader*>(shmBuf)->msgId_;
+    switch (msgId) {
+      case MSG_ID_ON_STG_MANUAL_INTERVENTION: {
+        const auto [statusCode, stgInstId] =
+            GetStgInstId(static_cast<const CommonIPCData*>(shmBuf));
+        if (statusCode != 0) {
+          LOG_W("Get invalid stgInstId from common ipc data of {} - {}.", msgId,
+                GetMsgName(msgId));
+          return;
+        }
+        LOG_I("Dispatch manual intervention: {}",
+              static_cast<const CommonIPCData*>(shmBuf)->data_);
+        auto asyncTask = std::make_shared<SHMIPCAsyncTask>(
+            std::make_shared<SHMIPCTask>(shmBuf, shmBufLen), stgInstId);
+        stgInstTaskDispatcher_->dispatch(asyncTask);
+      } break;
+
+      default:
+        LOG_W("Unhandled msgId {}.", msgId);
+        break;
+    }
+  };
+
+  shmCliOfWebSrv_ = std::make_shared<SHMCli>(addr, onSHMDataRecv);
+  shmCliOfWebSrv_->setClientChannel(getStgId());
+}
+
 void StgEngImpl::initOrdMgr() {
   const auto filled = magic_enum::enum_integer(OrderStatus::Filled);
   ordMgr_ = std::make_shared<OrdMgr>();
@@ -362,6 +398,7 @@ int StgEngImpl::doRun() {
   stgInstTaskDispatcher_->start();
   shmCliOfTDSrv_->start();
   shmCliOfRiskMgr_->start();
+  shmCliOfWebSrv_->start();
 
   resetBarrierOfStgStartSignal();
   sendStgStartSignal();
@@ -469,6 +506,7 @@ void StgEngImpl::handleTaskOfSyncGroup() {
 void StgEngImpl::doExit(const boost::system::error_code* ec, int signalNum) {
   scheduleTaskBundleExecutor_->stop();
   getOrdMgr()->syncOrderGroupToDB();
+  shmCliOfWebSrv_->stop();
   shmCliOfRiskMgr_->stop();
   shmCliOfTDSrv_->stop();
   stgInstTaskDispatcher_->stop();

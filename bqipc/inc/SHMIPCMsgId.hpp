@@ -29,6 +29,7 @@ constexpr static MsgId MSG_ID_ON_STG_INST_ADD = 10053;
 constexpr static MsgId MSG_ID_ON_STG_INST_DEL = 10054;
 constexpr static MsgId MSG_ID_ON_STG_INST_CHG = 10055;
 constexpr static MsgId MSG_ID_ON_STG_INST_TIMER = 10056;
+constexpr static MsgId MSG_ID_ON_STG_MANUAL_INTERVENTION = 10060;
 
 constexpr static MsgId MSG_ID_ON_STG_REG = 10071;
 constexpr static MsgId MSG_ID_ON_TDGW_REG = 10072;
@@ -85,6 +86,8 @@ inline std::string GetMsgName(MsgId msgId) {
       return "onStgInstChg";
     case MSG_ID_ON_STG_INST_TIMER:
       return "onStgInstTimer";
+    case MSG_ID_ON_STG_MANUAL_INTERVENTION:
+      return "onStgManualIntervention";
 
     case MSG_ID_ON_STG_REG:
       return "onStgReg";

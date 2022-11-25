@@ -1,3 +1,13 @@
+/*!
+ * \file HisMD.cpp
+ * \project BetterQuant
+ *
+ * \author byrnexu
+ * \date 2022/11/25
+ *
+ * \brief
+ */
+
 #include "HisMD.hpp"
 
 #include "def/Def.hpp"

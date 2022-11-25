@@ -15,6 +15,8 @@
 #include "SHMIPCPub.hpp"
 
 namespace bq {
+struct CommonIPCData;
+using CommonIPCDataSPtr = std::shared_ptr<CommonIPCData>;
 struct TopicContent;
 using TopicContentSPtr = std::shared_ptr<TopicContent>;
 }  // namespace bq
@@ -38,6 +40,10 @@ class StgInstTaskHandlerBase {
   StgEng* getStgEng() const { return stgEng_; }
 
  private:
+  virtual void onStgManualIntervention(const StgInstInfoSPtr& stgInstInfo,
+                                       const CommonIPCDataSPtr& commonIPCData) {
+  }
+
   virtual void onPushTopic(const StgInstInfoSPtr& stgInstInfo,
                            const TopicContentSPtr& topicContent) {}
 

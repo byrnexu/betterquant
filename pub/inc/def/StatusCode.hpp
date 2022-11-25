@@ -48,6 +48,10 @@ const static int SCODE_ORD_MGR_ADD_ORDER_INFO_FAILED = -7001;
 const static int SCODE_ORD_MGR_REMOVE_ORDER_INFO_FAILED = -7002;
 const static int SCODE_ORD_MGR_CAN_NOT_FIND_ORDER = -7005;
 
+// web srv statusCode [-8001, -9000)
+const static int SCODE_WEB_SRV_INVALID_BODY_IN_REQ = -8001;
+
+// external mapping statusCode [-9001, -10000)
 const static int SCODE_TD_SRV_RISK_EXCEED_FLOW_CTRL = -9001;
 
 // external statusCode
@@ -127,6 +131,8 @@ inline std::string GetStatusMsg(int statusCode) {
     return "First update id too large";
   } else if (statusCode == SCODE_MD_SVC_UPDATE_DATA_DISCONTINUOUS) {
     return "Update data discontinuous";
+  } else if (statusCode == SCODE_WEB_SRV_INVALID_BODY_IN_REQ) {
+    return "Invalid body in request.";
   } else if (statusCode == SCODE_TD_SRV_RISK_EXCEED_FLOW_CTRL) {
     return "TDSrv risk exceed flow control";
   } else {

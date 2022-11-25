@@ -1,3 +1,13 @@
+/*!
+ * \file MarketDataCond.cpp
+ * \project BetterQuant
+ *
+ * \author byrnexu
+ * \date 2022/11/25
+ *
+ * \brief
+ */
+
 #include "util/MarketDataCond.hpp"
 
 #include "def/StatusCode.hpp"

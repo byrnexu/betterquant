@@ -207,4 +207,15 @@ void ToUpper(char* s, std::size_t size) {
   }
 }
 
+std::string ReplaceSubStrBetween2Str(const std::string& str,
+                                     const std::string& replaceStr,
+                                     std::string_view leftStr,
+                                     std::string_view rightStr) {
+  const auto left = str.find(leftStr);
+  const auto right = str.find(rightStr);
+  const auto ret = str.substr(0, left + leftStr.size()) + replaceStr +
+                   str.substr(right, str.size());
+  return ret;
+}
+
 }  // namespace bq

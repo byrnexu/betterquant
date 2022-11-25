@@ -1,8 +1,25 @@
+/*!
+ * \file bq_v1_QueryHisMD.cpp
+ * \project BetterQuant
+ *
+ * \author byrnexu
+ * \date 2022/11/25
+ *
+ * \brief
+ */
+
 #include "bq_v1_QueryHisMD.hpp"
 
 #include "Config.hpp"
 #include "HisMD.hpp"
+#include "SHMIPCMsgId.hpp"
+#include "SHMSrv.hpp"
+#include "WebSrv.hpp"
+#include "def/CommonIPCData.hpp"
 #include "def/Def.hpp"
+#include "def/StatusCode.hpp"
+#include "util/BQUtil.hpp"
+#include "util/Logger.hpp"
 
 using namespace bq::v1;
 

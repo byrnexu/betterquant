@@ -26,12 +26,13 @@ cd bqriskmgr          && bash build-proj.sh && cd -
 cd bqstg/bqstgengimpl && bash build-proj.sh && cd -
 cd bqstg/bqstgeng-cxx && bash build-proj.sh && cd -
 cd bqstg/bqstgeng-cxx && bash build-proj.sh && cd -
+
 cd bqstg/bqstgeng-cxx && bash build-proj.sh && cd -
-
 cd bqstg/bqstgeng-cxx-demo && bash build-proj.sh && cd -
-cd bqstg/bqstgeng-py  && bash build-proj.sh && cd -
 
+cd bqstg/bqstgeng-py  && bash build-proj.sh && cd -
 cd bqstg/bqstgeng-py-demo  && bash build-proj.sh && cd -
+
 cd bqtd/bqtd-pub      && bash build-proj.sh && cd -
 
 cd bqtd/bqtd-srv-risk-plugin/            && bash build-proj.sh && cd -

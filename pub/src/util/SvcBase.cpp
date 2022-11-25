@@ -29,7 +29,21 @@ SvcBase::SvcBase(const std::string& configFilename,
   }
 }
 
-int SvcBase::init() {
+int SvcBase::init(const std::string& configFilename,
+                  InstallSignalHandler installSignalHandler) {
+  if (configFilename_.empty()) {
+    configFilename_ = configFilename;
+    RandomStr::get_mutable_instance().init();
+    RandomInt::get_mutable_instance().init();
+  }
+
+  if (signalHandler_ == nullptr &&
+      installSignalHandler == InstallSignalHandler::True) {
+    signalHandler_ = std::make_shared<SignalHandler>(
+        "SVC_BASE", [this](const boost::system::error_code& ec,
+                           int signalNumber) { exit(&ec, signalNumber); });
+  }
+
   if (auto ret = prepareInit(); ret != 0) {
     LOG_E("Init svc failed.");
     return ret;

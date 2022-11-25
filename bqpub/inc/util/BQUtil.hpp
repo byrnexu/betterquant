@@ -30,6 +30,8 @@ std::string convertTopic(const std::string& topic);
 
 std::string ToPrettyStr(Decimal value);
 
+std::string MakeCommonHttpBody(int statusCode, std::string data = "");
+
 void PrintLogo();
 
 }  // namespace bq

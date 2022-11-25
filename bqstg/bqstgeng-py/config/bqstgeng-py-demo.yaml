@@ -1,5 +1,6 @@
 stgEngChannelOfTDSrv: "TD@StgEngChannel@Trade"
 stgEngChannelOfRiskMgr: "RISK@StgEngChannel@Trade"
+stgEngChannelOfWebSrv: "WEBSRV@StgEngChannel@Trade"
 
 stgId: 10000
 

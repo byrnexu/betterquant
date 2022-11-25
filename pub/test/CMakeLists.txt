@@ -34,7 +34,7 @@ target_include_directories(${TEST_PROJECT_NAME}
     )
 
 target_link_directories(${TEST_PROJECT_NAME}
-    PUBLIC "${PROJECT_SOURCE_DIR}/lib"
+    PUBLIC "${SOLUTION_ROOT_DIR}/lib"
     PUBLIC "${MYSQLCPPCONN_LIB_DIR}"
     PUBLIC "${YYJSON_LIB_DIR}"
     PUBLIC "${NLOHMANN_JSON_LIB_DIR}"
@@ -51,11 +51,24 @@ target_link_directories(${TEST_PROJECT_NAME}
     PUBLIC "${GTEST_LIB_DIR}"
     )
 
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    target_link_libraries(${TEST_PROJECT_NAME}
+      pub-d
+    )
+else()
+    target_link_libraries(${TEST_PROJECT_NAME}
+      pub
+    )
+endif()
+
 target_link_libraries(${TEST_PROJECT_NAME}
     libyyjson.a
     libfmt.a
     libgtest.a
     libgmock.a
+    libxxhash.a
     dl
     pthread
+    ssl
+    crypto
     )

@@ -17,7 +17,12 @@
 
 namespace bq {
 
-class WebSrv : public SvcBase {
+template <typename Task>
+class TaskDispatcher;
+template <typename Task>
+using TaskDispatcherSPtr = std::shared_ptr<TaskDispatcher<Task>>;
+
+class WebSrv : public SvcBase, public boost::serialization::singleton<WebSrv> {
  public:
   using SvcBase::SvcBase;
 
@@ -27,6 +32,8 @@ class WebSrv : public SvcBase {
 
  private:
   int initDBEng();
+  int initWebSrvTaskDispatcher();
+  void initSHMSrv();
 
  public:
   int doRun() final;
@@ -43,8 +50,18 @@ class WebSrv : public SvcBase {
  public:
   db::DBEngSPtr getDBEng() const { return dbEng_; }
 
+  TaskDispatcherSPtr<SHMIPCTaskSPtr> getWebSrvTaskDispatcher() const {
+    return webSrvTaskDispatcher_;
+  }
+
+  SHMSrvSPtr getSHMSrvOfStgEng() const { return shmSrvOfStgEng_; }
+
  private:
   db::DBEngSPtr dbEng_{nullptr};
+
+  TaskDispatcherSPtr<SHMIPCTaskSPtr> webSrvTaskDispatcher_{nullptr};
+  SHMSrvSPtr shmSrvOfStgEng_{nullptr};
+
   std::shared_ptr<std::thread> threadDrogon_;
 };
 

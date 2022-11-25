@@ -34,6 +34,10 @@ int StgEng::run() { return stgEngImpl_->run(); }
 void StgEng::installStgInstTaskHandler(
     const StgInstTaskHandlerBaseSPtr& taskHandler) {
   StgInstTaskHandlerBundle stgInstTaskHandlerBundle = {
+      [&](const auto& stgInstInfo, const auto& commonIPCData) {
+        taskHandler->onStgManualIntervention(stgInstInfo, commonIPCData);
+      },
+
       [&](const auto& stgInstInfo, const auto& topicContent) {
         taskHandler->onPushTopic(stgInstInfo, topicContent);
       },

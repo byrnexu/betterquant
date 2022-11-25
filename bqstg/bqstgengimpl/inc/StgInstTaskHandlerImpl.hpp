@@ -52,6 +52,9 @@ using OrderInfoSPtr = std::shared_ptr<OrderInfo>;
 struct StgInstInfo;
 using StgInstInfoSPtr = std::shared_ptr<StgInstInfo>;
 
+struct CommonIPCData;
+using CommonIPCDataSPtr = std::shared_ptr<CommonIPCData>;
+
 struct TopicContent;
 using TopicContentSPtr = std::shared_ptr<TopicContent>;
 }  // namespace bq
@@ -59,6 +62,9 @@ using TopicContentSPtr = std::shared_ptr<TopicContent>;
 namespace bq::stg {
 
 struct StgInstTaskHandlerBundle {
+  std::function<void(const StgInstInfoSPtr&, const CommonIPCDataSPtr&)>
+      onStgManualIntervention_{nullptr};
+
   std::function<void(const StgInstInfoSPtr&, const TopicContentSPtr&)>
       onPushTopic_{nullptr};
 

@@ -1,4 +1,6 @@
-tdGWChannel: "WEBSRV@PubChannel@Trade"
+stgEngChannel: "WEBSRV@StgEngChannel@Trade"
+
+webSrvTaskDispatcherParam: moduleName=WebSrvTaskDispatcherParam;taskRandAssignedThreadPoolSize=0;taskSpecificThreadPoolSize=1
 
 dbEngParam: svcName=dbEng; dbName=BetterQuant; host=0.0.0.0; port=3306; username=root; password=showmethemoney
 dbTaskDispatcherParam: moduleName=dbTaskDispatcher

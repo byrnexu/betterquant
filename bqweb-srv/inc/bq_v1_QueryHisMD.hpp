@@ -1,6 +1,18 @@
+/*!
+ * \file bq_v1_QueryHisMD.cpp
+ * \project BetterQuant
+ *
+ * \author byrnexu
+ * \date 2022/11/25
+ *
+ * \brief
+ */
+
 #pragma once
 
 #include <drogon/HttpController.h>
+
+#include "def/BQDef.hpp"
 
 using namespace drogon;
 
@@ -22,6 +34,7 @@ class QueryHisMD : public drogon::HttpController<QueryHisMD> {
                 "/v1/QueryHisMD/offset/{marketCode}/{symbolType}/{symbolCode}/"
                 "{mdType}?level={level}&ts={ts}&offset={offset}",
                 Get);
+
   METHOD_LIST_END
 
   void queryBetween2Ts(const HttpRequestPtr &req,
