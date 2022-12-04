@@ -13,6 +13,7 @@
 #include "Config.hpp"
 #include "ConnMetadata.hpp"
 #include "MDSvc.hpp"
+#include "MDSvcConst.hpp"
 #include "WSCli.hpp"
 #include "WSCliOfExch.hpp"
 #include "WSTask.hpp"
@@ -104,6 +105,7 @@ MDStorageSvc::createDirOfMDOfUnifiedFmt(WSCliAsyncTaskSPtr& asyncTask) {
     LOG_W(statusMsg);
     return {-1, ""};
   }
+
   const auto mdType = fieldGroup[4];
   for (std::size_t i = 0; i < fieldGroup.size(); ++i) {
     if (i == 5 && mdType == magic_enum::enum_name(MDType::Books)) {
@@ -112,13 +114,10 @@ MDStorageSvc::createDirOfMDOfUnifiedFmt(WSCliAsyncTaskSPtr& asyncTask) {
       storagePath /= fieldGroup[i];
     }
   }
+
   try {
     if (!boost::filesystem::exists(storagePath)) {
       boost::filesystem::create_directories(storagePath);
-      if (mdType == magic_enum::enum_name(MDType::Candle)) {
-        boost::filesystem::create_directories(storagePath /
-                                              SUB_DIR_OF_CANDLE_DETAIL);
-      }
     }
   } catch (const std::exception& e) {
     const auto statusMsg = fmt::format("Create directories {} failed. [{}]",
@@ -139,48 +138,59 @@ void MDStorageSvc::cacheMDOfUnifiedFmt(
 
   // topic = MD@Binance@Spot@BTC-USDT@Trades
   const auto [statusCode, marketDataCond] =
-      getMarketDataCondFromTopic(arg->topic_);
+      GetMarketDataCondFromTopic(arg->topic_);
   if (statusCode != 0) {
     LOG_W("Cache market data failed because of invalid topic. {}", arg->topic_);
     return;
   }
 
-  const auto pathOfMDOfUnifiedFmt = storagePath;
   const auto exchDate = GetDateInStrFmtFromTs(arg->exchTs_);
   const auto fileNameOfMDOfUnifiedFmt =
       fmt::format("{}.{}", exchDate, HIS_MD_FILE_EXT);
 
   if (marketDataCond->mdType_ != MDType::Candle) {
-    const auto pathOfMD = pathOfMDOfUnifiedFmt / fileNameOfMDOfUnifiedFmt;
+    const auto pathOfMD = storagePath / fileNameOfMDOfUnifiedFmt;
     (*filename2MDGroup_)[pathOfMD.string()].emplace_back(
         arg->marketDataOfUnifiedFmt_ + "\n");
+
   } else {
-    auto pathOfCandleDetail = pathOfMDOfUnifiedFmt;
-    pathOfCandleDetail /= SUB_DIR_OF_CANDLE_DETAIL;
-    pathOfCandleDetail /= fileNameOfMDOfUnifiedFmt;
-    (*filename2MDGroup_)[pathOfCandleDetail.string()].emplace_back(
+    const auto fileOfCandleDetail = storagePath / fileNameOfMDOfUnifiedFmt;
+    (*filename2MDGroup_)[fileOfCandleDetail.string()].emplace_back(
         arg->marketDataOfUnifiedFmt_ + "\n");
 
-    auto pathOfCandle = pathOfMDOfUnifiedFmt / fileNameOfMDOfUnifiedFmt;
-    const auto iter = candleTopic2CandleData_.find(arg->topic_);
-    if (iter == std::end(candleTopic2CandleData_)) {
-      candleTopic2CandleData_[arg->topic_] = arg;
-    } else {
-      const auto minuteInCurCandle = arg->exchTs_ / 60000000;
-      const auto minuteInCache = iter->second->exchTs_ / 60000000;
-      if (minuteInCurCandle > minuteInCache) {
-        for (std::uint64_t i = minuteInCache; i < minuteInCurCandle; ++i) {
-          const auto curExchTs = i * 60000000;
-          auto marketDataOfUnifiedFmt = iter->second->marketDataOfUnifiedFmt_;
-          (*filename2MDGroup_)[pathOfCandle.string()].emplace_back(
-              marketDataOfUnifiedFmt + "\n");
-        }
-        iter->second = arg;
-      } else {
-        iter->second->marketDataOfUnifiedFmt_ = arg->marketDataOfUnifiedFmt_;
-      }
-    }
+    const auto fileOfCandle =
+        storagePath.parent_path() / fileNameOfMDOfUnifiedFmt;
+    handleLastRecOfCandleInOneMinute(arg, fileOfCandle);
   }
+}
+
+void MDStorageSvc::handleLastRecOfCandleInOneMinute(
+    const WSCliAsyncTaskArgSPtr argInCurCandle,
+    const boost::filesystem::path& fileOfCandle) {
+  const auto iter = candleTopic2CandleData_.find(argInCurCandle->topic_);
+  if (iter == std::end(candleTopic2CandleData_)) {
+    candleTopic2CandleData_[argInCurCandle->topic_] = argInCurCandle;
+    return;
+  }
+
+  auto& argInCache = iter->second;
+
+  const auto minuteInCurCandle = argInCurCandle->exchTs_ / 60000000;
+  const auto minuteInCache = argInCache->exchTs_ / 60000000;
+  if (minuteInCurCandle <= minuteInCache) {
+    argInCache->marketDataOfUnifiedFmt_ =
+        argInCurCandle->marketDataOfUnifiedFmt_;
+    return;
+  }
+
+  for (std::uint64_t i = minuteInCache; i < minuteInCurCandle; ++i) {
+    auto& marketData = argInCache->marketDataOfUnifiedFmt_;
+    const auto curExchTs = fmt::format("{}", i * 60000000);
+    ReplaceSubStrBetween2Str(marketData, curExchTs, ET_LTAG, ET_RTAG);
+    (*filename2MDGroup_)[fileOfCandle.string()].emplace_back(marketData + "\n");
+  }
+
+  argInCache = argInCurCandle;
 }
 
 std::tuple<int, boost::filesystem::path, std::string>

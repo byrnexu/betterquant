@@ -16,6 +16,7 @@
 #include "def/BQConst.hpp"
 #include "def/BQDef.hpp"
 #include "def/PosInfo.hpp"
+#include "def/SimedTDInfo.hpp"
 #include "def/SymbolInfo.hpp"
 #include "util/PosSnapshotImpl.hpp"
 
@@ -26,6 +27,41 @@ class global_event : public testing::Environment {
   virtual void SetUp() {}
   virtual void TearDown() {}
 };
+
+TEST(testSimedTDInfo, testSimedTDInfoConvert) {
+  {
+    const auto simedTDInfoInJsonFmt = R"({"s":100,"t":"0,0.1,T;0,0.9,M"})";
+    const auto [statusCode, simedTDInfo] =
+        MakeSimedTDInfo(simedTDInfoInJsonFmt);
+    const auto simedTDInfoInJsonFmtAfterConvert =
+        ConvertSimedTDInfoToJsonFmt(simedTDInfo);
+    EXPECT_TRUE(simedTDInfoInJsonFmt == simedTDInfoInJsonFmtAfterConvert);
+  }
+
+  {
+    const auto simedTDInfoInJsonFmt = R"({"s":100,"t":"0,0.1,T;0,0.9,M"})";
+    const auto j = MakeSimedTDInfoInJsonFmt(
+        OrderStatus::Filled,
+        {{Slippage(0), FilledPer(0.1), LiquidityDirection::Taker},
+         {Slippage(0), FilledPer(0.9), LiquidityDirection::Maker}});
+    EXPECT_TRUE(simedTDInfoInJsonFmt == j);
+  }
+
+  {
+    const auto simedTDInfoInJsonFmt = R"({"s":110,"t":""})";
+    const auto [statusCode, simedTDInfo] =
+        MakeSimedTDInfo(simedTDInfoInJsonFmt);
+    const auto simedTDInfoInJsonFmtAfterConvert =
+        ConvertSimedTDInfoToJsonFmt(simedTDInfo);
+    EXPECT_TRUE(simedTDInfoInJsonFmt == simedTDInfoInJsonFmtAfterConvert);
+  }
+
+  {
+    const auto simedTDInfoInJsonFmt = R"({"s":110,"t":""})";
+    const auto j = MakeSimedTDInfoInJsonFmt(OrderStatus::Failed, {});
+    EXPECT_TRUE(simedTDInfoInJsonFmt == j);
+  }
+}
 
 std::string PosGroup2Str(const PosInfoGroup& posInfoGroup) {
   std::string ret;

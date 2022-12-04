@@ -45,7 +45,7 @@ class MDSvc;
 
 class MDStorageSvc {
  public:
-  MDStorageSvc(MDSvc const* mdSvc);
+  explicit MDStorageSvc(MDSvc const* mdSvc);
 
  public:
   int init();
@@ -64,6 +64,9 @@ class MDStorageSvc {
       WSCliAsyncTaskSPtr& asyncTask);
   void cacheMDOfUnifiedFmt(WSCliAsyncTaskSPtr& asyncTask,
                            const boost::filesystem::path& storagePath);
+  void handleLastRecOfCandleInOneMinute(
+      const WSCliAsyncTaskArgSPtr arg,
+      const boost::filesystem::path& fileOfCandle);
 
   void cacheMDOfOrigFmt(const std::string& marketDataOfOrigFmt,
                         const boost::filesystem::path& storagePath,

@@ -1,21 +1,21 @@
 topicGroup:
   - {name: BTC-USDT-Perp@Trades, saveToDisk: true}
   - {name: BTC-USDT-Perp@Tickers, saveToDisk: true}
-  - {name: BTC-USDT-Perp@Candle, saveToDisk: true}
+  - {name: BTC-USDT-Perp@Candle@detail, saveToDisk: true}
   - {name: BTC-USDT-Perp@Books@400, saveToDisk: false}
   - {name: ETH-USDT-Perp@Trades, saveToDisk: true}
   - {name: ETH-USDT-Perp@Tickers, saveToDisk: true}
-  - {name: ETH-USDT-Perp@Candle, saveToDisk: true}
+  - {name: ETH-USDT-Perp@Candle@detail, saveToDisk: true}
   - {name: ETH-USDT-Perp@Books@400, saveToDisk: false}
   - {name: ADA-USDT-Perp@Trades, saveToDisk: true}
   - {name: ADA-USDT-Perp@Tickers, saveToDisk: true}
-  - {name: ADA-USDT-Perp@Candle, saveToDisk: true}
+  - {name: ADA-USDT-Perp@Candle@detail, saveToDisk: true}
   - {name: ADA-USDT-Perp@Books@400, saveToDisk: false}
   - {name: DOT-USDT-Perp@Trades, saveToDisk: true}
   - {name: DOT-USDT-Perp@Tickers, saveToDisk: true}
-  - {name: DOT-USDT-Perp@Candle, saveToDisk: true}
+  - {name: DOT-USDT-Perp@Candle@detail, saveToDisk: true}
   - {name: DOT-USDT-Perp@Books@400, saveToDisk: false}
   - {name: BNB-USDT-Perp@Trades, saveToDisk: true}
   - {name: BNB-USDT-Perp@Tickers, saveToDisk: true}
-  - {name: BNB-USDT-Perp@Candle, saveToDisk: true}
+  - {name: BNB-USDT-Perp@Candle@detail, saveToDisk: true}
   - {name: BNB-USDT-Perp@Books@400, saveToDisk: false}

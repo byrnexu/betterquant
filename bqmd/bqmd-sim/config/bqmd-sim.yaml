@@ -1,0 +1,34 @@
+playbackSpeed: 5
+
+playbackDateTimeStart: 20221125T020000
+playbackDateTimeEnd: 20221125T050000
+
+playbackTopicGroup:
+  - MD@Binance@Spot@BTC-USDT@Trades
+  - MD@Binance@Spot@BTC-USDT@Tickers
+  - MD@Binance@Spot@BTC-USDT@Candle@detail
+  - MD@Binance@Spot@BTC-USDT@Books@20
+  - MD@Binance@Spot@ETH-USDT@Trades
+  - MD@Binance@Spot@ETH-USDT@Candle@detail
+
+milliSecIntervalBetweenCacheCheck: 1000
+numOfCacheMD: 5
+secOfCacheMD: 600
+
+mdRootPath: data
+
+mdSimTaskDispatcherParam: moduleName=MDSimTaskDispatcherParam;taskRandAssignedThreadPoolSize=0;taskSpecificThreadPoolSize=1
+
+logger: 
+  queueSize: 128
+  backingThreadsCount: 1
+  defaultLoggerName: defaultLogger
+  loggerGroup: 
+    - 
+      loggerName: "defaultLogger"
+      maxFiles: 10
+      maxSize: 104857600
+      outputDir: "data/logs/bqmd/bqmd-sim"
+      outputFilename: "bqmd-sim"
+      rotatingSinkPattern: "[%Y%m%d %T.%f] [%L] [%t] [%s:%#] %v"
+      stdoutSinkPattern: "[%Y%m%d %T.%f] [%^%L%$] [%t] [%s:%#] %v"

@@ -47,7 +47,7 @@ void StgInstTaskHandlerOfPerpTest::onStgInstChg(
     const StgInstInfoSPtr& stgInstInfo) {}
 
 void StgInstTaskHandlerOfPerpTest::onStgInstTimer(
-    const StgInstInfoSPtr& stgInstInfo) {
+    const StgInstInfoSPtr& stgInstInfo, const std::string& timerName) {
   static bool alreadyOrder = false;
   if (StgInstIdOfTriggerSignal(stgInstInfo) == 2 && alreadyOrder == false) {
     const auto symbolCode = "ETH-USDT-Perp";

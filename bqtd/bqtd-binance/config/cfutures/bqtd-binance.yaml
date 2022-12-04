@@ -1,6 +1,9 @@
 marketCode: Binance
 symbolType: CFutures
-acctId: 10013
+acctId: 10003
+
+simedMode:
+  enable: false
 
 tdSrvChannel: "TD@TDGWChannel@Trade"
 tdSrvTaskDispatcherParam: moduleName=tdSrvTaskDispatcher; taskRandAllocThreadPoolSize=0; taskSpecificThreadPoolSize=2

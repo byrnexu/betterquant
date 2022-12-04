@@ -19,8 +19,18 @@
 namespace bq::stg {
 
 SHMIPCAsyncTaskSPtr MakeStgSignal(MsgId msgId, StgInstId stgInstId) {
-  StgSignal stgSignal(msgId, stgInstId);
+  StgSignal stgSignal(msgId);
   const auto task = std::make_shared<SHMIPCTask>(&stgSignal, sizeof(StgSignal));
+  const auto ret = std::make_shared<SHMIPCAsyncTask>(task, stgInstId);
+  return ret;
+}
+
+SHMIPCAsyncTaskSPtr MakeStgSignal(MsgId msgId, StgInstId stgInstId,
+                                  const std::string& data) {
+  const auto commonIPCData = MakeCommonIPCData(data);
+  commonIPCData->shmHeader_.msgId_ = msgId;
+  const auto task = std::make_shared<SHMIPCTask>(
+      commonIPCData.get(), sizeof(CommonIPCData) + commonIPCData->dataLen_ + 1);
   const auto ret = std::make_shared<SHMIPCAsyncTask>(task, stgInstId);
   return ret;
 }

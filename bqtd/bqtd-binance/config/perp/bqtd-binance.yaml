@@ -1,6 +1,9 @@
 marketCode: Binance
 symbolType: Perp
-acctId: 10014
+acctId: 10004
+
+simedMode:
+  enable: false
 
 tdSrvChannel: "TD@TDGWChannel@Trade"
 tdSrvTaskDispatcherParam: moduleName=tdSrvTaskDispatcher; taskRandAllocThreadPoolSize=0; taskSpecificThreadPoolSize=2

@@ -72,7 +72,6 @@ int ClearFilecont(const std::string& filename) {
   std::ofstream out;
   out.open(filename.c_str(), std::ofstream::out | std::ofstream::trunc);
   if (out.is_open() == false) {
-    LOG_E("Clear content of file {} failed.", "util", filename);
     return -1;
   }
   out.close();

@@ -251,30 +251,4 @@ OrderInfoSPtr OrdMgr::getOrderInfo(const OrderInfoSPtr& orderInfo,
   return nullptr;
 }
 
-int OrdMgr::syncOrderGroupToDB() {
-  std::vector<OrderInfoSPtr> orderGroupOfSyncToDB;
-  {
-    std::lock_guard<std::ext::spin_mutex> guard(mtxOrderGroupOfSyncToDB_);
-    std::swap(orderGroupOfSyncToDB, orderGroupOfSyncToDB_);
-  }
-
-  for (const auto& orderInfo : orderGroupOfSyncToDB) {
-    const auto identity = GET_RAND_STR();
-    const auto sql = orderInfo->getSqlOfUSPOrderInfoUpdate();
-    auto [ret, execRet] = dbEng_->asyncExec(identity, sql);
-    if (ret != 0) {
-      LOG_W("Sync order info to db failed. [{}]", sql);
-    }
-  }
-
-  return 0;
-}
-
-void OrdMgr::cacheOrderOfSyncToDB(const OrderInfoSPtr& orderInfo) {
-  {
-    std::lock_guard<std::ext::spin_mutex> guard(mtxOrderGroupOfSyncToDB_);
-    orderGroupOfSyncToDB_.emplace_back(orderInfo);
-  }
-}
-
 }  // namespace bq

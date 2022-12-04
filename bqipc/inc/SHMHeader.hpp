@@ -27,7 +27,7 @@ struct SHMHeader {
   Direction direction_;
   std::uint64_t timestamp_{0};
   TopicHash topicHash_{0};
-  char topicName_[MAX_TOPIC_NAME_LEN];
+  char topic_[MAX_TOPIC_LEN];
 
   std::string toStr() const;
   std::string toJson() const;

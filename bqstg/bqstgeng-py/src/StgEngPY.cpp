@@ -34,6 +34,7 @@
 #include "def/Def.hpp"
 #include "def/OrderInfo.hpp"
 #include "def/PosInfo.hpp"
+#include "def/SimedTDInfo.hpp"
 #include "def/StgInstInfo.hpp"
 #include "def/SymbolInfo.hpp"
 #include "util/PosSnapshot.hpp"
@@ -45,6 +46,27 @@ namespace bq::stg {
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(queryPnlOverloads, queryPnl, 2, 4)
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(queryPnlGroupByOverloads,
                                        queryPnlGroupBy, 2, 4)
+
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(orderOverloads, order, 7, 9)
+
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(queryHisMDBetween2TsOverloadsByFields,
+                                       queryHisMDBetween2Ts, 6, 7)
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(queryHisMDBetween2TsOverloadsByTopic,
+                                       queryHisMDBetween2Ts, 3, 4)
+
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(
+    querySpecificNumOfHisMDBeforeTsOverloadsByFields,
+    querySpecificNumOfHisMDBeforeTs, 6, 7)
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(
+    querySpecificNumOfHisMDBeforeTsOverloadsByTopic,
+    querySpecificNumOfHisMDBeforeTs, 3, 4)
+
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(
+    querySpecificNumOfHisMDAfterTsOverloadsByFields,
+    querySpecificNumOfHisMDAfterTs, 6, 7)
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(
+    querySpecificNumOfHisMDAfterTsOverloadsByTopic,
+    querySpecificNumOfHisMDAfterTs, 3, 4)
 
 BOOST_PYTHON_MODULE(bqstgeng) {
   // char array
@@ -121,6 +143,11 @@ BOOST_PYTHON_MODULE(bqstgeng) {
       .value("PartialFilledCanceled", OrderStatus::PartialFilledCanceled)
       .value("Failed", OrderStatus::Failed)
       .value("Others", OrderStatus::Others);
+
+  // enum LiquidityDirection
+  enum_<LiquidityDirection>("LiquidityDirection")
+      .value("Maker", LiquidityDirection::Maker)
+      .value("Taker", LiquidityDirection::Taker);
 
   // StgInstInfo
   class_<StgInstInfo, std::shared_ptr<StgInstInfo>>("StgInstInfo", init<>())
@@ -319,7 +346,6 @@ BOOST_PYTHON_MODULE(bqstgeng) {
 
   // RetOfQueryPosInfoGroupBy
   using RetOfQueryPosInfoGroupBy = std::tuple<int, Key2PosInfoBundleSPtr>;
-  using RetOfQueryPosInfoGroupBy = std::tuple<int, Key2PosInfoBundleSPtr>;
   class_<RetOfQueryPosInfoGroupBy>("ret_of_query_pos_info_group_by",
                                    init<int, Key2PosInfoBundleSPtr>())
       .def("__len__", &tuple_length<RetOfQueryPosInfoGroupBy>)
@@ -350,9 +376,9 @@ BOOST_PYTHON_MODULE(bqstgeng) {
            args("query_cond"));
 
   using RetOfOrder = std::tuple<int, OrderId>;
-  using OrderByFields =
-      RetOfOrder (StgEng::*)(const StgInstInfoSPtr&, AcctId, const std::string&,
-                             Side, PosSide, Decimal, Decimal);
+  using OrderByFields = RetOfOrder (StgEng::*)(
+      const StgInstInfoSPtr&, AcctId, const std::string&, Side, PosSide,
+      Decimal, Decimal, AlgoId, const SimedTDInfoSPtr&);
   using OrderByOrderInfo = RetOfOrder (StgEng::*)(OrderInfoSPtr&);
 
   class_<RetOfOrder>("ret_of_order", init<int, OrderId>())
@@ -398,9 +424,11 @@ BOOST_PYTHON_MODULE(bqstgeng) {
   class_<StgEng, boost::noncopyable>("StgEng", init<std::string>())
       .def("init", &StgEng::init, args("stg_inst_task_handler"))
       .def("run", &StgEng::run)
-      .def<OrderByFields>("order", &StgEng::order,
-                          args("stg_inst_info", "acct_id", "symbol_code",
-                               "side", "pos_side", "order_price", "order_size"))
+      .def<OrderByFields>(
+          "order", &StgEng::order,
+          orderOverloads(args("stg_inst_info", "acct_id", "symbol_code", "side",
+                              "pos_side", "order_price", "order_size",
+                              "algo_id", "simed_td_info")))
       .def<OrderByOrderInfo>("order", &StgEng::order, args("order_info"))
       .def("cancel_order", &StgEng::cancelOrder, args("order_id"))
       .def("get_order_info", &StgEng::getOrderInfo, args("order_id"))
@@ -408,30 +436,38 @@ BOOST_PYTHON_MODULE(bqstgeng) {
       .def("unsub", &StgEng::sub, args("subscriber", "topic"))
       .def<QryHisMDBetweenTsByFields>(
           "query_his_md_between_2_ts", &StgEng::queryHisMDBetween2Ts,
-          args("market_code", "symbol_type", "symbol_code", "mdtype",
-               "ts_begin", "ts_end", "level"))
+          queryHisMDBetween2TsOverloadsByFields(
+              args("market_code", "symbol_type", "symbol_code", "mdtype",
+                   "ts_begin", "ts_end", "level")))
       .def<QryHisMDBetweenTsByTopic>(
           "query_his_md_between_2_ts", &StgEng::queryHisMDBetween2Ts,
-          args("topic", "ts_begin", "ts_end", "level"))
+          queryHisMDBetween2TsOverloadsByTopic(
+              args("topic", "ts_begin", "ts_end", "level")))
       .def<QryHisMDBeforeTsByFields>(
           "query_specific_num_of_his_md_before_ts",
           &StgEng::querySpecificNumOfHisMDBeforeTs,
-          args("market_code", "symbol_type", "symbol_code", "mdtype", "ts",
-               "num", "level"))
-      .def<QryHisMDBeforeTsByTopic>("query_specific_num_of_his_md_before_ts",
-                                    &StgEng::querySpecificNumOfHisMDBeforeTs,
-                                    args("topic", "ts", "num", "level"))
+          querySpecificNumOfHisMDBeforeTsOverloadsByFields(
+              args("market_code", "symbol_type", "symbol_code", "mdtype", "ts",
+                   "num", "level")))
+      .def<QryHisMDBeforeTsByTopic>(
+          "query_specific_num_of_his_md_before_ts",
+          &StgEng::querySpecificNumOfHisMDBeforeTs,
+          querySpecificNumOfHisMDBeforeTsOverloadsByTopic(
+              args("topic", "ts", "num", "level")))
       .def<QryHisMDAfterTsByFields>(
           "query_specific_num_of_his_md_after_ts",
           &StgEng::querySpecificNumOfHisMDAfterTs,
-          args("market_code", "symbol_type", "symbol_code", "mdtype", "ts",
-               "num", "level"))
-      .def<QryHisMDAfterTsByTopic>("query_specific_num_of_his_md_after_ts",
-                                   &StgEng::querySpecificNumOfHisMDAfterTs,
-                                   args("topic", "ts", "num", "level"))
+          querySpecificNumOfHisMDAfterTsOverloadsByFields(
+              args("market_code", "symbol_type", "symbol_code", "mdtype", "ts",
+                   "num", "level")))
+      .def<QryHisMDAfterTsByTopic>(
+          "query_specific_num_of_his_md_after_ts",
+          &StgEng::querySpecificNumOfHisMDAfterTs,
+          querySpecificNumOfHisMDAfterTsOverloadsByTopic(
+              args("topic", "ts", "num", "level")))
       .def("install_stg_inst_timer", &StgEng::installStgInstTimer,
            args("stg_inst_id", "timer_name", "exec_at_startup",
-                "milli_sec_interval", "max_exec_times"))
+                "millisec_interval", "max_exec_times"))
       .def("save_stg_private_data", &StgEng::saveStgPrivateData,
            args("stg_inst_id", "json_str"))
       .def("load_stg_private_data", &StgEng::loadStgPrivateData,
@@ -439,6 +475,34 @@ BOOST_PYTHON_MODULE(bqstgeng) {
       .def("save_to_db", &StgEng::saveToDB, args("pnl"));
 
   def("get_status_msg", GetStatusMsg, args("status_code"));
+
+  // TransDetail
+  class_<TransDetail, TransDetailSPtr>("TransDetail", init<>())
+      .def(init<Decimal, Decimal, LiquidityDirection>(
+          args("self", "slippage", "filled_per", "ld")))
+      .def_readwrite("slippage", &TransDetail::slippage_)
+      .def_readwrite("filled_per", &TransDetail::filledPer_)
+      .def_readwrite("liquidity_direction", &TransDetail::liquidityDirection_)
+      .def("to_str", &TransDetail::toStr);
+
+  def("make_trans_detail", MakeTransDetail, args("trans_detail_in_json_fmt"));
+
+  // TransDetailGroup
+  class_<TransDetailGroup>("TransDetailGroup")
+      .def(vector_indexing_suite<TransDetailGroup, true>());
+
+  // SimedTDInfo
+  class_<SimedTDInfo, SimedTDInfoSPtr>("SimedTDInfo", init<>())
+      .def(init<OrderStatus, std::vector<TransDetailSPtr>>())
+      .def_readwrite("order_status", &SimedTDInfo::orderStatus_)
+      .def_readwrite("trans_detail_group", &SimedTDInfo::transDetailGroup_);
+
+  // RetOfMakeSimedTDInfo
+  using RetOfMakeSimedTDInfo = std::tuple<int, SimedTDInfoSPtr>;
+  class_<RetOfMakeSimedTDInfo>("ret_of_make_simed_td_info",
+                               init<int, SimedTDInfoSPtr>())
+      .def("__len__", &tuple_length<RetOfMakeSimedTDInfo>)
+      .def("__getitem__", &get_tuple_item<RetOfMakeSimedTDInfo>);
 }
 
 }  // namespace bq::stg

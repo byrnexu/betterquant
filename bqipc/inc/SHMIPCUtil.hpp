@@ -30,7 +30,8 @@ void InitMsgBody(void* target, const T source) {
 
 struct TopicContent {
   SHMHeader shmHeader_;
-  char data_[MAX_TOPIC_DATA_LEN];
+  std::uint32_t dataLen_{0};
+  char data_[0];
   std::string toJson() const;
 };
 using TopicContentSPtr = std::shared_ptr<TopicContent>;

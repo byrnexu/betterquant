@@ -53,6 +53,11 @@ class SymbolTableMaint {
   virtual std::tuple<int, db::TBLRecSetSPtr<TBLSymbolInfo>>
   convertSymbolTableFromExch(const std::string& symbolTableFromExch) = 0;
 
+  void PubTopicOfSymbolChg(
+      const db::TBLRecSetSPtr<TBLSymbolInfo>& tblRecSetAdd,
+      const db::TBLRecSetSPtr<TBLSymbolInfo>& tblRecSetDel,
+      const db::TBLRecSetSPtr<TBLSymbolInfo>& tblRecSetChg);
+
  protected:
   std::tuple<int, db::symbolInfo::RecordSPtr> makeSymbolInfo(
       const Val& v) const {

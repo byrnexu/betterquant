@@ -95,6 +95,9 @@ using TDSrvTaskHandlerSPtr = std::shared_ptr<TDSrvTaskHandler>;
 class ExceedFlowCtrlHandler;
 using ExceedFlowCtrlHandlerSPtr = std::shared_ptr<ExceedFlowCtrlHandler>;
 
+class SimedOrderInfoHandler;
+using SimedOrderInfoHandlerSPtr = std::shared_ptr<SimedOrderInfoHandler>;
+
 class TDSvc : public SvcBase {
  public:
   using SvcBase::SvcBase;
@@ -148,6 +151,8 @@ class TDSvc : public SvcBase {
 
   AcctId getAcctId() const { return acctId_; }
 
+  bool isSimedMode() const { return simedMode_; }
+
   MarketCode getMarketCodeEnum() const { return marketCodeEnum_; }
   SymbolType getSymbolTypeEnum() const { return symbolTypeEnum_; }
 
@@ -176,6 +181,10 @@ class TDSvc : public SvcBase {
 
   web::PingPongSvcSPtr getPingPongSvc() const { return pingPongSvc_; }
   WSCliOfExchSPtr getWSCliOfExch() const { return wsCliOfExch_; }
+
+  SimedOrderInfoHandlerSPtr getSimedOrderInfoHandler() const {
+    return simedOrderInfoHandler_;
+  }
 
   TaskDispatcherSPtr<SHMIPCTaskSPtr> getTDSrvTaskDispatcher() const {
     return tdSrvTaskDispatcher_;
@@ -212,6 +221,7 @@ class TDSvc : public SvcBase {
   std::string marketCode_;
   std::string symbolType_;
   AcctId acctId_;
+  bool simedMode_{false};
 
   MarketCode marketCodeEnum_;
   SymbolType symbolTypeEnum_;
@@ -235,6 +245,8 @@ class TDSvc : public SvcBase {
 
   web::PingPongSvcSPtr pingPongSvc_{nullptr};
   WSCliOfExchSPtr wsCliOfExch_{nullptr};
+
+  SimedOrderInfoHandlerSPtr simedOrderInfoHandler_{nullptr};
 
   TDSrvTaskHandlerSPtr tdSrvTaskHandler_{nullptr};
   TaskDispatcherSPtr<SHMIPCTaskSPtr> tdSrvTaskDispatcher_{nullptr};

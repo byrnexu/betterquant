@@ -1,13 +1,13 @@
 topicGroup:
   - {name: BTC-USD-CPerp@Trades, saveToDisk: true}
   - {name: BTC-USD-CPerp@Tickers, saveToDisk: true}
-  - {name: BTC-USD-CPerp@Candle, saveToDisk: true}
+  - {name: BTC-USD-CPerp@Candle@detail, saveToDisk: true}
   - {name: BTC-USD-CPerp@Books@400, saveToDisk: true}
   - {name: ETH-USD-CPerp@Trades, saveToDisk: true}
   - {name: ETH-USD-CPerp@Tickers, saveToDisk: true}
-  - {name: ETH-USD-CPerp@Candle, saveToDisk: true}
+  - {name: ETH-USD-CPerp@Candle@detail, saveToDisk: true}
   - {name: ETH-USD-CPerp@Books@400, saveToDisk: true}
   - {name: DOT-USD-CPerp@Trades, saveToDisk: true}
   - {name: DOT-USD-CPerp@Tickers, saveToDisk: true}
-  - {name: DOT-USD-CPerp@Candle, saveToDisk: true}
+  - {name: DOT-USD-CPerp@Candle@detail, saveToDisk: true}
   - {name: DOT-USD-CPerp@Books@400, saveToDisk: true}

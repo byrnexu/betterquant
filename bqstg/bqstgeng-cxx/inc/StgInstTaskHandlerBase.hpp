@@ -74,7 +74,8 @@ class StgInstTaskHandlerBase {
   virtual void onStgInstAdd(const StgInstInfoSPtr& stgInstInfo) {}
   virtual void onStgInstDel(const StgInstInfoSPtr& stgInstInfo) {}
   virtual void onStgInstChg(const StgInstInfoSPtr& stgInstInfo) {}
-  virtual void onStgInstTimer(const StgInstInfoSPtr& stgInstInfo) {}
+  virtual void onStgInstTimer(const StgInstInfoSPtr& stgInstInfo,
+                              const std::string& timerName) {}
 
  private:
   virtual void onPosUpdateOfAcctId(const StgInstInfoSPtr& stgInstInfo,

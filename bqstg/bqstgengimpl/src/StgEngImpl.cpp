@@ -29,6 +29,7 @@
 #include "def/DataStruOfStg.hpp"
 #include "def/Def.hpp"
 #include "def/Pnl.hpp"
+#include "def/SimedTDInfo.hpp"
 #include "def/StatusCode.hpp"
 #include "def/TaskOfSync.hpp"
 #include "util/AcctInfoCache.hpp"
@@ -339,14 +340,6 @@ void StgEngImpl::initScheduleTaskBundle() {
         },
         ExecAtStartup::False, MilliSecInterval(5000)));
 
-    scheduleTaskBundle_->emplace_back(std::make_shared<ScheduleTask>(
-        "syncOrderGroupToDB",
-        [this]() {
-          getOrdMgr()->syncOrderGroupToDB();
-          return true;
-        },
-        ExecAtStartup::False, MilliSecInterval(3000)));
-
     const auto milliSecIntervalOfSyncTask =
         getConfig()["milliSecIntervalOfSyncTask"].as<std::uint32_t>();
     scheduleTaskBundle_->emplace_back(std::make_shared<ScheduleTask>(
@@ -505,7 +498,6 @@ void StgEngImpl::handleTaskOfSyncGroup() {
 
 void StgEngImpl::doExit(const boost::system::error_code* ec, int signalNum) {
   scheduleTaskBundleExecutor_->stop();
-  getOrdMgr()->syncOrderGroupToDB();
   shmCliOfWebSrv_->stop();
   shmCliOfRiskMgr_->stop();
   shmCliOfTDSrv_->stop();
@@ -520,9 +512,18 @@ std::tuple<int, OrderId> StgEngImpl::order(const StgInstInfoSPtr& stgInstInfo,
                                            const std::string& symbolCode,
                                            Side side, PosSide posSide,
                                            Decimal orderPrice,
-                                           Decimal orderSize) {
-  auto orderInfo = MakeOrderInfo(stgInstInfo, acctId, symbolCode, side, posSide,
-                                 orderPrice, orderSize);
+                                           Decimal orderSize, AlgoId algoId,
+                                           const SimedTDInfoSPtr& simedTDInfo) {
+  std::string simedTDInfoInJsonFmt = "";
+  if (simedTDInfo != nullptr) {
+    simedTDInfoInJsonFmt = ConvertSimedTDInfoToJsonFmt(simedTDInfo);
+  }
+  if (simedTDInfoInJsonFmt.size() > MAX_SIMED_TD_INFO - 1) {
+    return {SCODE_STG_INVALID_SIMED_TD_INFO_SIZE, 0};
+  }
+  auto orderInfo =
+      MakeOrderInfo(stgInstInfo, acctId, symbolCode, side, posSide, orderPrice,
+                    orderSize, algoId, simedTDInfoInJsonFmt);
   return order(orderInfo);
 }
 
@@ -634,7 +635,7 @@ int StgEngImpl::unSub(StgInstId subscriber, const std::string& topic) {
 std::tuple<int, std::string> StgEngImpl::queryHisMDBetween2Ts(
     const std::string& topic, std::uint64_t tsBegin, std::uint64_t tsEnd,
     std::uint32_t level) {
-  const auto [statusCode, marketDataCond] = getMarketDataCondFromTopic(topic);
+  const auto [statusCode, marketDataCond] = GetMarketDataCondFromTopic(topic);
   if (statusCode != 0) return {statusCode, ""};
   return queryHisMDBetween2Ts(
       marketDataCond->marketCode_, marketDataCond->symbolType_,
@@ -652,13 +653,18 @@ std::tuple<int, std::string> StgEngImpl::queryHisMDBetween2Ts(
     std::uint32_t level) {
   std::string addr;
   if (mdType != MDType::Books) {
-    addr = fmt::format(
-        "{}/{}/{}/{}/{}?tsBegin={}&tsEnd={}", prefixOfQueryHisMDBetween,
-        magic_enum::enum_name(marketCode), magic_enum::enum_name(symbolType),
-        symbolCode, magic_enum::enum_name(mdType), tsBegin, tsEnd);
+    const auto prefix =
+        fmt::format(prefixOfQueryHisMDBetween,
+                    getConfig()["webSrv"].as<std::string>("localhost"));
+    addr = fmt::format("{}/{}/{}/{}/{}?tsBegin={}&tsEnd={}", prefix,
+                       magic_enum::enum_name(marketCode),
+                       magic_enum::enum_name(symbolType), symbolCode,
+                       magic_enum::enum_name(mdType), tsBegin, tsEnd);
   } else {
-    addr = fmt::format("{}/{}/{}/{}/{}?level={}&tsBegin={}&tsEnd={}",
-                       prefixOfQueryHisMDBetween,
+    const auto prefix =
+        fmt::format(prefixOfQueryHisMDBetween,
+                    getConfig()["webSrv"].as<std::string>("localhost"));
+    addr = fmt::format("{}/{}/{}/{}/{}?level={}&tsBegin={}&tsEnd={}", prefix,
                        magic_enum::enum_name(marketCode),
                        magic_enum::enum_name(symbolType), symbolCode,
                        magic_enum::enum_name(mdType), level, tsBegin, tsEnd);
@@ -683,7 +689,7 @@ std::tuple<int, std::string> StgEngImpl::queryHisMDBetween2Ts(
 
 std::tuple<int, std::string> StgEngImpl::querySpecificNumOfHisMDBeforeTs(
     const std::string& topic, std::uint64_t ts, int num, std::uint32_t level) {
-  const auto [statusCode, marketDataCond] = getMarketDataCondFromTopic(topic);
+  const auto [statusCode, marketDataCond] = GetMarketDataCondFromTopic(topic);
   if (statusCode != 0) return {statusCode, ""};
   return querySpecificNumOfHisMDBeforeTs(
       marketDataCond->marketCode_, marketDataCond->symbolType_,
@@ -698,15 +704,21 @@ std::tuple<int, std::string> StgEngImpl::querySpecificNumOfHisMDBeforeTs(
     MDType mdType, std::uint64_t ts, int num, std::uint32_t level) {
   std::string addr;
   if (mdType != MDType::Books) {
-    addr = fmt::format(
-        "{}/{}/{}/{}/{}?ts={}&offset={}", prefixOfQueryHisMDOffset,
-        magic_enum::enum_name(marketCode), magic_enum::enum_name(symbolType),
-        symbolCode, magic_enum::enum_name(mdType), ts, -1 * num);
+    const auto prefix =
+        fmt::format(prefixOfQueryHisMDOffset,
+                    getConfig()["webSrv"].as<std::string>("localhost"));
+    addr = fmt::format("{}/{}/{}/{}/{}?ts={}&offset={}", prefix,
+                       magic_enum::enum_name(marketCode),
+                       magic_enum::enum_name(symbolType), symbolCode,
+                       magic_enum::enum_name(mdType), ts, -1 * num);
   } else {
-    addr = fmt::format(
-        "{}/{}/{}/{}/{}?level={}&ts={}&offset={}", prefixOfQueryHisMDOffset,
-        magic_enum::enum_name(marketCode), magic_enum::enum_name(symbolType),
-        symbolCode, magic_enum::enum_name(mdType), level, ts, -1 * num);
+    const auto prefix =
+        fmt::format(prefixOfQueryHisMDOffset,
+                    getConfig()["webSrv"].as<std::string>("localhost"));
+    addr = fmt::format("{}/{}/{}/{}/{}?level={}&ts={}&offset={}", prefix,
+                       magic_enum::enum_name(marketCode),
+                       magic_enum::enum_name(symbolType), symbolCode,
+                       magic_enum::enum_name(mdType), level, ts, -1 * num);
   }
 
   const auto timeoutOfQueryHisMD =
@@ -728,7 +740,7 @@ std::tuple<int, std::string> StgEngImpl::querySpecificNumOfHisMDBeforeTs(
 
 std::tuple<int, std::string> StgEngImpl::querySpecificNumOfHisMDAfterTs(
     const std::string& topic, std::uint64_t ts, int num, std::uint32_t level) {
-  const auto [statusCode, marketDataCond] = getMarketDataCondFromTopic(topic);
+  const auto [statusCode, marketDataCond] = GetMarketDataCondFromTopic(topic);
   if (statusCode != 0) return {statusCode, ""};
   return querySpecificNumOfHisMDAfterTs(
       marketDataCond->marketCode_, marketDataCond->symbolType_,
@@ -743,15 +755,21 @@ std::tuple<int, std::string> StgEngImpl::querySpecificNumOfHisMDAfterTs(
     MDType mdType, std::uint64_t ts, int num, std::uint32_t level) {
   std::string addr;
   if (mdType != MDType::Books) {
-    addr = fmt::format(
-        "{}/{}/{}/{}/{}?ts={}&offset={}", prefixOfQueryHisMDOffset,
-        magic_enum::enum_name(marketCode), magic_enum::enum_name(symbolType),
-        symbolCode, magic_enum::enum_name(mdType), ts, num);
+    const auto prefix =
+        fmt::format(prefixOfQueryHisMDOffset,
+                    getConfig()["webSrv"].as<std::string>("localhost"));
+    addr = fmt::format("{}/{}/{}/{}/{}?ts={}&offset={}", prefix,
+                       magic_enum::enum_name(marketCode),
+                       magic_enum::enum_name(symbolType), symbolCode,
+                       magic_enum::enum_name(mdType), ts, num);
   } else {
-    addr = fmt::format(
-        "{}/{}/{}/{}/{}?level={}&ts={}&offset={}", prefixOfQueryHisMDOffset,
-        magic_enum::enum_name(marketCode), magic_enum::enum_name(symbolType),
-        symbolCode, magic_enum::enum_name(mdType), level, ts, num);
+    const auto prefix =
+        fmt::format(prefixOfQueryHisMDOffset,
+                    getConfig()["webSrv"].as<std::string>("localhost"));
+    addr = fmt::format("{}/{}/{}/{}/{}?level={}&ts={}&offset={}", prefix,
+                       magic_enum::enum_name(marketCode),
+                       magic_enum::enum_name(symbolType), symbolCode,
+                       magic_enum::enum_name(mdType), level, ts, num);
   }
 
   const auto timeoutOfQueryHisMD =
@@ -776,8 +794,14 @@ void StgEngImpl::installStgInstTimer(StgInstId stgInstId,
                                      ExecAtStartup execAtStartUp,
                                      std::uint32_t milliSecInterval,
                                      std::uint64_t maxExecTimes) {
-  const auto callback = [stgInstId, this]() {
-    auto asynTask = MakeStgSignal(MSG_ID_ON_STG_INST_TIMER, stgInstId);
+  LOG_I(
+      "Install a timer named {} "
+      "with a trigger interval of {} ms and a max exec times of 1.",
+      timerName, milliSecInterval, maxExecTimes);
+
+  const auto callback = [stgInstId, timerName, this]() {
+    auto asynTask =
+        MakeStgSignal(MSG_ID_ON_STG_INST_TIMER, stgInstId, timerName);
     stgInstTaskDispatcher_->dispatch(asynTask);
     return true;
   };

@@ -19,6 +19,7 @@ cd bqpub              && bash build-proj.sh && cd -
 cd bqmd/bqmd-pub      && bash build-proj.sh && cd -
 cd bqmd/bqmd-svc-base && bash build-proj.sh && cd -
 cd bqmd/bqmd-binance  && bash build-proj.sh && cd -
+cd bqmd/bqmd-sim      && bash build-proj.sh && cd -
 cd bqordmgr           && bash build-proj.sh && cd -
 cd bqassetsmgr        && bash build-proj.sh && cd -
 cd bqposmgr           && bash build-proj.sh && cd -

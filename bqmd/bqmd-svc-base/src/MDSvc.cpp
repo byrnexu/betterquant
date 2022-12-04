@@ -99,12 +99,12 @@ int MDSvc::doInit() {
   }
 
   shmSrvMsgHandler_ = std::make_shared<SHMSrvMsgHandler>(this);
-  const auto addrOfSHMSrv = fmt::format(
+  addrOfSHMSrv_ = fmt::format(
       "{}-{}-{}{}{}{}{}{}{}", TOPIC_PREFIX_OF_MARKET_DATA, marketCode_,
       symbolType_, SEP_OF_SHM_SVC, TOPIC_PREFIX_OF_MARKET_DATA, SEP_OF_SHM_SVC,
       marketCode_, SEP_OF_SHM_SVC, symbolType_);
   shmSrv_ = std::make_shared<SHMSrv>(
-      addrOfSHMSrv, [this](const auto* shmBuf, std::size_t shmBufLen) {
+      addrOfSHMSrv_, [this](const auto* shmBuf, std::size_t shmBufLen) {
         shmSrvMsgHandler_->handleReq(shmBuf, shmBufLen);
       });
 
@@ -146,11 +146,9 @@ void MDSvc::initTBLMonitorOfSymbolInfo() {
 int MDSvc::doRun() {
   getDBEng()->start();
   assert(symbolTableMaint_ != nullptr && "symbolTableMaint_ != nullptr");
-  if (CONFIG["enableSymbolTableMaint"].as<bool>()) {
-    if (auto ret = symbolTableMaint_->start(); ret != 0) {
-      LOG_E("Run failed.");
-      return ret;
-    }
+  if (auto ret = symbolTableMaint_->start(); ret != 0) {
+    LOG_E("Run failed.");
+    return ret;
   }
 
   if (saveMarketData()) {
@@ -195,9 +193,7 @@ void MDSvc::doExit(const boost::system::error_code* ec, int signalNum) {
   if (saveMarketData()) {
     mdStorageSvc_->stop();
   }
-  if (CONFIG["enableSymbolTableMaint"].as<bool>()) {
-    symbolTableMaint_->stop();
-  }
+  symbolTableMaint_->stop();
   getDBEng()->stop();
 }
 

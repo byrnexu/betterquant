@@ -54,6 +54,8 @@ struct OrderInfo {
   OrderTypeExtra orderTypeExtra_{OrderTypeExtra::Normal};
   std::uint64_t orderTime_{0};
 
+  char simedTDInfo_[MAX_SIMED_TD_INFO];
+
   Decimal fee_{0};
   char feeCurrency_[MAX_CURRENCY_LEN];
 

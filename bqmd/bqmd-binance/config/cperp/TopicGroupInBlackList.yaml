@@ -3,7 +3,7 @@ topicGroup:
   - OKT-USD-Perp@Trades
   - OKB-USD-Perp@Tickers
   - OKT-USD-Perp@Tickers
-  - OKB-USD-Perp@Candle
-  - OKT-USD-Perp@Candle
+  - OKB-USD-Perp@Candle@detail
+  - OKT-USD-Perp@Candle@detail
   - OKB-USD-Perp@Books@400
   - OKT-USD-Perp@Books@400

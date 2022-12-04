@@ -23,6 +23,8 @@ constexpr static MsgId MSG_ID_ON_MD_TICKERS = 10002;
 constexpr static MsgId MSG_ID_ON_MD_CANDLE = 10003;
 constexpr static MsgId MSG_ID_ON_MD_BOOKS = 10004;
 
+constexpr static MsgId MSG_ID_START_PLAYBACK_HIS_MD = 10021;
+
 constexpr static MsgId MSG_ID_ON_STG_START = 10051;
 constexpr static MsgId MSG_ID_ON_STG_INST_START = 10052;
 constexpr static MsgId MSG_ID_ON_STG_INST_ADD = 10053;
@@ -72,6 +74,8 @@ inline std::string GetMsgName(MsgId msgId) {
       return "onMDCandle";
     case MSG_ID_ON_MD_BOOKS:
       return "onMDBooks";
+    case MSG_ID_START_PLAYBACK_HIS_MD:
+      return "startPlaybackHisMD";
 
     case MSG_ID_ON_STG_START:
       return "onStgStart";
@@ -140,7 +144,7 @@ inline std::string GetMsgName(MsgId msgId) {
       return "assetsSnapshot";
 
     default:
-      return "unKnownMsg";
+      return "N/A";
   }
 }
 

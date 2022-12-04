@@ -36,7 +36,8 @@ class StgInstTaskHandlerOfSpotPerfTest : public StgInstTaskHandlerBase {
   void onStgInstAdd(const StgInstInfoSPtr& stgInstInfo) final;
   void onStgInstDel(const StgInstInfoSPtr& stgInstInfo) final;
   void onStgInstChg(const StgInstInfoSPtr& stgInstInfo) final;
-  void onStgInstTimer(const StgInstInfoSPtr& stgInstInfo) final;
+  void onStgInstTimer(const StgInstInfoSPtr& stgInstInfo,
+                      const std::string& timerName) final;
 
  private:
   void onTrades(const StgInstInfoSPtr& stgInstInfo,

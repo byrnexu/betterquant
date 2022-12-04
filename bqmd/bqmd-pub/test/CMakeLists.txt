@@ -13,6 +13,10 @@ else()
 endif()
 
 target_include_directories(${TEST_PROJECT_NAME}
+    PUBLIC "${SOLUTION_ROOT_DIR}/bqmd/bqmd-pub/inc"
+    PUBLIC "${SOLUTION_ROOT_DIR}/bqpub/inc"
+    PUBLIC "${SOLUTION_ROOT_DIR}/bqipc/inc"
+    PUBLIC "${SOLUTION_ROOT_DIR}/pub/inc"
     PUBLIC "${PROJECT_SOURCE_DIR}/inc"
     PUBLIC "${PROJECT_SOURCE_DIR}/src"
     PUBLIC "${MYSQLCPPCONN_INC_DIR}"
@@ -34,7 +38,7 @@ target_include_directories(${TEST_PROJECT_NAME}
     )
 
 target_link_directories(${TEST_PROJECT_NAME}
-    PUBLIC "${PROJECT_SOURCE_DIR}/lib"
+    PUBLIC "${SOLUTION_ROOT_DIR}/lib/"
     PUBLIC "${MYSQLCPPCONN_LIB_DIR}"
     PUBLIC "${YYJSON_LIB_DIR}"
     PUBLIC "${NLOHMANN_JSON_LIB_DIR}"
@@ -51,11 +55,32 @@ target_link_directories(${TEST_PROJECT_NAME}
     PUBLIC "${GTEST_LIB_DIR}"
     )
 
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    target_link_libraries(${TEST_PROJECT_NAME}
+      bqmd-pub-d
+      bqpub-d
+      pub-d
+      bqipc-d
+      )
+else()
+    target_link_libraries(${TEST_PROJECT_NAME}
+      bqmd-pub
+      bqpub
+      pub
+      bqipc
+      )
+endif()
+
+
 target_link_libraries(${TEST_PROJECT_NAME}
+    libboost_filesystem.a
+    libboost_date_time.a
     libyyjson.a
     libfmt.a
     libgtest.a
     libgmock.a
     dl
     pthread
+    ssl
+    crypto
     )

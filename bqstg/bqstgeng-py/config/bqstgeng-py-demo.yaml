@@ -7,6 +7,8 @@ stgId: 10000
 dbEngParam: svcName=dbEng; dbName=BetterQuant; host=0.0.0.0; port=3306; username=root; password=showmethemoney
 dbTaskDispatcherParam: moduleName=dbTaskDispatcher
 
+webSrv: localhost
+
 stgInstTaskDispatcherParam: moduleName=StgInstTaskDispatcher;taskRandAssignedThreadPoolSize=0;taskSpecificThreadPoolSize=4
 
 milliSecIntervalOfTBLMonitorOfSymbolInfo: 10000

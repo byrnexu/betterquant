@@ -46,7 +46,7 @@ void StgInstTaskHandlerOfCPerpTest::onStgInstChg(
     const StgInstInfoSPtr& stgInstInfo) {}
 
 void StgInstTaskHandlerOfCPerpTest::onStgInstTimer(
-    const StgInstInfoSPtr& stgInstInfo) {
+    const StgInstInfoSPtr& stgInstInfo, const std::string& timerName) {
   static bool alreadyOrder = false;
   if (StgInstIdOfTriggerSignal(stgInstInfo) == 1 && alreadyOrder == false) {
     const auto symbolCode = "DOT-USD-CPerp";

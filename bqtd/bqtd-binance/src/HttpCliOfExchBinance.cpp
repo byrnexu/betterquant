@@ -56,7 +56,7 @@ int HttpCliOfExchBinance::doOrder(const OrderInfoSPtr& orderInfo) {
 
 std::tuple<bool, int, std::string> HttpCliOfExchBinance::rspOfOrderIsFailed(
     const std::string& text) {
-  std::unique_ptr<yyjson_doc, AutoFree> doc(
+  std::unique_ptr<yyjson_doc, AutoFreeYYDoc> doc(
       yyjson_read(text.data(), text.size(), 0));
   if (doc.get() == nullptr) {
     const auto statusMsg = fmt::format(
@@ -105,7 +105,7 @@ int HttpCliOfExchBinance::doCancelOrder(const OrderInfoSPtr& orderInfo) {
 
 std::tuple<bool, int, std::string>
 HttpCliOfExchBinance::rspOfCancelOrderIsFailed(const std::string& text) {
-  std::unique_ptr<yyjson_doc, AutoFree> doc(
+  std::unique_ptr<yyjson_doc, AutoFreeYYDoc> doc(
       yyjson_read(text.data(), text.size(), 0));
   if (doc.get() == nullptr) {
     const auto statusMsg = fmt::format(
@@ -155,7 +155,7 @@ std::tuple<int, std::string> HttpCliOfExchBinance::doGetListenKey() {
   LOG_D("Get listen key success. [text size = {}] {}", rsp.text.size(),
         rsp.url.str());
 
-  std::unique_ptr<yyjson_doc, AutoFree> doc(
+  std::unique_ptr<yyjson_doc, AutoFreeYYDoc> doc(
       yyjson_read(rsp.text.data(), rsp.text.size(), 0));
   if (doc.get() == nullptr) {
     LOG_W("Get listen key failed because of parse rsp failed. {}", rsp.text);

@@ -101,6 +101,7 @@ target_link_directories(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME}
     PUBLIC mysqlcppconn-static
     PUBLIC libmysqlclient.a
+    PUBLIC libboost_filesystem.a
     PUBLIC libcpr.a
     PUBLIC libcurl.a
     PUBLIC libxxhash.a

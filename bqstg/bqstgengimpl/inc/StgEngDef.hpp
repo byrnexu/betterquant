@@ -17,10 +17,8 @@
 namespace bq::stg {
 
 struct StgSignal {
-  StgSignal(MsgId msgId, StgInstId stgInstId)
-      : shmHeader_(msgId), stgInstId_(stgInstId) {}
+  StgSignal(MsgId msgId) : shmHeader_(msgId) {}
   SHMHeader shmHeader_;
-  StgInstId stgInstId_{1};
 };
 
 }  // namespace bq::stg

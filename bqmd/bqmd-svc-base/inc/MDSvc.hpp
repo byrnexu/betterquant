@@ -115,6 +115,8 @@ class MDSvc : public SvcBase {
   }
   SHMSrvSPtr getSHMSrv() const { return shmSrv_; }
 
+  std::string getAddrOfSHMSrv() const { return addrOfSHMSrv_; }
+
  protected:
   void setReqParser(const ReqParserSPtr& value) { ReqParser_ = value; }
   void setRspParser(const RspParserSPtr& value) { RspParser_ = value; }
@@ -160,6 +162,7 @@ class MDSvc : public SvcBase {
   SubAndUnSubSvcSPtr subAndUnSubSvc_{nullptr};
   TopicGroupMustSubMaintSPtr topicGroupMustSubMaint_{nullptr};
 
+  std::string addrOfSHMSrv_;
   SHMSrvMsgHandlerSPtr shmSrvMsgHandler_{nullptr};
   SHMSrvSPtr shmSrv_{nullptr};
 };

@@ -22,7 +22,17 @@ const static int SCODE_BQPUB_INVALID_QRY_COND = -1111;
 const static int SCODE_BQPUB_PNL_NOT_EXISTS = -1112;
 const static int SCODE_BQPUB_POS_INFO_GROUP_NOT_EXISTS = -1113;
 
+const static int SCODE_BQPUB_INVALID_FORMAT_OF_SIMED_TD_INFO = -1121;
+const static int SCODE_BQPUB_INVALID_TRANS_DETAIL_IN_SIMED_TD_INFO = -1122;
+const static int SCODE_BQPUB_INVALID_ORDER_STATUS_IN_SIMED_TD_INFO = -1123;
+
 const static int SCODE_TD_SVC_EXCEED_FLOW_CTRL = -3501;
+const static int SCODE_TD_SVC_REAL_TD_MODE_RECV_SIMED_TD_ORDER = -3511;
+const static int SCODE_TD_SVC_SIMED_TD_MODE_RECV_REAL_TD_ORDER = -3512;
+const static int SCODE_TD_SVC_REAL_TD_MODE_RECV_SIMED_TD_ORDER_CANCEL = -3513;
+const static int SCODE_TD_SVC_SIMED_TD_MODE_RECV_REAL_TD_ORDER_CANCEL = -3514;
+
+const static int SCODE_TD_SVC_SIMED_ORDER_STATSU_FAILED = -3515;
 
 const static int SCODE_TD_SRV_TDGW_NOT_EXISTS = -4001;
 
@@ -31,6 +41,11 @@ const static int SCODE_HIS_MD_INVALID_NUM = -4502;
 const static int SCODE_HIS_MD_RECORDS_LESS_THAN_NUM_OF_QURIES = -4503;
 const static int SCODE_HIS_MD_NUM_OF_RECORDS_GREATER_THAN_LIMIT = -4504;
 
+const static int SCODE_HIS_MD_MAKE_INDEX_GROUP_FAILED = -4511;
+const static int SCODE_HIS_MD_GET_EXCH_TS_FAILED = -4512;
+const static int SCODE_HIS_MD_SAVE_INDEX_GROUP_FAILED = -4513;
+const static int SCODE_HIS_MD_LOAD_INDEX_GROUP_FAILED = -4514;
+
 const static int SCODE_DB_CAN_NOT_FIND_SYM_CODE = -5001;
 const static int SCODE_DB_CAN_NOT_FIND_EXCH_SYM_CODE = -5002;
 const static int SCODE_DB_CAN_NOT_FIND_STG_INST = -5003;
@@ -38,6 +53,8 @@ const static int SCODE_DB_CAN_NOT_FIND_ACCT_INFO = -5004;
 
 const static int SCODE_STG_MUST_HAVE_STG_INST_1 = -6002;
 const static int SCODE_STG_INST_ID_MUST_START_FROM_1 = -6003;
+
+const static int SCODE_STG_INVALID_SIMED_TD_INFO_SIZE = -6011;
 
 const static int SCODE_STG_ENG_INVALID_CONFIG_FILENAME = -6041;
 const static int SCODE_STG_INST_TASK_HANDLER_NOT_INSTALL = -6051;
@@ -81,8 +98,26 @@ inline std::string GetStatusMsg(int statusCode) {
     return "Pnl not exists";
   } else if (statusCode == SCODE_BQPUB_POS_INFO_GROUP_NOT_EXISTS) {
     return "PosInfoGroup not exists";
+  } else if (statusCode == SCODE_BQPUB_INVALID_FORMAT_OF_SIMED_TD_INFO) {
+    return "Invalid format of simed td info";
+  } else if (statusCode == SCODE_BQPUB_INVALID_TRANS_DETAIL_IN_SIMED_TD_INFO) {
+    return "Invalid trans detail in simed td info";
+  } else if (statusCode == SCODE_BQPUB_INVALID_ORDER_STATUS_IN_SIMED_TD_INFO) {
+    return "Invalid order status in simed td info";
   } else if (statusCode == SCODE_TD_SVC_EXCEED_FLOW_CTRL) {
     return "TDSvc exceed flow control";
+  } else if (statusCode == SCODE_TD_SVC_REAL_TD_MODE_RECV_SIMED_TD_ORDER) {
+    return "TDSvc real td mode recv simed td order";
+  } else if (statusCode == SCODE_TD_SVC_SIMED_TD_MODE_RECV_REAL_TD_ORDER) {
+    return "TDSvc simed td mode recv real td order";
+  } else if (statusCode ==
+             SCODE_TD_SVC_REAL_TD_MODE_RECV_SIMED_TD_ORDER_CANCEL) {
+    return "TDSvc real td mode recv simed td order cancel";
+  } else if (statusCode ==
+             SCODE_TD_SVC_SIMED_TD_MODE_RECV_REAL_TD_ORDER_CANCEL) {
+    return "TDSvc simed td mode recv real td order cancel";
+  } else if (statusCode == SCODE_TD_SVC_SIMED_ORDER_STATSU_FAILED) {
+    return "Simed order status failed .";
   } else if (statusCode == SCODE_TD_SRV_TDGW_NOT_EXISTS) {
     return "TDGW not exists";
   } else if (statusCode == SCODE_HIS_MD_INVALID_TS) {
@@ -105,6 +140,8 @@ inline std::string GetStatusMsg(int statusCode) {
     return "Stg must have stg inst 1";
   } else if (statusCode == SCODE_STG_INST_ID_MUST_START_FROM_1) {
     return "Stg inst id must start from 1";
+  } else if (statusCode == SCODE_STG_INVALID_SIMED_TD_INFO_SIZE) {
+    return "Invalid simed td info size.";
   } else if (statusCode == SCODE_STG_ENG_INVALID_CONFIG_FILENAME) {
     return "Invalid config filename";
   } else if (statusCode == SCODE_STG_INST_TASK_HANDLER_NOT_INSTALL) {

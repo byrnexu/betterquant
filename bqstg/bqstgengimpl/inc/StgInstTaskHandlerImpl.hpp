@@ -88,7 +88,8 @@ struct StgInstTaskHandlerBundle {
   std::function<void(const StgInstInfoSPtr&)> onStgInstAdd_{nullptr};
   std::function<void(const StgInstInfoSPtr&)> onStgInstDel_{nullptr};
   std::function<void(const StgInstInfoSPtr&)> onStgInstChg_{nullptr};
-  std::function<void(const StgInstInfoSPtr&)> onStgInstTimer_{nullptr};
+  std::function<void(const StgInstInfoSPtr&, const std::string&)>
+      onStgInstTimer_{nullptr};
 
   std::function<void(const StgInstInfoSPtr&, const PosSnapshotSPtr&)>
       onPosUpdateOfAcctId_{nullptr};

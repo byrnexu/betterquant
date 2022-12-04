@@ -10,8 +10,11 @@
 
 #include "def/DataStruOfMD.hpp"
 
+#include "def/Def.hpp"
+#include "util/BQUtil.hpp"
 #include "util/Datetime.hpp"
 #include "util/Float.hpp"
+#include "util/Logger.hpp"
 #include "util/String.hpp"
 
 namespace bq {
@@ -225,10 +228,10 @@ std::string Tickers::dataOfUnifiedFmt() const {
 
 std::string Candle::toStr() const {
   const auto ret = fmt::format(
-      "{} {} startTs: {}; open {}; high: {}; "
-      "low: {}; close: {}; vol: {}; amt: {}; extDataLen: {}",
-      shmHeader_.toStr(), mdHeader_.toStr(), ConvertTsToPtime(startTs_), open_,
-      high_, low_, close_, vol_, amt_, extDataLen_);
+      "{} {} open: {}; high: {}; low: {}; "
+      "close: {}; vol: {}; amt: {}; extDataLen: {}",
+      shmHeader_.toStr(), mdHeader_.toStr(), open_, high_, low_, close_, vol_,
+      amt_, extDataLen_);
   return ret;
 }
 
@@ -242,8 +245,6 @@ std::string Candle::data() const {
   rapidjson::Writer<rapidjson::StringBuffer> writer(strBuf);
 
   writer.StartObject();
-  writer.Key("startTs");
-  writer.Uint64(startTs_);
   writer.Key("open");
   writer.Double(open_);
   writer.Key("high");
@@ -274,6 +275,257 @@ std::string MakeMarketData(const SHMHeader& shmHeader, const MDHeader& mdHeader,
   ret = ret + R"("mdHeader":)" + mdHeader.toJson() + ",";
   ret = ret + R"("data":)" + data + "}";
   return ret;
+}
+
+void initMDHeader(SHMHeader& shmHeader, MDHeader& mdHeader, const Doc& doc) {
+  mdHeader.exchTs_ = doc["mdHeader"]["exchTs"].GetUint64();
+  mdHeader.localTs_ = doc["mdHeader"]["localTs"].GetUint64();
+
+  const auto marketCode = doc["mdHeader"]["marketCode"].GetString();
+  mdHeader.marketCode_ = magic_enum::enum_cast<MarketCode>(marketCode).value();
+
+  const auto symbolType = doc["mdHeader"]["symbolType"].GetString();
+  mdHeader.symbolType_ = magic_enum::enum_cast<SymbolType>(symbolType).value();
+
+  const auto symbolCode = doc["mdHeader"]["symbolCode"].GetString();
+  strncpy(mdHeader.symbolCode_, symbolCode, sizeof(mdHeader.symbolCode_) - 1);
+
+  const auto mdType = doc["mdHeader"]["mdType"].GetString();
+  mdHeader.mdType_ = magic_enum::enum_cast<MDType>(mdType).value();
+
+  shmHeader.msgId_ = GetMsgIdByMDType(mdHeader.mdType_);
+
+  std::string topic;
+  TopicHash topicHash;
+  if (mdHeader.mdType_ == MDType::Books) {
+    std::tie(topic, topicHash) =
+        MakeTopicInfo(marketCode, symbolType, symbolCode, mdHeader.mdType_,
+                      Int2StrInCompileTime<MAX_DEPTH_LEVEL>::type::value);
+
+  } else if (mdHeader.mdType_ == MDType::Candle) {
+    std::tie(topic, topicHash) =
+        MakeTopicInfo(marketCode, symbolType, symbolCode, mdHeader.mdType_,
+                      SUFFIX_OF_CANDLE_DETAIL);
+
+  } else {
+    std::tie(topic, topicHash) =
+        MakeTopicInfo(marketCode, symbolType, symbolCode, mdHeader.mdType_);
+  }
+  shmHeader.topicHash_ = topicHash;
+  strncpy(shmHeader.topic_, topic.c_str(), sizeof(shmHeader.topic_) - 1);
+}
+
+/*
+{
+  "mdHeader": {
+    "exchTs": 1669338603492000,
+    "localTs": 1669338603626138,
+    "marketCode": "Binance",
+    "symbolType": "Spot",
+    "symbolCode": "BTC-USDT",
+    "mdType": "Trades"
+  },
+  "data": {
+    "tradeTs": 1669338603491000,
+    "tradeId": "1920957568-2242251309-22422513",
+    "price": 16529.42,
+    "size": 0.00312,
+    "side": "Bid"
+  }
+}
+*/
+std::tuple<int, Trades> MakeTrades(const std::string& jsonStr) {
+  Trades ret;
+
+  Doc doc;
+  if (doc.Parse(jsonStr.data()).HasParseError()) {
+    LOG_W("Parse data failed. {0} [offset {1}] {2}",
+          GetParseError_En(doc.GetParseError()), doc.GetErrorOffset(), jsonStr);
+    return {-1, ret};
+  }
+
+  initMDHeader(ret.shmHeader_, ret.mdHeader_, doc);
+
+  ret.tradeTs_ = doc["data"]["tradeTs"].GetUint64();
+  strncpy(ret.tradeId_, doc["data"]["tradeId"].GetString(),
+          sizeof(ret.tradeId_));
+  ret.price_ = doc["data"]["price"].GetDouble();
+  ret.size_ = doc["data"]["size"].GetDouble();
+  const auto side = doc["data"]["side"].GetString();
+  ret.side_ = magic_enum::enum_cast<Side>(side).value();
+
+  return {0, ret};
+}
+
+/*
+{
+  "mdHeader": {
+    "exchTs": 1669338601386000,
+    "localTs": 1669338601888897,
+    "marketCode": "Binance",
+    "symbolType": "Spot",
+    "symbolCode": "BTC-USDT",
+    "mdType": "Books"
+  },
+  "data": {
+    "asks": [{
+      "price": 16527.85,
+      "size": 0.0379,
+      "orderNum": 0
+    }, {
+      "price": 16527.87,
+      "size": 0.01513,
+      "orderNum": 0
+    }],
+    "bids": [{
+      "price": 16527.41,
+      "size": 0.00065,
+      "orderNum": 0
+    }, {
+      "price": 16527.4,
+      "size": 0.006,
+      "orderNum": 0
+    }]
+  }
+}
+*/
+std::tuple<int, Books> MakeBooks(const std::string& jsonStr) {
+  Books ret;
+
+  Doc doc;
+  if (doc.Parse(jsonStr.data()).HasParseError()) {
+    LOG_W("Parse data failed. {0} [offset {1}] {2}",
+          GetParseError_En(doc.GetParseError()), doc.GetErrorOffset(), jsonStr);
+    return {-1, ret};
+  }
+
+  initMDHeader(ret.shmHeader_, ret.mdHeader_, doc);
+
+  for (std::size_t i = 0; i < doc["data"]["asks"].Size(); ++i) {
+    if (i == MAX_DEPTH_LEVEL) break;
+    ret.asks_[i].price_ = doc["data"]["asks"][i]["price"].GetDouble();
+    ret.asks_[i].size_ = doc["data"]["asks"][i]["size"].GetDouble();
+    ret.asks_[i].orderNum_ = doc["data"]["asks"][i]["orderNum"].GetInt();
+  }
+
+  for (std::size_t i = 0; i < doc["data"]["bids"].Size(); ++i) {
+    if (i == MAX_DEPTH_LEVEL) break;
+    ret.bids_[i].price_ = doc["data"]["bids"][i]["price"].GetDouble();
+    ret.bids_[i].size_ = doc["data"]["bids"][i]["size"].GetDouble();
+    ret.bids_[i].orderNum_ = doc["data"]["bids"][i]["orderNum"].GetInt();
+  }
+
+  return {0, ret};
+}
+
+/*
+{
+  "mdHeader": {
+    "exchTs": 1669339079941000,
+    "localTs": 1669339080121968,
+    "marketCode": "Binance",
+    "symbolType": "Spot",
+    "symbolCode": "BTC-USDT",
+    "mdType": "Candle"
+  },
+  "data": {
+    "open": 16541.34,
+    "high": 16543.28,
+    "low": 16538.99,
+    "close": 16542.51,
+    "vol": 41.77032,
+    "amt": 690941.9306651
+  }
+}
+*/
+std::tuple<int, Candle> MakeCandle(const std::string& jsonStr) {
+  Candle ret;
+
+  Doc doc;
+  if (doc.Parse(jsonStr.data()).HasParseError()) {
+    LOG_W("Parse data failed. {0} [offset {1}] {2}",
+          GetParseError_En(doc.GetParseError()), doc.GetErrorOffset(), jsonStr);
+    return {-1, ret};
+  }
+
+  initMDHeader(ret.shmHeader_, ret.mdHeader_, doc);
+
+  ret.open_ = doc["data"]["open"].GetDouble();
+  ret.high_ = doc["data"]["high"].GetDouble();
+  ret.low_ = doc["data"]["low"].GetDouble();
+  ret.close_ = doc["data"]["close"].GetDouble();
+  ret.vol_ = doc["data"]["vol"].GetDouble();
+  ret.amt_ = doc["data"]["amt"].GetDouble();
+
+  return {0, ret};
+}
+
+/*
+{
+  "mdHeader": {
+    "exchTs": 1669338602578000,
+    "localTs": 1669338602832317,
+    "marketCode": "Binance",
+    "symbolType": "Spot",
+    "symbolCode": "BTC-USDT",
+    "mdType": "Tickers"
+  },
+  "data": {
+    "lastPrice": 16528.88,
+    "lastSize": 0.0,
+    "askPrice": 0.0,
+    "askSize": 0.0,
+    "bidPrice": 0.0,
+    "bidSize": 0.0,
+    "open24h": 16558.8,
+    "high24h": 16812.63,
+    "low24h": 16458.05,
+    "vol24h": 208577.12905,
+    "amt24h": 3464772623.884822
+  }
+}
+*/
+std::tuple<int, Tickers> MakeTickers(const std::string& jsonStr) {
+  Tickers ret;
+
+  Doc doc;
+  if (doc.Parse(jsonStr.data()).HasParseError()) {
+    LOG_W("Parse data failed. {0} [offset {1}] {2}",
+          GetParseError_En(doc.GetParseError()), doc.GetErrorOffset(), jsonStr);
+    return {-1, ret};
+  }
+
+  initMDHeader(ret.shmHeader_, ret.mdHeader_, doc);
+
+  ret.lastPrice_ = doc["data"]["lastPrice"].GetDouble();
+  ret.lastSize_ = doc["data"]["lastSize"].GetDouble();
+  ret.askPrice_ = doc["data"]["askPrice"].GetDouble();
+  ret.askSize_ = doc["data"]["askSize"].GetDouble();
+  ret.bidPrice_ = doc["data"]["bidPrice"].GetDouble();
+  ret.bidSize_ = doc["data"]["bidSize"].GetDouble();
+  ret.open24h_ = doc["data"]["open24h"].GetDouble();
+  ret.high24h_ = doc["data"]["high24h"].GetDouble();
+  ret.low24h_ = doc["data"]["low24h"].GetDouble();
+  ret.vol24h_ = doc["data"]["vol24h"].GetDouble();
+  ret.amt24h_ = doc["data"]["amt24h"].GetDouble();
+
+  return {0, ret};
+}
+
+MsgId GetMsgIdByMDType(MDType mdType) {
+  switch (mdType) {
+    case MDType::Trades:
+      return MSG_ID_ON_MD_TRADES;
+    case MDType::Books:
+      return MSG_ID_ON_MD_BOOKS;
+    case MDType::Tickers:
+      return MSG_ID_ON_MD_TICKERS;
+    case MDType::Candle:
+      return MSG_ID_ON_MD_CANDLE;
+    default:
+      return 0;
+  }
+  return 0;
 }
 
 }  // namespace bq

@@ -139,32 +139,32 @@ TEST(PosMgr, PosMgrSingleSideULong) {
   auto ordSUBid1 = Make_S_U_Bid_0_01_PRICE_19999();
   posMgr->updateByOrderInfoFromTDGW(ordSUBid1);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/Perp/BTC-USDT-PERP/Bid/Both/0/BTC fee=1e-06; pos=0.01; prePos=0; avgOpenPrice=19999; pnlUnReal=0; pnlReal=0
-65535/1/2/3/4/4294967295/Binance/Perp/BTC-USDT-PERP/Ask/Both/0/BTC fee=0; pos=0; prePos=0; avgOpenPrice=0; pnlUnReal=0; pnlReal=0)");
+0/1/2/3/4/0/Binance/Perp/BTC-USDT-PERP/Ask/Both/0/BTC fee=0; pos=0; prePos=0; avgOpenPrice=0; pnlUnReal=0; pnlReal=0
+0/1/2/3/4/0/Binance/Perp/BTC-USDT-PERP/Bid/Both/0/BTC fee=1e-06; pos=0.01; prePos=0; avgOpenPrice=19999; pnlUnReal=0; pnlReal=0)");
 
   auto ordSUBid2 = Make_S_U_Bid_0_02_PRICE_20999(ordSUBid1);
   posMgr->updateByOrderInfoFromTDGW(ordSUBid2);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/Perp/BTC-USDT-PERP/Bid/Both/0/BTC fee=3e-06; pos=0.03; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=0
-65535/1/2/3/4/4294967295/Binance/Perp/BTC-USDT-PERP/Ask/Both/0/BTC fee=0; pos=0; prePos=0; avgOpenPrice=0; pnlUnReal=0; pnlReal=0)");
+0/1/2/3/4/0/Binance/Perp/BTC-USDT-PERP/Ask/Both/0/BTC fee=0; pos=0; prePos=0; avgOpenPrice=0; pnlUnReal=0; pnlReal=0
+0/1/2/3/4/0/Binance/Perp/BTC-USDT-PERP/Bid/Both/0/BTC fee=3e-06; pos=0.03; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=0)");
 
   auto ordSUBid3 = Make_S_U_Ask_0_01_PRICE_20555(ordSUBid1);
   posMgr->updateByOrderInfoFromTDGW(ordSUBid3);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/Perp/BTC-USDT-PERP/Bid/Both/0/BTC fee=4e-06; pos=0.019999999999999997; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=-1.106666666666679
-65535/1/2/3/4/4294967295/Binance/Perp/BTC-USDT-PERP/Ask/Both/0/BTC fee=0; pos=0; prePos=0; avgOpenPrice=0; pnlUnReal=0; pnlReal=0)");
+0/1/2/3/4/0/Binance/Perp/BTC-USDT-PERP/Ask/Both/0/BTC fee=0; pos=0; prePos=0; avgOpenPrice=0; pnlUnReal=0; pnlReal=0
+0/1/2/3/4/0/Binance/Perp/BTC-USDT-PERP/Bid/Both/0/BTC fee=4e-06; pos=0.019999999999999997; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=-1.106666666666679)");
 
   auto ordSUBid4 = Make_S_U_Ask_0_03_PRICE_20888(ordSUBid1);
   posMgr->updateByOrderInfoFromTDGW(ordSUBid4);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/Perp/BTC-USDT-PERP/Bid/Both/0/BTC fee=4e-06; pos=0; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=3.3399999999999626
-65535/1/2/3/4/4294967295/Binance/Perp/BTC-USDT-PERP/Ask/Both/0/BTC fee=3e-06; pos=-0.010000000000000002; prePos=0; avgOpenPrice=20888; pnlUnReal=0; pnlReal=0)");
+0/1/2/3/4/0/Binance/Perp/BTC-USDT-PERP/Ask/Both/0/BTC fee=3e-06; pos=-0.010000000000000002; prePos=0; avgOpenPrice=20888; pnlUnReal=0; pnlReal=0
+0/1/2/3/4/0/Binance/Perp/BTC-USDT-PERP/Bid/Both/0/BTC fee=4e-06; pos=0; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=3.3399999999999626)");
 
   auto ordSUBid5 = Make_S_U_Bid_0_01_PRICE_21888(ordSUBid1);
   posMgr->updateByOrderInfoFromTDGW(ordSUBid5);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/Perp/BTC-USDT-PERP/Bid/Both/0/BTC fee=4e-06; pos=0; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=3.3399999999999626
-65535/1/2/3/4/4294967295/Binance/Perp/BTC-USDT-PERP/Ask/Both/0/BTC fee=4e-06; pos=0; prePos=0; avgOpenPrice=20888; pnlUnReal=0; pnlReal=-10)");
+0/1/2/3/4/0/Binance/Perp/BTC-USDT-PERP/Ask/Both/0/BTC fee=4e-06; pos=0; prePos=0; avgOpenPrice=20888; pnlUnReal=0; pnlReal=-10
+0/1/2/3/4/0/Binance/Perp/BTC-USDT-PERP/Bid/Both/0/BTC fee=4e-06; pos=0; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=3.3399999999999626)");
 }
 
 OrderInfoSPtr Make_S_U_Ask_0_01_PRICE_19999() {
@@ -270,32 +270,32 @@ TEST(PosMgr, PosMgrSingleSideUShort) {
   auto ordSUAsk1 = Make_S_U_Ask_0_01_PRICE_19999();
   posMgr->updateByOrderInfoFromTDGW(ordSUAsk1);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/Perp/BTC-USDT-PERP/Bid/Both/0/BTC fee=0; pos=0; prePos=0; avgOpenPrice=0; pnlUnReal=0; pnlReal=0
-65535/1/2/3/4/4294967295/Binance/Perp/BTC-USDT-PERP/Ask/Both/0/BTC fee=1e-06; pos=-0.01; prePos=0; avgOpenPrice=19999; pnlUnReal=0; pnlReal=0)");
+0/1/2/3/4/0/Binance/Perp/BTC-USDT-PERP/Ask/Both/0/BTC fee=1e-06; pos=-0.01; prePos=0; avgOpenPrice=19999; pnlUnReal=0; pnlReal=0
+0/1/2/3/4/0/Binance/Perp/BTC-USDT-PERP/Bid/Both/0/BTC fee=0; pos=0; prePos=0; avgOpenPrice=0; pnlUnReal=0; pnlReal=0)");
 
   auto ordSUAsk2 = Make_S_U_Ask_0_02_PRICE_20999(ordSUAsk1);
   posMgr->updateByOrderInfoFromTDGW(ordSUAsk2);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/Perp/BTC-USDT-PERP/Bid/Both/0/BTC fee=0; pos=0; prePos=0; avgOpenPrice=0; pnlUnReal=0; pnlReal=0
-65535/1/2/3/4/4294967295/Binance/Perp/BTC-USDT-PERP/Ask/Both/0/BTC fee=3e-06; pos=-0.03; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=0)");
+0/1/2/3/4/0/Binance/Perp/BTC-USDT-PERP/Ask/Both/0/BTC fee=3e-06; pos=-0.03; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=0
+0/1/2/3/4/0/Binance/Perp/BTC-USDT-PERP/Bid/Both/0/BTC fee=0; pos=0; prePos=0; avgOpenPrice=0; pnlUnReal=0; pnlReal=0)");
 
   auto ordSUAsk3 = Make_S_U_Bid_0_01_PRICE_20555(ordSUAsk1);
   posMgr->updateByOrderInfoFromTDGW(ordSUAsk3);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/Perp/BTC-USDT-PERP/Bid/Both/0/BTC fee=0; pos=0; prePos=0; avgOpenPrice=0; pnlUnReal=0; pnlReal=0
-65535/1/2/3/4/4294967295/Binance/Perp/BTC-USDT-PERP/Ask/Both/0/BTC fee=4e-06; pos=-0.019999999999999997; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=1.106666666666679)");
+0/1/2/3/4/0/Binance/Perp/BTC-USDT-PERP/Ask/Both/0/BTC fee=4e-06; pos=-0.019999999999999997; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=1.106666666666679
+0/1/2/3/4/0/Binance/Perp/BTC-USDT-PERP/Bid/Both/0/BTC fee=0; pos=0; prePos=0; avgOpenPrice=0; pnlUnReal=0; pnlReal=0)");
 
   auto ordSUAsk4 = Make_S_U_Bid_0_03_PRICE_20888(ordSUAsk1);
   posMgr->updateByOrderInfoFromTDGW(ordSUAsk4);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/Perp/BTC-USDT-PERP/Bid/Both/0/BTC fee=3e-06; pos=0.010000000000000002; prePos=0; avgOpenPrice=20888; pnlUnReal=0; pnlReal=0
-65535/1/2/3/4/4294967295/Binance/Perp/BTC-USDT-PERP/Ask/Both/0/BTC fee=4e-06; pos=0; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=-3.3399999999999626)");
+0/1/2/3/4/0/Binance/Perp/BTC-USDT-PERP/Ask/Both/0/BTC fee=4e-06; pos=0; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=-3.3399999999999626
+0/1/2/3/4/0/Binance/Perp/BTC-USDT-PERP/Bid/Both/0/BTC fee=3e-06; pos=0.010000000000000002; prePos=0; avgOpenPrice=20888; pnlUnReal=0; pnlReal=0)");
 
   auto ordSUAsk5 = Make_S_U_Ask_0_01_PRICE_21888(ordSUAsk1);
   posMgr->updateByOrderInfoFromTDGW(ordSUAsk5);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/Perp/BTC-USDT-PERP/Bid/Both/0/BTC fee=4e-06; pos=0; prePos=0; avgOpenPrice=20888; pnlUnReal=0; pnlReal=10
-65535/1/2/3/4/4294967295/Binance/Perp/BTC-USDT-PERP/Ask/Both/0/BTC fee=4e-06; pos=0; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=-3.3399999999999626)");
+0/1/2/3/4/0/Binance/Perp/BTC-USDT-PERP/Ask/Both/0/BTC fee=4e-06; pos=0; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=-3.3399999999999626
+0/1/2/3/4/0/Binance/Perp/BTC-USDT-PERP/Bid/Both/0/BTC fee=4e-06; pos=0; prePos=0; avgOpenPrice=20888; pnlUnReal=0; pnlReal=10)");
 }
 
 OrderInfoSPtr Make_S_C_Bid_1_PRICE_20000() {
@@ -401,32 +401,32 @@ TEST(PosMgr, PosMgrSingleSideCLong) {
   auto ordSUBid1 = Make_S_C_Bid_1_PRICE_20000();
   posMgr->updateByOrderInfoFromTDGW(ordSUBid1);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/CPerp/BTC-USDT-CPERP/Ask/Both/100/BTC fee=0; pos=0; prePos=0; avgOpenPrice=0; pnlUnReal=0; pnlReal=0
-65535/1/2/3/4/4294967295/Binance/CPerp/BTC-USDT-CPERP/Bid/Both/100/BTC fee=1e-06; pos=1; prePos=0; avgOpenPrice=20000; pnlUnReal=0; pnlReal=0)");
+0/1/2/3/4/0/Binance/CPerp/BTC-USDT-CPERP/Ask/Both/100/BTC fee=0; pos=0; prePos=0; avgOpenPrice=0; pnlUnReal=0; pnlReal=0
+0/1/2/3/4/0/Binance/CPerp/BTC-USDT-CPERP/Bid/Both/100/BTC fee=1e-06; pos=1; prePos=0; avgOpenPrice=20000; pnlUnReal=0; pnlReal=0)");
 
   auto ordSUBid2 = Make_S_C_Bid_2_PRICE_21000(ordSUBid1);
   posMgr->updateByOrderInfoFromTDGW(ordSUBid2);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/CPerp/BTC-USDT-CPERP/Ask/Both/100/BTC fee=0; pos=0; prePos=0; avgOpenPrice=0; pnlUnReal=0; pnlReal=0
-65535/1/2/3/4/4294967295/Binance/CPerp/BTC-USDT-CPERP/Bid/Both/100/BTC fee=3e-06; pos=3; prePos=0; avgOpenPrice=20655.737704918032; pnlUnReal=0; pnlReal=0)");
+0/1/2/3/4/0/Binance/CPerp/BTC-USDT-CPERP/Ask/Both/100/BTC fee=0; pos=0; prePos=0; avgOpenPrice=0; pnlUnReal=0; pnlReal=0
+0/1/2/3/4/0/Binance/CPerp/BTC-USDT-CPERP/Bid/Both/100/BTC fee=3e-06; pos=3; prePos=0; avgOpenPrice=20655.737704918032; pnlUnReal=0; pnlReal=0)");
 
   auto ordSUBid3 = Make_S_C_Ask_1_PRICE_20500(ordSUBid1);
   posMgr->updateByOrderInfoFromTDGW(ordSUBid3);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/CPerp/BTC-USDT-CPERP/Ask/Both/100/BTC fee=0; pos=0; prePos=0; avgOpenPrice=0; pnlUnReal=0; pnlReal=0
-65535/1/2/3/4/4294967295/Binance/CPerp/BTC-USDT-CPERP/Bid/Both/100/BTC fee=4e-06; pos=2; prePos=0; avgOpenPrice=20655.737704918032; pnlUnReal=0; pnlReal=-3.6778939217963933e-05)");
+0/1/2/3/4/0/Binance/CPerp/BTC-USDT-CPERP/Ask/Both/100/BTC fee=0; pos=0; prePos=0; avgOpenPrice=0; pnlUnReal=0; pnlReal=0
+0/1/2/3/4/0/Binance/CPerp/BTC-USDT-CPERP/Bid/Both/100/BTC fee=4e-06; pos=2; prePos=0; avgOpenPrice=20655.737704918032; pnlUnReal=0; pnlReal=-3.6778939217963933e-05)");
 
   auto ordSUBid4 = Make_S_C_Ask_3_PRICE_22000(ordSUBid1);
   posMgr->updateByOrderInfoFromTDGW(ordSUBid4);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/CPerp/BTC-USDT-CPERP/Ask/Both/100/BTC fee=3e-06; pos=-1; prePos=0; avgOpenPrice=22000; pnlUnReal=0; pnlReal=0
-65535/1/2/3/4/4294967295/Binance/CPerp/BTC-USDT-CPERP/Bid/Both/100/BTC fee=4e-06; pos=0; prePos=0; avgOpenPrice=20655.737704918032; pnlUnReal=0; pnlReal=0.0005548516524126281)");
+0/1/2/3/4/0/Binance/CPerp/BTC-USDT-CPERP/Ask/Both/100/BTC fee=3e-06; pos=-1; prePos=0; avgOpenPrice=22000; pnlUnReal=0; pnlReal=0
+0/1/2/3/4/0/Binance/CPerp/BTC-USDT-CPERP/Bid/Both/100/BTC fee=4e-06; pos=0; prePos=0; avgOpenPrice=20655.737704918032; pnlUnReal=0; pnlReal=0.0005548516524126281)");
 
   auto ordSUBid5 = Make_S_C_Bid_1_PRICE_23000(ordSUBid1);
   posMgr->updateByOrderInfoFromTDGW(ordSUBid5);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/CPerp/BTC-USDT-CPERP/Ask/Both/100/BTC fee=4e-06; pos=0; prePos=0; avgOpenPrice=22000; pnlUnReal=0; pnlReal=-0.00019762845849802314
-65535/1/2/3/4/4294967295/Binance/CPerp/BTC-USDT-CPERP/Bid/Both/100/BTC fee=4e-06; pos=0; prePos=0; avgOpenPrice=20655.737704918032; pnlUnReal=0; pnlReal=0.0005548516524126281)");
+0/1/2/3/4/0/Binance/CPerp/BTC-USDT-CPERP/Ask/Both/100/BTC fee=4e-06; pos=0; prePos=0; avgOpenPrice=22000; pnlUnReal=0; pnlReal=-0.00019762845849802314
+0/1/2/3/4/0/Binance/CPerp/BTC-USDT-CPERP/Bid/Both/100/BTC fee=4e-06; pos=0; prePos=0; avgOpenPrice=20655.737704918032; pnlUnReal=0; pnlReal=0.0005548516524126281)");
 }
 
 OrderInfoSPtr Make_S_C_Ask_1_PRICE_20000() {
@@ -532,32 +532,32 @@ TEST(PosMgr, PosMgrSingleSideCShort) {
   auto ordSUAsk1 = Make_S_C_Ask_1_PRICE_20000();
   posMgr->updateByOrderInfoFromTDGW(ordSUAsk1);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/CPerp/BTC-USDT-CPERP/Ask/Both/100/BTC fee=1e-06; pos=-1; prePos=0; avgOpenPrice=20000; pnlUnReal=0; pnlReal=0
-65535/1/2/3/4/4294967295/Binance/CPerp/BTC-USDT-CPERP/Bid/Both/100/BTC fee=0; pos=0; prePos=0; avgOpenPrice=0; pnlUnReal=0; pnlReal=0)");
+0/1/2/3/4/0/Binance/CPerp/BTC-USDT-CPERP/Ask/Both/100/BTC fee=1e-06; pos=-1; prePos=0; avgOpenPrice=20000; pnlUnReal=0; pnlReal=0
+0/1/2/3/4/0/Binance/CPerp/BTC-USDT-CPERP/Bid/Both/100/BTC fee=0; pos=0; prePos=0; avgOpenPrice=0; pnlUnReal=0; pnlReal=0)");
 
   auto ordSUAsk2 = Make_S_C_Ask_2_PRICE_21000(ordSUAsk1);
   posMgr->updateByOrderInfoFromTDGW(ordSUAsk2);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/CPerp/BTC-USDT-CPERP/Ask/Both/100/BTC fee=3e-06; pos=-3; prePos=0; avgOpenPrice=20655.737704918032; pnlUnReal=0; pnlReal=0
-65535/1/2/3/4/4294967295/Binance/CPerp/BTC-USDT-CPERP/Bid/Both/100/BTC fee=0; pos=0; prePos=0; avgOpenPrice=0; pnlUnReal=0; pnlReal=0)");
+0/1/2/3/4/0/Binance/CPerp/BTC-USDT-CPERP/Ask/Both/100/BTC fee=3e-06; pos=-3; prePos=0; avgOpenPrice=20655.737704918032; pnlUnReal=0; pnlReal=0
+0/1/2/3/4/0/Binance/CPerp/BTC-USDT-CPERP/Bid/Both/100/BTC fee=0; pos=0; prePos=0; avgOpenPrice=0; pnlUnReal=0; pnlReal=0)");
 
   auto ordSUAsk3 = Make_S_C_Bid_1_PRICE_20500(ordSUAsk1);
   posMgr->updateByOrderInfoFromTDGW(ordSUAsk3);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/CPerp/BTC-USDT-CPERP/Ask/Both/100/BTC fee=4e-06; pos=-2; prePos=0; avgOpenPrice=20655.737704918032; pnlUnReal=0; pnlReal=3.6778939217963933e-05
-65535/1/2/3/4/4294967295/Binance/CPerp/BTC-USDT-CPERP/Bid/Both/100/BTC fee=0; pos=0; prePos=0; avgOpenPrice=0; pnlUnReal=0; pnlReal=0)");
+0/1/2/3/4/0/Binance/CPerp/BTC-USDT-CPERP/Ask/Both/100/BTC fee=4e-06; pos=-2; prePos=0; avgOpenPrice=20655.737704918032; pnlUnReal=0; pnlReal=3.6778939217963933e-05
+0/1/2/3/4/0/Binance/CPerp/BTC-USDT-CPERP/Bid/Both/100/BTC fee=0; pos=0; prePos=0; avgOpenPrice=0; pnlUnReal=0; pnlReal=0)");
 
   auto ordSUAsk4 = Make_S_C_Bid_3_PRICE_22000(ordSUAsk1);
   posMgr->updateByOrderInfoFromTDGW(ordSUAsk4);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/CPerp/BTC-USDT-CPERP/Ask/Both/100/BTC fee=4e-06; pos=0; prePos=0; avgOpenPrice=20655.737704918032; pnlUnReal=0; pnlReal=-0.0005548516524126281
-65535/1/2/3/4/4294967295/Binance/CPerp/BTC-USDT-CPERP/Bid/Both/100/BTC fee=3e-06; pos=1; prePos=0; avgOpenPrice=22000; pnlUnReal=0; pnlReal=0)");
+0/1/2/3/4/0/Binance/CPerp/BTC-USDT-CPERP/Ask/Both/100/BTC fee=4e-06; pos=0; prePos=0; avgOpenPrice=20655.737704918032; pnlUnReal=0; pnlReal=-0.0005548516524126281
+0/1/2/3/4/0/Binance/CPerp/BTC-USDT-CPERP/Bid/Both/100/BTC fee=3e-06; pos=1; prePos=0; avgOpenPrice=22000; pnlUnReal=0; pnlReal=0)");
 
   auto ordSUAsk5 = Make_S_C_Ask_1_PRICE_23000(ordSUAsk1);
   posMgr->updateByOrderInfoFromTDGW(ordSUAsk5);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/CPerp/BTC-USDT-CPERP/Ask/Both/100/BTC fee=4e-06; pos=0; prePos=0; avgOpenPrice=20655.737704918032; pnlUnReal=0; pnlReal=-0.0005548516524126281
-65535/1/2/3/4/4294967295/Binance/CPerp/BTC-USDT-CPERP/Bid/Both/100/BTC fee=4e-06; pos=0; prePos=0; avgOpenPrice=22000; pnlUnReal=0; pnlReal=0.00019762845849802314)");
+0/1/2/3/4/0/Binance/CPerp/BTC-USDT-CPERP/Ask/Both/100/BTC fee=4e-06; pos=0; prePos=0; avgOpenPrice=20655.737704918032; pnlUnReal=0; pnlReal=-0.0005548516524126281
+0/1/2/3/4/0/Binance/CPerp/BTC-USDT-CPERP/Bid/Both/100/BTC fee=4e-06; pos=0; prePos=0; avgOpenPrice=22000; pnlUnReal=0; pnlReal=0.00019762845849802314)");
 }
 
 OrderInfoSPtr Make_D_U_Bid_L_0_01_PRICE_19999() {
@@ -647,22 +647,22 @@ TEST(PosMgr, PosMgrDoubleSideULong) {
   auto ordSUBid1 = Make_D_U_Bid_L_0_01_PRICE_19999();
   posMgr->updateByOrderInfoFromTDGW(ordSUBid1);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/Perp/BTC-USDT-PERP/Bid/Long/0/BTC fee=1e-06; pos=0.01; prePos=0; avgOpenPrice=19999; pnlUnReal=0; pnlReal=0)");
+0/1/2/3/4/0/Binance/Perp/BTC-USDT-PERP/Bid/Long/0/BTC fee=1e-06; pos=0.01; prePos=0; avgOpenPrice=19999; pnlUnReal=0; pnlReal=0)");
 
   auto ordSUBid2 = Make_D_U_Bid_L_0_02_PRICE_20999(ordSUBid1);
   posMgr->updateByOrderInfoFromTDGW(ordSUBid2);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/Perp/BTC-USDT-PERP/Bid/Long/0/BTC fee=3e-06; pos=0.03; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=0)");
+0/1/2/3/4/0/Binance/Perp/BTC-USDT-PERP/Bid/Long/0/BTC fee=3e-06; pos=0.03; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=0)");
 
   auto ordSUBid3 = Make_D_U_Ask_L_0_01_PRICE_20555(ordSUBid1);
   posMgr->updateByOrderInfoFromTDGW(ordSUBid3);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/Perp/BTC-USDT-PERP/Bid/Long/0/BTC fee=4e-06; pos=0.019999999999999997; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=-1.106666666666679)");
+0/1/2/3/4/0/Binance/Perp/BTC-USDT-PERP/Bid/Long/0/BTC fee=4e-06; pos=0.019999999999999997; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=-1.106666666666679)");
 
   auto ordSUBid4 = Make_D_U_Ask_L_0_02_PRICE_20555(ordSUBid1);
   posMgr->updateByOrderInfoFromTDGW(ordSUBid4);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/Perp/BTC-USDT-PERP/Bid/Long/0/BTC fee=6e-06; pos=0; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=-3.3200000000000367)");
+0/1/2/3/4/0/Binance/Perp/BTC-USDT-PERP/Bid/Long/0/BTC fee=6e-06; pos=0; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=-3.3200000000000367)");
 }
 
 OrderInfoSPtr Make_D_U_Ask_S_0_01_PRICE_19999() {
@@ -752,22 +752,22 @@ TEST(PosMgr, PosMgrDoubleSideUShort) {
   auto ordSUBid1 = Make_D_U_Ask_S_0_01_PRICE_19999();
   posMgr->updateByOrderInfoFromTDGW(ordSUBid1);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/Perp/BTC-USDT-PERP/Ask/Short/0/BTC fee=1e-06; pos=-0.01; prePos=0; avgOpenPrice=19999; pnlUnReal=0; pnlReal=0)");
+0/1/2/3/4/0/Binance/Perp/BTC-USDT-PERP/Ask/Short/0/BTC fee=1e-06; pos=-0.01; prePos=0; avgOpenPrice=19999; pnlUnReal=0; pnlReal=0)");
 
   auto ordSUBid2 = Make_D_U_Ask_S_0_02_PRICE_20999(ordSUBid1);
   posMgr->updateByOrderInfoFromTDGW(ordSUBid2);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/Perp/BTC-USDT-PERP/Ask/Short/0/BTC fee=3e-06; pos=-0.03; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=0)");
+0/1/2/3/4/0/Binance/Perp/BTC-USDT-PERP/Ask/Short/0/BTC fee=3e-06; pos=-0.03; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=0)");
 
   auto ordSUBid3 = Make_D_U_Bid_S_0_01_PRICE_20555(ordSUBid1);
   posMgr->updateByOrderInfoFromTDGW(ordSUBid3);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/Perp/BTC-USDT-PERP/Ask/Short/0/BTC fee=4e-06; pos=-0.019999999999999997; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=1.106666666666679)");
+0/1/2/3/4/0/Binance/Perp/BTC-USDT-PERP/Ask/Short/0/BTC fee=4e-06; pos=-0.019999999999999997; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=1.106666666666679)");
 
   auto ordSUBid4 = Make_D_U_Bid_S_0_02_PRICE_20555(ordSUBid1);
   posMgr->updateByOrderInfoFromTDGW(ordSUBid4);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/Perp/BTC-USDT-PERP/Ask/Short/0/BTC fee=6e-06; pos=0; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=3.3200000000000367)");
+0/1/2/3/4/0/Binance/Perp/BTC-USDT-PERP/Ask/Short/0/BTC fee=6e-06; pos=0; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=3.3200000000000367)");
 }
 
 OrderInfoSPtr Make_D_C_Bid_L_1_PRICE_19999() {
@@ -857,22 +857,22 @@ TEST(PosMgr, PosMgrDoubleSideCLong) {
   auto ordSUBid1 = Make_D_C_Bid_L_1_PRICE_19999();
   posMgr->updateByOrderInfoFromTDGW(ordSUBid1);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/CPerp/BTC-USDT-CPERP/Bid/Long/100/BTC fee=1e-06; pos=1; prePos=0; avgOpenPrice=19999; pnlUnReal=0; pnlReal=0)");
+0/1/2/3/4/0/Binance/CPerp/BTC-USDT-CPERP/Bid/Long/100/BTC fee=1e-06; pos=1; prePos=0; avgOpenPrice=19999; pnlUnReal=0; pnlReal=0)");
 
   auto ordSUBid2 = Make_D_C_Bid_L_2_PRICE_20999(ordSUBid1);
   posMgr->updateByOrderInfoFromTDGW(ordSUBid2);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/CPerp/BTC-USDT-CPERP/Bid/Long/100/BTC fee=3e-06; pos=3; prePos=0; avgOpenPrice=20654.737167401676; pnlUnReal=0; pnlReal=0)");
+0/1/2/3/4/0/Binance/CPerp/BTC-USDT-CPERP/Bid/Long/100/BTC fee=3e-06; pos=3; prePos=0; avgOpenPrice=20654.737167401676; pnlUnReal=0; pnlReal=0)");
 
   auto ordSUBid3 = Make_D_C_Ask_L_1_PRICE_20555(ordSUBid1);
   posMgr->updateByOrderInfoFromTDGW(ordSUBid3);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/CPerp/BTC-USDT-CPERP/Bid/Long/100/BTC fee=4e-06; pos=2; prePos=0; avgOpenPrice=20654.737167401676; pnlUnReal=0; pnlReal=-2.3491993703954783e-05)");
+0/1/2/3/4/0/Binance/CPerp/BTC-USDT-CPERP/Bid/Long/100/BTC fee=4e-06; pos=2; prePos=0; avgOpenPrice=20654.737167401676; pnlUnReal=0; pnlReal=-2.3491993703954783e-05)");
 
   auto ordSUBid4 = Make_D_C_Ask_L_2_PRICE_20555(ordSUBid1);
   posMgr->updateByOrderInfoFromTDGW(ordSUBid4);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/CPerp/BTC-USDT-CPERP/Bid/Long/100/BTC fee=6e-06; pos=0; prePos=0; avgOpenPrice=20654.737167401676; pnlUnReal=0; pnlReal=-7.047598111186435e-05)");
+0/1/2/3/4/0/Binance/CPerp/BTC-USDT-CPERP/Bid/Long/100/BTC fee=6e-06; pos=0; prePos=0; avgOpenPrice=20654.737167401676; pnlUnReal=0; pnlReal=-7.047598111186435e-05)");
 }
 
 OrderInfoSPtr Make_D_C_Ask_S_1_PRICE_19999() {
@@ -962,22 +962,22 @@ TEST(PosMgr, PosMgrDoubleSideCShort) {
   auto ordSUBid1 = Make_D_C_Ask_S_1_PRICE_19999();
   posMgr->updateByOrderInfoFromTDGW(ordSUBid1);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/CPerp/BTC-USDT-CPERP/Ask/Short/100/BTC fee=1e-06; pos=-1; prePos=0; avgOpenPrice=19999; pnlUnReal=0; pnlReal=0)");
+0/1/2/3/4/0/Binance/CPerp/BTC-USDT-CPERP/Ask/Short/100/BTC fee=1e-06; pos=-1; prePos=0; avgOpenPrice=19999; pnlUnReal=0; pnlReal=0)");
 
   auto ordSUBid2 = Make_D_C_Ask_S_2_PRICE_20999(ordSUBid1);
   posMgr->updateByOrderInfoFromTDGW(ordSUBid2);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/CPerp/BTC-USDT-CPERP/Ask/Short/100/BTC fee=3e-06; pos=-3; prePos=0; avgOpenPrice=20654.737167401676; pnlUnReal=0; pnlReal=0)");
+0/1/2/3/4/0/Binance/CPerp/BTC-USDT-CPERP/Ask/Short/100/BTC fee=3e-06; pos=-3; prePos=0; avgOpenPrice=20654.737167401676; pnlUnReal=0; pnlReal=0)");
 
   auto ordSUBid3 = Make_D_C_Bid_S_1_PRICE_20555(ordSUBid1);
   posMgr->updateByOrderInfoFromTDGW(ordSUBid3);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/CPerp/BTC-USDT-CPERP/Ask/Short/100/BTC fee=4e-06; pos=-2; prePos=0; avgOpenPrice=20654.737167401676; pnlUnReal=0; pnlReal=2.3491993703954783e-05)");
+0/1/2/3/4/0/Binance/CPerp/BTC-USDT-CPERP/Ask/Short/100/BTC fee=4e-06; pos=-2; prePos=0; avgOpenPrice=20654.737167401676; pnlUnReal=0; pnlReal=2.3491993703954783e-05)");
 
   auto ordSUBid4 = Make_D_C_Bid_S_2_PRICE_20555(ordSUBid1);
   posMgr->updateByOrderInfoFromTDGW(ordSUBid4);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/CPerp/BTC-USDT-CPERP/Ask/Short/100/BTC fee=6e-06; pos=0; prePos=0; avgOpenPrice=20654.737167401676; pnlUnReal=0; pnlReal=7.047598111186435e-05)");
+0/1/2/3/4/0/Binance/CPerp/BTC-USDT-CPERP/Ask/Short/100/BTC fee=6e-06; pos=0; prePos=0; avgOpenPrice=20654.737167401676; pnlUnReal=0; pnlReal=7.047598111186435e-05)");
 }
 
 OrderInfoSPtr Make_S_U_Bid_0_01_SPOT_PRICE_19999() {
@@ -1087,32 +1087,32 @@ TEST(PosMgr, PosMgrSingleSideULongSpot) {
   auto ordSUBid1 = Make_S_U_Bid_0_01_SPOT_PRICE_19999();
   posMgr->updateByOrderInfoFromTDGW(ordSUBid1);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/Spot/BTC-USDT/Ask/Both/0/BTC fee=0; pos=0; prePos=0; avgOpenPrice=0; pnlUnReal=0; pnlReal=0
-65535/1/2/3/4/4294967295/Binance/Spot/BTC-USDT/Bid/Both/0/BTC fee=1e-06; pos=0.01; prePos=0; avgOpenPrice=19999; pnlUnReal=0; pnlReal=0)");
+0/1/2/3/4/0/Binance/Spot/BTC-USDT/Bid/Both/0/BTC fee=1e-06; pos=0.01; prePos=0; avgOpenPrice=19999; pnlUnReal=0; pnlReal=0
+0/1/2/3/4/0/Binance/Spot/BTC-USDT/Ask/Both/0/BTC fee=0; pos=0; prePos=0; avgOpenPrice=0; pnlUnReal=0; pnlReal=0)");
 
   auto ordSUBid2 = Make_S_U_Bid_0_02_SPOT_PRICE_20999(ordSUBid1);
   posMgr->updateByOrderInfoFromTDGW(ordSUBid2);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/Spot/BTC-USDT/Ask/Both/0/BTC fee=0; pos=0; prePos=0; avgOpenPrice=0; pnlUnReal=0; pnlReal=0
-65535/1/2/3/4/4294967295/Binance/Spot/BTC-USDT/Bid/Both/0/BTC fee=3e-06; pos=0.03; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=0)");
+0/1/2/3/4/0/Binance/Spot/BTC-USDT/Bid/Both/0/BTC fee=3e-06; pos=0.03; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=0
+0/1/2/3/4/0/Binance/Spot/BTC-USDT/Ask/Both/0/BTC fee=0; pos=0; prePos=0; avgOpenPrice=0; pnlUnReal=0; pnlReal=0)");
 
   auto ordSUBid3 = Make_S_U_Ask_0_01_SPOT_PRICE_20555(ordSUBid1);
   posMgr->updateByOrderInfoFromTDGW(ordSUBid3);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/Spot/BTC-USDT/Ask/Both/0/BTC fee=0; pos=0; prePos=0; avgOpenPrice=0; pnlUnReal=0; pnlReal=0
-65535/1/2/3/4/4294967295/Binance/Spot/BTC-USDT/Bid/Both/0/BTC fee=4e-06; pos=0.019999999999999997; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=-1.106666666666679)");
+0/1/2/3/4/0/Binance/Spot/BTC-USDT/Bid/Both/0/BTC fee=4e-06; pos=0.019999999999999997; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=-1.106666666666679
+0/1/2/3/4/0/Binance/Spot/BTC-USDT/Ask/Both/0/BTC fee=0; pos=0; prePos=0; avgOpenPrice=0; pnlUnReal=0; pnlReal=0)");
 
   auto ordSUBid4 = Make_S_U_Ask_0_03_SPOT_PRICE_20888(ordSUBid1);
   posMgr->updateByOrderInfoFromTDGW(ordSUBid4);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/Spot/BTC-USDT/Ask/Both/0/BTC fee=3e-06; pos=-0.010000000000000002; prePos=0; avgOpenPrice=20888; pnlUnReal=0; pnlReal=0
-65535/1/2/3/4/4294967295/Binance/Spot/BTC-USDT/Bid/Both/0/BTC fee=4e-06; pos=0; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=3.3399999999999626)");
+0/1/2/3/4/0/Binance/Spot/BTC-USDT/Bid/Both/0/BTC fee=4e-06; pos=0; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=3.3399999999999626
+0/1/2/3/4/0/Binance/Spot/BTC-USDT/Ask/Both/0/BTC fee=3e-06; pos=-0.010000000000000002; prePos=0; avgOpenPrice=20888; pnlUnReal=0; pnlReal=0)");
 
   auto ordSUBid5 = Make_S_U_Bid_0_01_SPOT_PRICE_21888(ordSUBid1);
   posMgr->updateByOrderInfoFromTDGW(ordSUBid5);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/Spot/BTC-USDT/Ask/Both/0/BTC fee=4e-06; pos=0; prePos=0; avgOpenPrice=20888; pnlUnReal=0; pnlReal=-10
-65535/1/2/3/4/4294967295/Binance/Spot/BTC-USDT/Bid/Both/0/BTC fee=4e-06; pos=0; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=3.3399999999999626)");
+0/1/2/3/4/0/Binance/Spot/BTC-USDT/Bid/Both/0/BTC fee=4e-06; pos=0; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=3.3399999999999626
+0/1/2/3/4/0/Binance/Spot/BTC-USDT/Ask/Both/0/BTC fee=4e-06; pos=0; prePos=0; avgOpenPrice=20888; pnlUnReal=0; pnlReal=-10)");
 }
 
 OrderInfoSPtr Make_S_U_Ask_0_01_SPOT_PRICE_19999() {
@@ -1222,32 +1222,32 @@ TEST(PosMgr, PosMgrSingleSideUShortSpot) {
   auto ordSUAsk1 = Make_S_U_Ask_0_01_SPOT_PRICE_19999();
   posMgr->updateByOrderInfoFromTDGW(ordSUAsk1);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/Spot/BTC-USDT/Ask/Both/0/BTC fee=1e-06; pos=-0.01; prePos=0; avgOpenPrice=19999; pnlUnReal=0; pnlReal=0
-65535/1/2/3/4/4294967295/Binance/Spot/BTC-USDT/Bid/Both/0/BTC fee=0; pos=0; prePos=0; avgOpenPrice=0; pnlUnReal=0; pnlReal=0)");
+0/1/2/3/4/0/Binance/Spot/BTC-USDT/Bid/Both/0/BTC fee=0; pos=0; prePos=0; avgOpenPrice=0; pnlUnReal=0; pnlReal=0
+0/1/2/3/4/0/Binance/Spot/BTC-USDT/Ask/Both/0/BTC fee=1e-06; pos=-0.01; prePos=0; avgOpenPrice=19999; pnlUnReal=0; pnlReal=0)");
 
   auto ordSUAsk2 = Make_S_U_Ask_0_02_SPOT_PRICE_20999(ordSUAsk1);
   posMgr->updateByOrderInfoFromTDGW(ordSUAsk2);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/Spot/BTC-USDT/Ask/Both/0/BTC fee=3e-06; pos=-0.03; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=0
-65535/1/2/3/4/4294967295/Binance/Spot/BTC-USDT/Bid/Both/0/BTC fee=0; pos=0; prePos=0; avgOpenPrice=0; pnlUnReal=0; pnlReal=0)");
+0/1/2/3/4/0/Binance/Spot/BTC-USDT/Bid/Both/0/BTC fee=0; pos=0; prePos=0; avgOpenPrice=0; pnlUnReal=0; pnlReal=0
+0/1/2/3/4/0/Binance/Spot/BTC-USDT/Ask/Both/0/BTC fee=3e-06; pos=-0.03; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=0)");
 
   auto ordSUAsk3 = Make_S_U_Bid_0_01_SPOT_PRICE_20555(ordSUAsk1);
   posMgr->updateByOrderInfoFromTDGW(ordSUAsk3);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/Spot/BTC-USDT/Ask/Both/0/BTC fee=4e-06; pos=-0.019999999999999997; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=1.106666666666679
-65535/1/2/3/4/4294967295/Binance/Spot/BTC-USDT/Bid/Both/0/BTC fee=0; pos=0; prePos=0; avgOpenPrice=0; pnlUnReal=0; pnlReal=0)");
+0/1/2/3/4/0/Binance/Spot/BTC-USDT/Bid/Both/0/BTC fee=0; pos=0; prePos=0; avgOpenPrice=0; pnlUnReal=0; pnlReal=0
+0/1/2/3/4/0/Binance/Spot/BTC-USDT/Ask/Both/0/BTC fee=4e-06; pos=-0.019999999999999997; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=1.106666666666679)");
 
   auto ordSUAsk4 = Make_S_U_Bid_0_03_SPOT_PRICE_20888(ordSUAsk1);
   posMgr->updateByOrderInfoFromTDGW(ordSUAsk4);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/Spot/BTC-USDT/Ask/Both/0/BTC fee=4e-06; pos=0; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=-3.3399999999999626
-65535/1/2/3/4/4294967295/Binance/Spot/BTC-USDT/Bid/Both/0/BTC fee=3e-06; pos=0.010000000000000002; prePos=0; avgOpenPrice=20888; pnlUnReal=0; pnlReal=0)");
+0/1/2/3/4/0/Binance/Spot/BTC-USDT/Bid/Both/0/BTC fee=3e-06; pos=0.010000000000000002; prePos=0; avgOpenPrice=20888; pnlUnReal=0; pnlReal=0
+0/1/2/3/4/0/Binance/Spot/BTC-USDT/Ask/Both/0/BTC fee=4e-06; pos=0; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=-3.3399999999999626)");
 
   auto ordSUAsk5 = Make_S_U_Ask_0_01_SPOT_PRICE_21888(ordSUAsk1);
   posMgr->updateByOrderInfoFromTDGW(ordSUAsk5);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/Spot/BTC-USDT/Ask/Both/0/BTC fee=4e-06; pos=0; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=-3.3399999999999626
-65535/1/2/3/4/4294967295/Binance/Spot/BTC-USDT/Bid/Both/0/BTC fee=4e-06; pos=0; prePos=0; avgOpenPrice=20888; pnlUnReal=0; pnlReal=10)");
+0/1/2/3/4/0/Binance/Spot/BTC-USDT/Bid/Both/0/BTC fee=4e-06; pos=0; prePos=0; avgOpenPrice=20888; pnlUnReal=0; pnlReal=10
+0/1/2/3/4/0/Binance/Spot/BTC-USDT/Ask/Both/0/BTC fee=4e-06; pos=0; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=-3.3399999999999626)");
 }
 
 OrderInfoSPtr Make_D_U_Bid_L_0_01_SPOT_PRICE_19999() {
@@ -1340,22 +1340,22 @@ TEST(PosMgr, PosMgrDoubleSideULongSpot) {
   auto ordSUBid1 = Make_D_U_Bid_L_0_01_SPOT_PRICE_19999();
   posMgr->updateByOrderInfoFromTDGW(ordSUBid1);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/Spot/BTC-USDT/Bid/Long/0/BTC fee=1e-06; pos=0.01; prePos=0; avgOpenPrice=19999; pnlUnReal=0; pnlReal=0)");
+0/1/2/3/4/0/Binance/Spot/BTC-USDT/Bid/Long/0/BTC fee=1e-06; pos=0.01; prePos=0; avgOpenPrice=19999; pnlUnReal=0; pnlReal=0)");
 
   auto ordSUBid2 = Make_D_U_Bid_L_0_02_SPOT_PRICE_20999(ordSUBid1);
   posMgr->updateByOrderInfoFromTDGW(ordSUBid2);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/Spot/BTC-USDT/Bid/Long/0/BTC fee=3e-06; pos=0.03; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=0)");
+0/1/2/3/4/0/Binance/Spot/BTC-USDT/Bid/Long/0/BTC fee=3e-06; pos=0.03; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=0)");
 
   auto ordSUBid3 = Make_D_U_Ask_L_0_01_SPOT_PRICE_20555(ordSUBid1);
   posMgr->updateByOrderInfoFromTDGW(ordSUBid3);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/Spot/BTC-USDT/Bid/Long/0/BTC fee=4e-06; pos=0.019999999999999997; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=-1.106666666666679)");
+0/1/2/3/4/0/Binance/Spot/BTC-USDT/Bid/Long/0/BTC fee=4e-06; pos=0.019999999999999997; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=-1.106666666666679)");
 
   auto ordSUBid4 = Make_D_U_Ask_L_0_02_SPOT_PRICE_20555(ordSUBid1);
   posMgr->updateByOrderInfoFromTDGW(ordSUBid4);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/Spot/BTC-USDT/Bid/Long/0/BTC fee=6e-06; pos=0; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=-3.3200000000000367)");
+0/1/2/3/4/0/Binance/Spot/BTC-USDT/Bid/Long/0/BTC fee=6e-06; pos=0; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=-3.3200000000000367)");
 }
 
 OrderInfoSPtr Make_D_U_Ask_S_0_01_SPOT_PRICE_19999() {
@@ -1448,22 +1448,22 @@ TEST(PosMgr, PosMgrDoubleSideUShortSpot) {
   auto ordSUBid1 = Make_D_U_Ask_S_0_01_SPOT_PRICE_19999();
   posMgr->updateByOrderInfoFromTDGW(ordSUBid1);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/Spot/BTC-USDT/Ask/Short/0/BTC fee=1e-06; pos=-0.01; prePos=0; avgOpenPrice=19999; pnlUnReal=0; pnlReal=0)");
+0/1/2/3/4/0/Binance/Spot/BTC-USDT/Ask/Short/0/BTC fee=1e-06; pos=-0.01; prePos=0; avgOpenPrice=19999; pnlUnReal=0; pnlReal=0)");
 
   auto ordSUBid2 = Make_D_U_Ask_S_0_02_SPOT_PRICE_20999(ordSUBid1);
   posMgr->updateByOrderInfoFromTDGW(ordSUBid2);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/Spot/BTC-USDT/Ask/Short/0/BTC fee=3e-06; pos=-0.03; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=0)");
+0/1/2/3/4/0/Binance/Spot/BTC-USDT/Ask/Short/0/BTC fee=3e-06; pos=-0.03; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=0)");
 
   auto ordSUBid3 = Make_D_U_Bid_S_0_01_SPOT_PRICE_20555(ordSUBid1);
   posMgr->updateByOrderInfoFromTDGW(ordSUBid3);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/Spot/BTC-USDT/Ask/Short/0/BTC fee=4e-06; pos=-0.019999999999999997; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=1.106666666666679)");
+0/1/2/3/4/0/Binance/Spot/BTC-USDT/Ask/Short/0/BTC fee=4e-06; pos=-0.019999999999999997; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=1.106666666666679)");
 
   auto ordSUBid4 = Make_D_U_Bid_S_0_02_SPOT_PRICE_20555(ordSUBid1);
   posMgr->updateByOrderInfoFromTDGW(ordSUBid4);
   EXPECT_TRUE(posMgr->toStr() == R"(
-65535/1/2/3/4/4294967295/Binance/Spot/BTC-USDT/Ask/Short/0/BTC fee=6e-06; pos=0; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=3.3200000000000367)");
+0/1/2/3/4/0/Binance/Spot/BTC-USDT/Ask/Short/0/BTC fee=6e-06; pos=0; prePos=0; avgOpenPrice=20665.666666666668; pnlUnReal=0; pnlReal=3.3200000000000367)");
 }
 
 int main(int argc, char** argv) {

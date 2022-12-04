@@ -15,59 +15,100 @@ class StgInstTaskHandler(StgInstTaskHandlerBase):
     def on_stg_start(self):
         # Install a timer for stg inst 1 that fires 1 time after 3000 ms
         self.stg_eng.install_stg_inst_timer(
-            1, "testTimer", ExecAtStartup.IsFalse, 3000, 1
+            stg_inst_id=1,
+            timer_name="TestSimedOrder",
+            exec_at_startup=ExecAtStartup.IsFalse,
+            millisec_interval=1000 * 3600 * 24,
+            max_exec_times=1,
         )
 
+        # Install a timer for stg inst 1 that fires 1 time after 3600 s
+        self.stg_eng.install_stg_inst_timer(
+            stg_inst_id=1,
+            timer_name="TestRealOrder",
+            exec_at_startup=ExecAtStartup.IsFalse,
+            millisec_interval=1000 * 3600 * 24,
+            max_exec_times=1,
+        )
+
+        self.__query_his_md()
+
+    def __query_his_md(self):
         now = int(time.time() * 1000000)
 
         ret_of_qry = self.stg_eng.query_his_md_between_2_ts(
-            "MD@Binance@Spot@BTC-USDT@Candle", now - 60 * 1000000, now, 1
+            topic="MD@Binance@Spot@BTC-USDT@Candle",
+            ts_begin=now - 60 * 1000000,
+            ts_end=now,
         )
+        print(f"===== {ret_of_qry[0]}")
+        print(f"===== {ret_of_qry[1]}")
 
         ret_of_qry = self.stg_eng.query_his_md_between_2_ts(
             MarketCode.Binance,
             SymbolType.Spot,
             "BTC-USDT",
             MDType.Candle,
-            now - 60 * 1000000,
-            now,
-            1,
+            ts_begin=now - 60 * 1000000,
+            ts_end=now,
         )
+        print(f"===== {ret_of_qry[0]}")
+        print(f"===== {ret_of_qry[1]}")
 
         ret_of_qry = self.stg_eng.query_specific_num_of_his_md_before_ts(
-            "MD@Binance@Spot@BTC-USDT@Candle", now, 1, 1
+            topic="MD@Binance@Spot@BTC-USDT@Candle", ts=now, num=1
         )
+        print(f"===== {ret_of_qry[0]}")
+        print(f"===== {ret_of_qry[1]}")
 
         ret_of_qry = self.stg_eng.query_specific_num_of_his_md_before_ts(
-            MarketCode.Binance, SymbolType.Spot, "BTC-USDT", MDType.Candle, now, 1, 1
+            MarketCode.Binance,
+            SymbolType.Spot,
+            "BTC-USDT",
+            MDType.Candle,
+            ts=now,
+            num=1,
         )
+        print(f"===== {ret_of_qry[0]}")
+        print(f"===== {ret_of_qry[1]}")
 
         ret_of_qry = self.stg_eng.query_specific_num_of_his_md_after_ts(
-            "MD@Binance@Spot@BTC-USDT@Candle", now - 60 * 1000000, 2, 1
+            topic="MD@Binance@Spot@BTC-USDT@Candle", ts=now - 60 * 1000000, num=2
         )
+        print(f"===== {ret_of_qry[0]}")
+        print(f"===== {ret_of_qry[1]}")
 
         ret_of_qry = self.stg_eng.query_specific_num_of_his_md_after_ts(
             MarketCode.Binance,
             SymbolType.Spot,
             "BTC-USDT",
             MDType.Candle,
-            now - 60 * 1000000,
-            2,
-            1,
+            ts=now - 60 * 1000000,
+            num=2,
         )
+        print(f"===== {ret_of_qry[0]}")
+        print(f"===== {ret_of_qry[1]}")
 
         ret_of_qry = self.stg_eng.query_specific_num_of_his_md_before_ts(
-            "MD@Binance@Spot@BTC-USDT@Books", now - 60 * 1000000, 2, 20
+            topic="MD@Binance@Spot@BTC-USDT@Books",
+            ts=now - 60 * 1000000,
+            num=2,
+            level=20,
         )
-
-        print(ret_of_qry[0])
-        print(ret_of_qry[1])
+        print(f"===== {ret_of_qry[0]}")
+        print(f"===== {ret_of_qry[1]}")
 
     def on_stg_inst_start(self, stg_inst_info):
         if stg_inst_info.stg_inst_id == 1:
             # sub topic
             self.stg_eng.sub(
-                stg_inst_info.stg_inst_id, "shm://MD.Binance.Spot/NewSymbol"
+                stg_inst_info.stg_inst_id, "shm://MD.Binance.Spot/SymbolAdd"
+            )
+            self.stg_eng.sub(
+                stg_inst_info.stg_inst_id, "shm://MD.Binance.Spot/SymbolChg"
+            )
+            self.stg_eng.sub(
+                stg_inst_info.stg_inst_id, "shm://MD.Binance.Spot/SymbolDel"
             )
 
             # sub market data of trades, note that the topic is case sensitive.
@@ -80,11 +121,28 @@ class StgInstTaskHandler(StgInstTaskHandlerBase):
             )
             # sub market data of books
             self.stg_eng.sub(
-                stg_inst_info.stg_inst_id, "shm://MD.Binance.Spot/BTC-USDT/Books/1"
+                stg_inst_info.stg_inst_id, "shm://MD.Binance.Spot/ADA-USDT/Books/20"
             )
             # sub market data of candle
             self.stg_eng.sub(
                 stg_inst_info.stg_inst_id, "shm://MD.Binance.Spot/ADA-USDT/Candle"
+            )
+
+            # sub market data of trades, note that the topic is case sensitive.
+            self.stg_eng.sub(
+                stg_inst_info.stg_inst_id, "shm://MD.Binance.Spot/BTC-USDT/Trades"
+            )
+            # sub market data of tickers
+            self.stg_eng.sub(
+                stg_inst_info.stg_inst_id, "shm://MD.Binance.Spot/BTC-USDT/Tickers"
+            )
+            # sub market data of books
+            self.stg_eng.sub(
+                stg_inst_info.stg_inst_id, "shm://MD.Binance.Spot/BTC-USDT/Books/1"
+            )
+            # sub market data of candle
+            self.stg_eng.sub(
+                stg_inst_info.stg_inst_id, "shm://MD.Binance.Spot/BTC-USDT/Candle"
             )
 
             # sub trades of BNB-USDT for calc pnl, note that the topic is case sensitive.
@@ -116,7 +174,19 @@ class StgInstTaskHandler(StgInstTaskHandlerBase):
         if stg_inst_info.stg_inst_id == 2:
             pass
 
-    def on_stg_inst_timer(self, stg_inst_info):
+    def on_stg_inst_timer(self, stg_inst_info, timer_name):
+        if timer_name == "TestRealOrder":
+            print(f"Timer {timer_name} was triggered")
+            self.__test_real_order(stg_inst_info)
+
+        if timer_name == "TestSimedOrder":
+            print(f"Timer {timer_name} was triggered")
+            for i in range(0, 10000):
+                self.__test_simed_order(stg_inst_info)
+
+        return
+
+    def __test_real_order(self, stg_inst_info):
         ret_of_order = self.stg_eng.order(
             stg_inst_info,
             acct_id=10001,
@@ -134,7 +204,6 @@ class StgInstTaskHandler(StgInstTaskHandlerBase):
             return
 
         order_id = ret_of_order[1]
-        print(f"Create order info of order_id {order_id} success. ")
 
         ret_of_get_order_info = self.stg_eng.get_order_info(order_id)
         status_code = ret_of_get_order_info[0]
@@ -144,18 +213,55 @@ class StgInstTaskHandler(StgInstTaskHandlerBase):
             return
 
         order_info = ret_of_get_order_info[1]
-        print(f"Get order info of {order_id} success. {order_info.to_short_str()}")
-        print(f'order_info.symbol_code = {"".join(order_info.symbol_code)}')
-        print(f'order_info.exch_symbol_code = {"".join(order_info.exch_symbol_code)}')
+        return
 
-    def on_stg_manual_intervention(self, stg_inst_info, stg_manual_intervention):
-        instr = json.dumps(stg_manual_intervention)
+    def __test_simed_order(self, stg_inst_info):
+        simed_td_info = SimedTDInfo()
+        simed_td_info.order_status = OrderStatus.PartialFilled
+        simed_td_info.trans_detail_group.append(
+            TransDetail(slippage=0.1, filled_per=0.1, ld=LiquidityDirection.Maker)
+        )
+        simed_td_info.trans_detail_group.append(
+            TransDetail(slippage=0.1, filled_per=0.1, ld=LiquidityDirection.Maker)
+        )
+
+        ret_of_order = self.stg_eng.order(
+            stg_inst_info,
+            acct_id=10001,
+            symbol_code="BTC-USDT",
+            side=Side.Bid,
+            pos_side=PosSide.Both,
+            order_price=22222.22,
+            order_size=10,
+            algo_id=0,
+            simed_td_info=simed_td_info,
+        )
+
+        status_code = ret_of_order[0]
+        if status_code != 0:
+            status_msg = get_status_msg(status_code)
+            print(f"Create order failed. {status_code} - {status_msg}")
+            return
+
+        order_id = ret_of_order[1]
+
+        ret_of_get_order_info = self.stg_eng.get_order_info(order_id)
+        status_code = ret_of_get_order_info[0]
+        if status_code != 0:
+            status_msg = get_status_msg(status_code)
+            print(f"Get order info failed. {status_code} - {status_msg}")
+            return
+
+        order_info = ret_of_get_order_info[1]
+        self.stg_eng.cancel_order(order_id)
+        return
 
     def on_stg_manual_intervention(self, stg_inst_info, stg_manual_intervention):
         print(stg_manual_intervention)
+        data = json.dumps(stg_manual_intervention)
 
     def on_push_topic(self, stg_inst_info, topic_data):
-        print(topic_data)
+        print(f"stg inst {stg_inst_info.stg_inst_id} recv {topic_data}")
 
     def on_order_ret(self, stg_inst_info, order_info):
         print(f"on order ret {order_info.to_short_str()}")

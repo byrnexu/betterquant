@@ -11,7 +11,6 @@
 #include "bq_v1_ManualIntervention.hpp"
 
 #include "Config.hpp"
-#include "HisMD.hpp"
 #include "SHMIPCMsgId.hpp"
 #include "SHMSrv.hpp"
 #include "WebSrv.hpp"

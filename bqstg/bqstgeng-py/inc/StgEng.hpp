@@ -20,6 +20,8 @@
 namespace bq {
 struct Pnl;
 using PnlSPtr = std::shared_ptr<Pnl>;
+struct SimedTDInfo;
+using SimedTDInfoSPtr = std::shared_ptr<SimedTDInfo>;
 }  // namespace bq
 
 namespace bq::stg {
@@ -61,7 +63,9 @@ class StgEng {
   std::tuple<int, OrderId> order(const StgInstInfoSPtr& stgInstInfo,
                                  AcctId acctId, const std::string& symbolCode,
                                  Side side, PosSide posSide, Decimal orderPrice,
-                                 Decimal orderSize);
+                                 Decimal orderSize,
+                                 AlgoId algoId = DEFAULT_ALGO_ID,
+                                 const SimedTDInfoSPtr& simedTDInfo = nullptr);
 
   std::tuple<int, OrderId> order(OrderInfoSPtr& orderInfo);
 

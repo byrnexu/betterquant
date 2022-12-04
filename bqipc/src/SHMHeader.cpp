@@ -16,11 +16,11 @@
 namespace bq {
 
 std::string SHMHeader::toStr() const {
-  const auto topicName = strlen(topicName_) == 0 ? "empty" : topicName_;
-  const auto ret = fmt::format(
-      "{} Channel: {} {} {} topicHash: {} topicName: {}", GetMsgName(msgId_),
-      clientChannel_, magic_enum::enum_name(direction_),
-      ConvertTsToPtime(timestamp_), topicHash_, topicName);
+  const auto topic = strlen(topic_) == 0 ? "empty" : topic_;
+  const auto ret = fmt::format("{} Channel: {} {} {} topicHash: {} topic: {}",
+                               GetMsgName(msgId_), clientChannel_,
+                               magic_enum::enum_name(direction_),
+                               ConvertTsToPtime(timestamp_), topicHash_, topic);
   return ret;
 }
 
@@ -44,8 +44,8 @@ std::string SHMHeader::toJson() const {
   writer.Key("topicHash");
   writer.Uint64(topicHash_);
 
-  writer.Key("topicName");
-  writer.String(topicName_);
+  writer.Key("topic");
+  writer.String(topic_);
 
   writer.EndObject();
 

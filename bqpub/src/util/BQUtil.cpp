@@ -25,9 +25,9 @@ namespace bq {
 std::tuple<int, std::string> GetAddrFromTopic(const std::string& appName,
                                               const std::string& topic) {
   std::vector<std::string> fieldGroup;
-  boost::split(fieldGroup, topic, boost::is_any_of(SEP_OF_SHM_SVC));
+  boost::split(fieldGroup, topic, boost::is_any_of(SEP_OF_TOPIC));
   if (fieldGroup.size() < 3) {
-    LOG_W("Get pub channel from topic failed because of invalid topic {}.",
+    LOG_W("Get shm svc addr from topic failed because of invalid topic {}.",
           topic);
     return {SCODE_BQPUB_INVALID_TOPIC, ""};
   }
@@ -37,6 +37,22 @@ std::tuple<int, std::string> GetAddrFromTopic(const std::string& appName,
   const auto ret =
       fmt::format("{}{}{}{}{}{}{}", appName, SEP_OF_SHM_SVC, topicType,
                   SEP_OF_SHM_SVC, marketCode, SEP_OF_SHM_SVC, symbolType);
+  return {0, ret};
+}
+
+std::tuple<int, std::string> GetChannelFromAddr(const std::string& shmSvcAddr) {
+  std::vector<std::string> fieldGroup;
+  boost::split(fieldGroup, shmSvcAddr, boost::is_any_of(SEP_OF_SHM_SVC));
+  if (fieldGroup.size() < 4) {
+    LOG_W("Get channel from shm svc addr failed because of invalid addr {}.",
+          shmSvcAddr);
+    return {SCODE_BQPUB_INVALID_TOPIC, ""};
+  }
+  const auto marketCode = fieldGroup[2];
+  const auto symbolType = fieldGroup[3];
+  const auto ret =
+      fmt::format("{}{}{}{}{}", TOPIC_PREFIX_OF_MARKET_DATA, SEP_OF_SHM_SVC,
+                  marketCode, SEP_OF_SHM_SVC, symbolType);
   return {0, ret};
 }
 
@@ -86,6 +102,23 @@ std::string MakeCommonHttpBody(int statusCode, std::string data) {
   }
   ret = ret + data;
   return ret;
+}
+
+std::tuple<std::string, TopicHash> MakeTopicInfo(const std::string& marketCode,
+                                                 const std::string& symbolType,
+                                                 const std::string& symbolCode,
+                                                 MDType mdType,
+                                                 const std::string& ext) {
+  auto topic = fmt::format("{}{}{}{}{}{}{}{}{}", TOPIC_PREFIX_OF_MARKET_DATA,
+                           SEP_OF_TOPIC, marketCode,  //
+                           SEP_OF_TOPIC, symbolType,  //
+                           SEP_OF_TOPIC, symbolCode,  //
+                           SEP_OF_TOPIC, magic_enum::enum_name(mdType));
+  if (!ext.empty()) {
+    topic.append(fmt::format("{}{}", SEP_OF_TOPIC, ext));
+  }
+  const auto topicHash = XXH3_64bits(topic.data(), topic.size());
+  return {topic, topicHash};
 }
 
 // clang-format off

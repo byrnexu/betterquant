@@ -13,6 +13,7 @@
 #include "StgEngImpl.hpp"
 #include "StgInstTaskHandlerBase.hpp"
 #include "StgInstTaskHandlerImpl.hpp"
+#include "def/SimedTDInfo.hpp"
 #include "util/PosSnapshot.hpp"
 
 namespace bq::stg {
@@ -70,8 +71,8 @@ void StgEng::installStgInstTaskHandler(
       [&](const auto& stgInstInfo) { taskHandler->onStgInstAdd(stgInstInfo); },
       [&](const auto& stgInstInfo) { taskHandler->onStgInstDel(stgInstInfo); },
       [&](const auto& stgInstInfo) { taskHandler->onStgInstChg(stgInstInfo); },
-      [&](const auto& stgInstInfo) {
-        taskHandler->onStgInstTimer(stgInstInfo);
+      [&](const auto& stgInstInfo, const auto& timerName) {
+        taskHandler->onStgInstTimer(stgInstInfo, timerName);
       },
 
       [&](const auto& stgInstInfo, const auto& posUpdateOfAcctId) {
@@ -116,9 +117,10 @@ std::tuple<int, OrderId> StgEng::order(const StgInstInfoSPtr& stgInstInfo,
                                        AcctId acctId,
                                        const std::string& symbolCode, Side side,
                                        PosSide posSide, Decimal orderPrice,
-                                       Decimal orderSize) {
+                                       Decimal orderSize, AlgoId algoId,
+                                       const SimedTDInfoSPtr& simedTDInfo) {
   return stgEngImpl_->order(stgInstInfo, acctId, symbolCode, side, posSide,
-                            orderPrice, orderSize);
+                            orderPrice, orderSize, algoId, simedTDInfo);
 }
 
 std::tuple<int, OrderId> StgEng::order(OrderInfoSPtr& orderInfo) {

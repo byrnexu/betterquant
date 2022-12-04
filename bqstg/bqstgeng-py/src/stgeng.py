@@ -21,7 +21,7 @@ class StgInstTaskHandlerBase(object):
     def on_stg_inst_start(self, stg_inst_info):
         pass
 
-    def on_stg_inst_timer(self, stg_inst_info):
+    def on_stg_inst_timer(self, stg_inst_info, timerName):
         pass
 
     def on_stg_manual_intervention(self, stg_inst_info, stg_manual_intervention):

@@ -327,12 +327,13 @@ void StgEng::installStgInstTaskHandler(PyObject* value) {
 
   stgEngImpl_->getStgInstTaskHandler()
       ->getStgInstTaskHandlerBundle()
-      .onStgInstTimer_ = [this](const StgInstInfoSPtr& stgInstInfo) {
+      .onStgInstTimer_ = [this](const StgInstInfoSPtr& stgInstInfo,
+                                const std::string& timerName) {
     {
       std::lock_guard<std::mutex> guard(mtxPY_);
       try {
-        boost::python::call_method<void>(stgInstTaskHandler_,
-                                         "on_stg_inst_timer", stgInstInfo);
+        boost::python::call_method<void>(
+            stgInstTaskHandler_, "on_stg_inst_timer", stgInstInfo, timerName);
       } catch (const boost::python::error_already_set& e) {
         if (PyErr_Occurred()) {
           const auto msg = handlePYErr();
@@ -527,9 +528,10 @@ std::tuple<int, OrderId> StgEng::order(const StgInstInfoSPtr& stgInstInfo,
                                        AcctId acctId,
                                        const std::string& symbolCode, Side side,
                                        PosSide posSide, Decimal orderPrice,
-                                       Decimal orderSize) {
+                                       Decimal orderSize, AlgoId algoId,
+                                       const SimedTDInfoSPtr& simedTDInfo) {
   return stgEngImpl_->order(stgInstInfo, acctId, symbolCode, side, posSide,
-                            orderPrice, orderSize);
+                            orderPrice, orderSize, algoId, simedTDInfo);
 }
 
 std::tuple<int, OrderId> StgEng::order(OrderInfoSPtr& orderInfo) {

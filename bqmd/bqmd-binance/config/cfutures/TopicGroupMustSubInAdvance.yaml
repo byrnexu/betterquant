@@ -3,7 +3,7 @@ topicGroup:
   - {name: ETH-USD-ThisQuarter@Trades, saveToDisk: true}
   - {name: BTC-USD-ThisQuarter@Tickers, saveToDisk: true}
   - {name: ETH-USD-ThisQuarter@Tickers, saveToDisk: true}
-  - {name: BTC-USD-ThisQuarter@Candle, saveToDisk: true}
-  - {name: ETH-USD-ThisQuarter@Candle, saveToDisk: true}
+  - {name: BTC-USD-ThisQuarter@Candle@detail, saveToDisk: true}
+  - {name: ETH-USD-ThisQuarter@Candle@detail, saveToDisk: true}
   - {name: BTC-USD-ThisQuarter@Books@400, saveToDisk: true}
   - {name: ETH-USD-ThisQuarter@Books@400, saveToDisk: true}

@@ -27,6 +27,8 @@ using CommonIPCDataSPtr = std::shared_ptr<CommonIPCData>;
 namespace bq::stg {
 
 SHMIPCAsyncTaskSPtr MakeStgSignal(MsgId msgId, StgInstId stgInstId);
+SHMIPCAsyncTaskSPtr MakeStgSignal(MsgId msgId, StgInstId stgInstId,
+                                  const std::string& data);
 
 std::tuple<int, StgInstId> GetStgInstId(const CommonIPCData* commonIPCData);
 

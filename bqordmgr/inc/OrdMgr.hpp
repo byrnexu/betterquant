@@ -97,10 +97,6 @@ class OrdMgr {
                              LockFunc lockFunc = LockFunc::True);
 
  public:
-  void cacheOrderOfSyncToDB(const OrderInfoSPtr& orderInfo);
-  int syncOrderGroupToDB();
-
- public:
   YAML::Node& getNode() { return node_; }
 
  private:
@@ -110,9 +106,6 @@ class OrdMgr {
 
   OrderInfoGroupSPtr orderInfoGroup_{nullptr};
   mutable std::ext::spin_mutex mtxOrderInfoGroup_;
-
-  std::vector<OrderInfoSPtr> orderGroupOfSyncToDB_;
-  mutable std::ext::spin_mutex mtxOrderGroupOfSyncToDB_;
 };
 
 }  // namespace bq

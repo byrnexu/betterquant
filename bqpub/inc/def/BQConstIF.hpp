@@ -105,14 +105,15 @@ enum class IsTheAssetInfoUpdated { True = 1, False = 2 };
 constexpr static std::uint32_t MAX_DEPTH_LEVEL = 400;
 constexpr static std::uint32_t DEFAULT_DEPTH_LEVEL = 20;
 
-constexpr static std::uint16_t DEFAULT_PRODUCT_ID = 0xFFFF;
-constexpr static std::uint32_t DEFAULT_ALGO_ID = 0xFFFFFFFF;
-constexpr static std::uint64_t DEFAULT_PARENT_ORDER_ID = 0xFFFF;
+constexpr static std::uint16_t DEFAULT_PRODUCT_ID = 0;
+constexpr static std::uint32_t DEFAULT_ALGO_ID = 0;
+constexpr static std::uint64_t DEFAULT_PARENT_ORDER_ID = 0;
 
 constexpr static std::uint16_t MAX_SYMBOL_CODE_LEN = 32;
 constexpr static std::uint16_t MAX_TRADE_ID_LEN = 32;
 constexpr static std::uint16_t MAX_CURRENCY_LEN = 16;
 constexpr static std::uint16_t MAX_ASSETS_NAME_LEN = 32;
+constexpr static std::uint16_t MAX_SIMED_TD_INFO = 64;
 
 const static std::string TOPIC_PREFIX_OF_MARKET_DATA = "MD";
 const static std::string TOPIC_PREFIX_OF_TRADE_DATA = "TD";
@@ -143,9 +144,12 @@ const static std::uint64_t UNDEFINED_FIELD_MAX_TS = 1893456000000000;
 const static std::size_t MAX_TD_SRV_RISK_PLUGIN_NUM = 32;
 
 const static std::string HIS_MD_FILE_EXT = "dat";
-const static std::string SEP_OF_HIS_MD_DATA = ":";
+const static std::string HIS_MD_INDEX_BY_ET_EXT = "et";
+const static std::string HIS_MD_INDEX_BY_LT_EXT = "lt";
 
 const static std::string MIN_DATE_OF_HIS_MD = "20180101";
-const static std::string SUB_DIR_OF_CANDLE_DETAIL = "detail";
+const static std::string SUFFIX_OF_CANDLE_DETAIL = "detail";
+
+const static std::uint32_t MAX_SEC_OF_CACHE_MD = 600;
 
 }  // namespace bq

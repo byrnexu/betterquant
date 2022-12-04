@@ -105,10 +105,10 @@ Config::getTopicGroupMustSubAndSaveInConf(const std::string& nodeName) const {
     const auto& topicGroup = config["topicGroup"];
     for (auto iter = topicGroup.begin(); iter != topicGroup.end(); ++iter) {
       const auto name = (*iter)["name"].as<std::string>();
-      const auto topicName = fmt::format("{}{}{}", prefix, SEP_OF_TOPIC, name);
-      topicGroupMustSubInAdvance->emplace(topicName);
+      const auto topic = fmt::format("{}{}{}", prefix, SEP_OF_TOPIC, name);
+      topicGroupMustSubInAdvance->emplace(topic);
       if ((*iter)["saveToDisk"].as<bool>()) {
-        topicGroupMustSave->emplace(topicName);
+        topicGroupMustSave->emplace(topic);
       }
     }
     return {0, topicGroupMustSubInAdvance, topicGroupMustSave};

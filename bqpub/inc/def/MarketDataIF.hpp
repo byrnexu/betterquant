@@ -94,7 +94,6 @@ using TickersUPtr = std::unique_ptr<Tickers>;
 struct Candle {
   SHMHeader shmHeader_;
   MDHeader mdHeader_;
-  std::uint64_t startTs_;
   Decimal open_;
   Decimal high_;
   Decimal low_;
@@ -113,5 +112,12 @@ using CandleUPtr = std::unique_ptr<Candle>;
 
 std::string MakeMarketData(const SHMHeader& shmHeader, const MDHeader& mdHeader,
                            const std::string& data);
+
+std::tuple<int, Trades> MakeTrades(const std::string& jsonStr);
+std::tuple<int, Books> MakeBooks(const std::string& jsonStr);
+std::tuple<int, Candle> MakeCandle(const std::string& jsonStr);
+std::tuple<int, Tickers> MakeTickers(const std::string& jsonStr);
+
+MsgId GetMsgIdByMDType(MDType mdType);
 
 }  // namespace bq

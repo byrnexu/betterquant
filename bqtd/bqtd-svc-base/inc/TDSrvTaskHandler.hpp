@@ -13,6 +13,8 @@
 #include "util/Pch.hpp"
 
 namespace bq {
+struct OrderInfo;
+using OrderInfoSPtr = std::shared_ptr<OrderInfo>;
 struct SHMIPCTask;
 using SHMIPCTaskSPtr = std::shared_ptr<SHMIPCTask>;
 template <typename Task>
@@ -39,7 +41,12 @@ class TDSrvTaskHandler {
 
  private:
   void handleMsgIdOnOrder(SHMIPCAsyncTaskSPtr& asyncTask);
+  void handleMsgIdOnOrderInRealTDMode(OrderInfoSPtr& orderInfo);
+  void handleMsgIdOnOrderInSimedTDMode(OrderInfoSPtr& orderInfo);
+
   void handleMsgIdOnCancelOrder(SHMIPCAsyncTaskSPtr& asyncTask);
+  void handleMsgIdOnCancelOrderInRealTDMode(OrderInfoSPtr& orderInfo);
+  void handleMsgIdOnCancelOrderInSimedTDMode(OrderInfoSPtr& orderInfo);
 
   void handleMsgIdSyncUnclosedOrderInfo(SHMIPCAsyncTaskSPtr& asyncTask);
   void handleMsgIdSyncAssetsSnapshot(SHMIPCAsyncTaskSPtr& asyncTask);

@@ -127,11 +127,10 @@ void SHMSrv::beforePushMsg(ClientChannel clientChannel, MsgId msgId,
 SafePublisherSPtr SHMSrv::getSafePublisher(ClientChannel clientChannel) {
   auto waitForSubscriberToBeVisible =
       [&](iox::popo::UntypedPublisher* publisher) {
-        if (clientChannel == 0) return;
         int i = 0;
         while (true) {
           if (++i > TIMES_OF_WAIT_FOR_SUBSCRIBER) {
-            LOG_W("Subscriber is not ready after {} times of attempts.", i);
+            LOG_I("No subscriber found after {} times of attempts.", i);
             break;
           }
           if (publisher->hasSubscribers()) {

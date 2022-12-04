@@ -155,13 +155,16 @@ void StgInstTaskHandlerImpl::handleAsyncTaskImpl(
       }
       break;
 
-    case MSG_ID_ON_STG_INST_TIMER:
-      LOG_D("On stg inst {} timer. {}", stgInstInfo->stgInstId_,
-            stgInstInfo->toStr());
+    case MSG_ID_ON_STG_INST_TIMER: {
+      const auto commonIPCData =
+          MakeMsgSPtrByTask<CommonIPCData>(asyncTask->task_);
+      const auto timerName = std::string(commonIPCData->data_);
+      LOG_D("On timer of {} stg inst {}. {}", stgInstInfo->stgInstId_,
+            timerName, stgInstInfo->toStr());
       if (stgInstTaskHandlerBundle_.onStgInstTimer_) {
-        stgInstTaskHandlerBundle_.onStgInstTimer_(stgInstInfo);
+        stgInstTaskHandlerBundle_.onStgInstTimer_(stgInstInfo, timerName);
       }
-      break;
+    } break;
 
     case MSG_ID_ON_STG_REG:
       LOG_D("On stg reg trigged. ");
@@ -263,11 +266,14 @@ void StgInstTaskHandlerImpl::handleAsyncTaskImpl(
       }
     } break;
 
-    default:
+    default: {
+      const auto msgId = static_cast<const SHMHeader*>(data)->msgId_;
+      LOG_I("On msg {} - {} of stg inst {}. {}", msgId, GetMsgName(msgId),
+            stgInstInfo->stgInstId_, stgInstInfo->toStr());
       if (stgInstTaskHandlerBundle_.onOtherStgInstTask_) {
         stgInstTaskHandlerBundle_.onOtherStgInstTask_(stgInstInfo, asyncTask);
       }
-      break;
+    } break;
   }
 }
 

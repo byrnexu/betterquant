@@ -411,6 +411,7 @@ std::string OrderInfo::getSqlOfUSPOrderInfoUpdate() const {
     "'{}',"  // orderType
     "'{}',"  // orderTypeExtra
     "'{}',"  // orderTime
+    "'{}',"  // simedTDInfo
     "'{}',"  // fee
     "'{}',"  // feeCurrency
     "'{}',"  // dealSize
@@ -445,6 +446,7 @@ std::string OrderInfo::getSqlOfUSPOrderInfoUpdate() const {
     magic_enum::enum_name(orderType_),
     magic_enum::enum_name(orderTypeExtra_),
     ConvertTsToDBTime(orderTime_),
+    simedTDInfo_,
     fee_,
     feeCurrency_,
     dealSize_,
@@ -637,7 +639,8 @@ OrderInfoSPtr MakeOrderInfo(const db::tradeInfo::RecordSPtr& recTradeInfo) {
 OrderInfoSPtr MakeOrderInfo(const StgInstInfoSPtr& stgInstInfo, AcctId acctId,
                             const std::string& symbolCode, Side side,
                             PosSide posSide, Decimal orderPrice,
-                            Decimal orderSize, AlgoId algoId) {
+                            Decimal orderSize, AlgoId algoId,
+                            const std::string& simedTDInfo) {
   const auto now = GetTotalUSSince1970();
   const auto orderInfo = std::make_shared<OrderInfo>();
   orderInfo->orderTime_ = now;
@@ -661,6 +664,9 @@ OrderInfoSPtr MakeOrderInfo(const StgInstInfoSPtr& stgInstInfo, AcctId acctId,
 
   orderInfo->orderType_ = OrderType::Limit;
   orderInfo->orderTypeExtra_ = OrderTypeExtra::Normal;
+
+  strncpy(orderInfo->simedTDInfo_, simedTDInfo.c_str(),
+          sizeof(orderInfo->simedTDInfo_) - 1);
 
   return orderInfo;
 }

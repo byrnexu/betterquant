@@ -26,7 +26,7 @@ struct MarketDataCond {
 };
 using MarketDataCondSPtr = std::shared_ptr<MarketDataCond>;
 
-std::tuple<int, MarketDataCondSPtr> getMarketDataCondFromTopic(
+std::tuple<int, MarketDataCondSPtr> GetMarketDataCondFromTopic(
     const std::string& topic);
 
 }  // namespace bq

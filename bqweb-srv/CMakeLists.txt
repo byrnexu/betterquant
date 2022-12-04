@@ -59,6 +59,7 @@ target_include_directories(${PROJECT_NAME}
     PUBLIC "${SOLUTION_ROOT_DIR}/bqassetsmgr/inc"
     PUBLIC "${SOLUTION_ROOT_DIR}/bqposmgr/inc"
     PUBLIC "${SOLUTION_ROOT_DIR}/bqordmgr/inc"
+    PUBLIC "${SOLUTION_ROOT_DIR}/bqmd/bqmd-pub/inc"
     PUBLIC "${SOLUTION_ROOT_DIR}/bqweb/inc"
     PUBLIC "${SOLUTION_ROOT_DIR}/bqpub/inc"
     PUBLIC "${SOLUTION_ROOT_DIR}/bqipc/inc"
@@ -108,6 +109,7 @@ target_link_directories(${PROJECT_NAME}
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_link_libraries(${PROJECT_NAME}
+      bqmd-pub-d
       bqposmgr-d
       bqassetsmgr-d
       bqordmgr-d
@@ -118,6 +120,7 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     )
 else()
     target_link_libraries(${PROJECT_NAME}
+      bqmd-pub
       bqposmgr
       bqassetsmgr
       bqordmgr

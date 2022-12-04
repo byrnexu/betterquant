@@ -15,7 +15,7 @@
 namespace bq {
 
 // topic = MD@Binance@Spot@BTC-USDT@Books@20
-std::tuple<int, MarketDataCondSPtr> getMarketDataCondFromTopic(
+std::tuple<int, MarketDataCondSPtr> GetMarketDataCondFromTopic(
     const std::string& topic) {
   std::vector<std::string> fieldGroup;
   boost::split(fieldGroup, topic, boost::is_any_of(SEP_OF_TOPIC));

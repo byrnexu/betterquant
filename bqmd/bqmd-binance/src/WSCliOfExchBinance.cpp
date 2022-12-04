@@ -26,6 +26,7 @@
 #include "db/TBLMonitorOfSymbolInfo.hpp"
 #include "def/DataStruOfMD.hpp"
 #include "def/MDWSCliAsyncTaskArg.hpp"
+#include "util/BQUtil.hpp"
 #include "util/Json.hpp"
 #include "util/String.hpp"
 #include "util/Util.hpp"
@@ -165,9 +166,9 @@ std::string WSCliOfExchBinance::handleMDTrades(WSCliAsyncTaskSPtr& asyncTask) {
         trades->size_ = CONV(Decimal, size);
         trades->side_ = GetSide(exchSide);
         if (mdSvc_->saveMarketData()) {
-          arg->topic_ = topic;
-          arg->exchTs_ = exchTs;
           arg->marketDataOfUnifiedFmt_ = trades->dataOfUnifiedFmt();
+          arg->exchTs_ = exchTs;
+          arg->topic_ = topic;
         }
       },
       PUB_CHANNEL, MSG_ID_ON_MD_TRADES, sizeof(Trades));
@@ -271,9 +272,9 @@ std::string WSCliOfExchBinance::handleMDTickers(WSCliAsyncTaskSPtr& asyncTask) {
         tickers->vol24h_ = CONV(Decimal, vol24h);
         tickers->amt24h_ = CONV(Decimal, amt24h);
         if (mdSvc_->saveMarketData()) {
-          arg->topic_ = topic;
-          arg->exchTs_ = exchTs;
           arg->marketDataOfUnifiedFmt_ = tickers->dataOfUnifiedFmt();
+          arg->exchTs_ = exchTs;
+          arg->topic_ = topic;
         }
       },
       PUB_CHANNEL, MSG_ID_ON_MD_TICKERS, sizeof(Tickers));
@@ -323,7 +324,6 @@ std::string WSCliOfExchBinance::handleMDCandle(WSCliAsyncTaskSPtr& asyncTask) {
   const auto exchTs = yyjson_get_uint(valExchTs) * 1000;
 
   yyjson_val* vals = nullptr;
-  yyjson_val* valStartTs = nullptr;
   yyjson_val* valOpen = nullptr;
   yyjson_val* valClose = nullptr;
   yyjson_val* valHigh = nullptr;
@@ -339,8 +339,6 @@ std::string WSCliOfExchBinance::handleMDCandle(WSCliAsyncTaskSPtr& asyncTask) {
   while ((valFieldName = yyjson_obj_iter_next(&iter))) {
     if (yyjson_equals_str(valFieldName, "s")) {
       vals = yyjson_obj_iter_get_val(valFieldName);
-    } else if (yyjson_equals_str(valFieldName, "t")) {
-      valStartTs = yyjson_obj_iter_get_val(valFieldName);
     } else if (yyjson_equals_str(valFieldName, "o")) {
       valOpen = yyjson_obj_iter_get_val(valFieldName);
     } else if (yyjson_equals_str(valFieldName, "c")) {
@@ -371,7 +369,8 @@ std::string WSCliOfExchBinance::handleMDCandle(WSCliAsyncTaskSPtr& asyncTask) {
   }
 
   const auto [topic, topicHash] =
-      MakeTopicInfo(marketCode, symbolType, symbolCode, MDType::Candle);
+      MakeTopicInfo(marketCode, symbolType, symbolCode, MDType::Candle,
+                    SUFFIX_OF_CANDLE_DETAIL);
 
   mdSvc_->getSHMSrv()->pushMsgWithZeroCopy(
       [&](void* shmBuf) {
@@ -384,7 +383,6 @@ std::string WSCliOfExchBinance::handleMDCandle(WSCliAsyncTaskSPtr& asyncTask) {
         strncpy(candle->mdHeader_.symbolCode_, symbolCode.c_str(),
                 sizeof(candle->mdHeader_.symbolCode_) - 1);
         candle->mdHeader_.mdType_ = MDType::Candle;
-        candle->startTs_ = yyjson_get_uint(valStartTs) * 1000;
         candle->open_ = CONV(Decimal, yyjson_get_str(valOpen));
         candle->high_ = CONV(Decimal, yyjson_get_str(valHigh));
         candle->low_ = CONV(Decimal, yyjson_get_str(valLow));
@@ -392,9 +390,9 @@ std::string WSCliOfExchBinance::handleMDCandle(WSCliAsyncTaskSPtr& asyncTask) {
         candle->vol_ = CONV(Decimal, yyjson_get_str(valVol));
         candle->amt_ = CONV(Decimal, yyjson_get_str(valAmt));
         if (mdSvc_->saveMarketData()) {
-          arg->topic_ = topic;
-          arg->exchTs_ = exchTs;
           arg->marketDataOfUnifiedFmt_ = candle->dataOfUnifiedFmt();
+          arg->exchTs_ = exchTs;
+          arg->topic_ = topic;
         }
       },
       PUB_CHANNEL, MSG_ID_ON_MD_CANDLE, sizeof(Candle));
@@ -489,10 +487,10 @@ std::string WSCliOfExchBinance::handleMDBooks(WSCliAsyncTaskSPtr& asyncTask) {
           books->bids_[bidsLvl].size_ = depthData->size_;
         }
         if (mdSvc_->saveMarketData()) {
-          arg->topic_ = topic;
-          arg->exchTs_ = exchTs;
           arg->marketDataOfUnifiedFmt_ =
               books->dataOfUnifiedFmt(mdSvc_->getBooksDepthLevelOfSave());
+          arg->exchTs_ = exchTs;
+          arg->topic_ = topic;
         }
       },
       PUB_CHANNEL, MSG_ID_ON_MD_BOOKS, sizeof(Books));

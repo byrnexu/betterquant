@@ -23,4 +23,6 @@ struct CommonIPCData {
 };
 using CommonIPCDataSPtr = std::shared_ptr<CommonIPCData>;
 
+CommonIPCDataSPtr MakeCommonIPCData(const std::string& str);
+
 }  // namespace bq

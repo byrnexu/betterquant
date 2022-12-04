@@ -1,6 +1,9 @@
 marketCode: Binance
 symbolType: CPerp
-acctId: 10015
+acctId: 10005
+
+simedMode:
+  enable: false
 
 tdSrvChannel: "TD@TDGWChannel@Trade"
 tdSrvTaskDispatcherParam: moduleName=tdSrvTaskDispatcher; taskRandAllocThreadPoolSize=0; taskSpecificThreadPoolSize=2

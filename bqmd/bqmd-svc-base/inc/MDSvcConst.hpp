@@ -21,4 +21,7 @@ const static std::string UNDEFINED_FIELD_MIN_DATETIME =
 const static std::string UNDEFINED_FIELD_MAX_DATETIME =
     "2030-01-01 00:00:00.000000";
 
+const static std::string ET_LTAG = R"("exchTs":)";
+const static std::string ET_RTAG = R"(,"localTs")";
+
 }  // namespace bq::md::svc

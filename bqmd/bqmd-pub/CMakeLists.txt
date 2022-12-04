@@ -115,6 +115,8 @@ endif()
 
 target_link_libraries(${PROJECT_NAME}
     mysqlcppconn-static
+    libboost_filesystem.a
+    libboost_date_time.a
     libmysqlclient.a
     libcpr.a
     libcurl.a
@@ -151,4 +153,15 @@ if (BUILD_BENCH)
     else()
         add_custom_target(bench COMMAND ${EXECUTABLE_OUTPUT_PATH}/${BENCH_PROJECT_NAME})
     endif()
+endif()
+
+execute_process(COMMAND bash -c "mkdir -p ${SOLUTION_ROOT_DIR}/bin/testData/ \
+    && rsync -aPc --delete ${PROJECT_SOURCE_DIR}/testData/ ${SOLUTION_ROOT_DIR}/bin/testData/")
+
+if(${CMAKE_BUILD_TYPE} MATCHES Debug)
+  execute_process(COMMAND bash -c "mkdir -p ${PROJECT_SOURCE_DIR}/build/debug/testData/ \
+      && rsync -aPc --delete ${PROJECT_SOURCE_DIR}/testData/ ${PROJECT_SOURCE_DIR}/build/debug/testData/ ")
+else()
+  execute_process(COMMAND bash -c "mkdir -p ${PROJECT_SOURCE_DIR}/build/release/testData/ \
+      && rsync -aPc --delete ${PROJECT_SOURCE_DIR}/testData/ ${PROJECT_SOURCE_DIR}/build/release/testData/ ")
 endif()
