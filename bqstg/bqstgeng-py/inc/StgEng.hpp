@@ -80,29 +80,27 @@ class StgEng {
   std::tuple<int, std::string> queryHisMDBetween2Ts(
       MarketCode marketCode, SymbolType symbolType,
       const std::string& symbolCode, MDType mdType, std::uint64_t tsBegin,
-      std::uint64_t tsEnd, std::uint32_t level = DEFAULT_DEPTH_LEVEL);
+      std::uint64_t tsEnd, const std::string& ext = "");
 
-  std::tuple<int, std::string> queryHisMDBetween2Ts(
-      const std::string& topic, std::uint64_t tsBegin, std::uint64_t tsEnd,
-      std::uint32_t level = DEFAULT_DEPTH_LEVEL);
+  std::tuple<int, std::string> queryHisMDBetween2Ts(const std::string& topic,
+                                                    std::uint64_t tsBegin,
+                                                    std::uint64_t tsEnd);
 
   std::tuple<int, std::string> querySpecificNumOfHisMDBeforeTs(
       MarketCode marketCode, SymbolType symbolType,
       const std::string& symbolCode, MDType mdType, std::uint64_t ts, int num,
-      std::uint32_t level = DEFAULT_DEPTH_LEVEL);
+      const std::string& ext = "");
 
   std::tuple<int, std::string> querySpecificNumOfHisMDBeforeTs(
-      const std::string& topic, std::uint64_t ts, int num,
-      std::uint32_t level = DEFAULT_DEPTH_LEVEL);
+      const std::string& topic, std::uint64_t ts, int num);
 
   std::tuple<int, std::string> querySpecificNumOfHisMDAfterTs(
       MarketCode marketCode, SymbolType symbolType,
       const std::string& symbolCode, MDType mdType, std::uint64_t ts, int num,
-      std::uint32_t level = DEFAULT_DEPTH_LEVEL);
+      const std::string& ext = "");
 
   std::tuple<int, std::string> querySpecificNumOfHisMDAfterTs(
-      const std::string& topic, std::uint64_t ts, int num,
-      std::uint32_t level = DEFAULT_DEPTH_LEVEL);
+      const std::string& topic, std::uint64_t ts, int num);
 
  public:
   bool saveStgPrivateData(StgInstId stgInstId, const std::string& jsonStr);

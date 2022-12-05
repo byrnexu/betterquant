@@ -11,6 +11,7 @@
 #include "util/MarketDataCond.hpp"
 
 #include "def/StatusCode.hpp"
+#include "util/String.hpp"
 
 namespace bq {
 
@@ -44,12 +45,25 @@ std::tuple<int, MarketDataCondSPtr> GetMarketDataCondFromTopic(
   }
   ret->mdType_ = mdType.value();
 
-  if (ret->mdType_ == MDType::Books && fieldGroup.size() == 6) {
-    const auto level = CONV_OPT(std::uint32_t, fieldGroup[5]);
-    if (level == boost::none) {
-      return {SCODE_BQPUB_INVALID_TOPIC, nullptr};
+  if (fieldGroup.size() == 6) {
+    ret->ext_ = fieldGroup[5];
+
+    switch (ret->mdType_) {
+      case MDType::Books:
+        if (isNumber(ret->ext_) == false) {
+          return {SCODE_BQPUB_INVALID_TOPIC, nullptr};
+        }
+        break;
+
+      case MDType::Candle:
+        if (ret->ext_ != "detail") {
+          return {SCODE_BQPUB_INVALID_TOPIC, nullptr};
+        }
+        break;
+
+      default:
+        return {SCODE_BQPUB_INVALID_TOPIC, nullptr};
     }
-    ret->level_ = level.value();
   }
 
   return {0, ret};

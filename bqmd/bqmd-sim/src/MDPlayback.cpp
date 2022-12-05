@@ -74,7 +74,7 @@ void MDPlayback::playback(
     const Ts2MarketDataOfSimGroupSPtr& ts2MarketDataOfSimGroup) {
   if (ts2MarketDataOfSimGroup->empty()) return;
 
-  auto playbackSpeed = CONFIG["playbackSpeed"].as<std::uint32_t>(1);
+  auto playbackSpeed = CONFIG["playbackSpeed"].as<double>(1);
   if (playbackSpeed == 0) playbackSpeed = UINT32_MAX;
 
   LOG_I("Begin to playback {} num of market data between {} - {}",
@@ -103,7 +103,8 @@ void MDPlayback::playback(
     const auto delay = marketDataOfSim->delay_ / playbackSpeed / 1000;
     LOG_T("Playback topic {} of ts {} after {} ms.", topic, rec.first, delay);
     if (delay != 0) {
-      std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+      std::this_thread::sleep_for(
+          std::chrono::milliseconds(static_cast<std::uint32_t>(delay)));
     }
 
     const auto msgId = static_cast<SHMHeader*>(marketDataOfSim->data_)->msgId_;

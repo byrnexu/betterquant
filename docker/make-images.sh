@@ -28,6 +28,10 @@ make_inst_pkg() {
 }
 
 # Create an installation file for use by the Add command in the Dockerfile
+readonly BQMD_SIM=bqmd-sim
+make_inst_pkg $BQMD_SIM
+
+# Create an installation file for use by the Add command in the Dockerfile
 readonly BQMD_BINANCE=bqmd-binance
 make_inst_pkg $BQMD_BINANCE
 
@@ -72,6 +76,7 @@ docker images
 rm -rf roudi
 rm -rf $BQTD_SRV
 rm -rf $BQRISK_MGR
+rm -rf $BQMD_SIM
 rm -rf $BQMD_BINANCE
 rm -rf $BQTD_BINANCE
 rm -rf $BQWEB_SRV

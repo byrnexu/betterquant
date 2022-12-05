@@ -28,7 +28,7 @@ namespace bq::md::svc::binance {
  *   "id": 1
  * }
  *
- * MD@Binance@Spot@BTC/USDT@candle@1D
+ * MD@Binance@Spot@BTC-USDT@Candle@detail
  */
 std::vector<std::string> ReqParserOfBinance::doGetTopicGroupForSubOrUnSubAgain(
     const std::string& req) {
@@ -65,8 +65,11 @@ std::vector<std::string> ReqParserOfBinance::doGetTopicGroupForSubOrUnSubAgain(
       continue;
     }
 
-    const auto topic = fmt::format("{}{}{}{}{}", prefix, SEP_OF_TOPIC,
-                                   symbolCode, SEP_OF_TOPIC, mdType);
+    auto topic = fmt::format("{}{}{}{}{}", prefix, SEP_OF_TOPIC, symbolCode,
+                             SEP_OF_TOPIC, mdType);
+    if (mdType == magic_enum::enum_name(MDType::Candle)) {
+      topic = topic + SEP_OF_TOPIC + SUFFIX_OF_CANDLE_DETAIL;
+    }
     ret.emplace_back(topic);
   }
 

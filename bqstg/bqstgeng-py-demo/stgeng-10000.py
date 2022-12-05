@@ -37,7 +37,7 @@ class StgInstTaskHandler(StgInstTaskHandlerBase):
         now = int(time.time() * 1000000)
 
         ret_of_qry = self.stg_eng.query_his_md_between_2_ts(
-            topic="MD@Binance@Spot@BTC-USDT@Candle",
+            topic="MD@Binance@Spot@BTC-USDT@Candle@detail",
             ts_begin=now - 60 * 1000000,
             ts_end=now,
         )
@@ -51,12 +51,13 @@ class StgInstTaskHandler(StgInstTaskHandlerBase):
             MDType.Candle,
             ts_begin=now - 60 * 1000000,
             ts_end=now,
+            ext="detail",
         )
         print(f"===== {ret_of_qry[0]}")
         print(f"===== {ret_of_qry[1]}")
 
         ret_of_qry = self.stg_eng.query_specific_num_of_his_md_before_ts(
-            topic="MD@Binance@Spot@BTC-USDT@Candle", ts=now, num=1
+            topic="MD@Binance@Spot@BTC-USDT@Candle@detail", ts=now, num=1
         )
         print(f"===== {ret_of_qry[0]}")
         print(f"===== {ret_of_qry[1]}")
@@ -68,6 +69,7 @@ class StgInstTaskHandler(StgInstTaskHandlerBase):
             MDType.Candle,
             ts=now,
             num=1,
+            ext="detail",
         )
         print(f"===== {ret_of_qry[0]}")
         print(f"===== {ret_of_qry[1]}")
@@ -85,15 +87,13 @@ class StgInstTaskHandler(StgInstTaskHandlerBase):
             MDType.Candle,
             ts=now - 60 * 1000000,
             num=2,
+            ext="detail",
         )
         print(f"===== {ret_of_qry[0]}")
         print(f"===== {ret_of_qry[1]}")
 
         ret_of_qry = self.stg_eng.query_specific_num_of_his_md_before_ts(
-            topic="MD@Binance@Spot@BTC-USDT@Books",
-            ts=now - 60 * 1000000,
-            num=2,
-            level=20,
+            topic="MD@Binance@Spot@BTC-USDT@Books@20", ts=now - 60 * 1000000, num=2
         )
         print(f"===== {ret_of_qry[0]}")
         print(f"===== {ret_of_qry[1]}")
@@ -125,7 +125,8 @@ class StgInstTaskHandler(StgInstTaskHandlerBase):
             )
             # sub market data of candle
             self.stg_eng.sub(
-                stg_inst_info.stg_inst_id, "shm://MD.Binance.Spot/ADA-USDT/Candle"
+                stg_inst_info.stg_inst_id,
+                "shm://MD.Binance.Spot/ADA-USDT/Candle/detail",
             )
 
             # sub market data of trades, note that the topic is case sensitive.
@@ -142,7 +143,8 @@ class StgInstTaskHandler(StgInstTaskHandlerBase):
             )
             # sub market data of candle
             self.stg_eng.sub(
-                stg_inst_info.stg_inst_id, "shm://MD.Binance.Spot/BTC-USDT/Candle"
+                stg_inst_info.stg_inst_id,
+                "shm://MD.Binance.Spot/BTC-USDT/Candle/detail",
             )
 
             # sub trades of BNB-USDT for calc pnl, note that the topic is case sensitive.
@@ -280,6 +282,7 @@ class StgInstTaskHandler(StgInstTaskHandlerBase):
 
     def on_candle(self, stg_inst_info, candle):
         market_data = json.dumps(candle)
+        print(market_data)
 
     def on_stg_inst_add(self, stg_inst_info):
         # Write strategy business code here

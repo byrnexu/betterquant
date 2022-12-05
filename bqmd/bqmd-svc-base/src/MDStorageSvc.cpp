@@ -184,10 +184,10 @@ void MDStorageSvc::handleLastRecOfCandleInOneMinute(
   }
 
   for (std::uint64_t i = minuteInCache; i < minuteInCurCandle; ++i) {
-    auto& marketData = argInCache->marketDataOfUnifiedFmt_;
+    const auto& md = argInCache->marketDataOfUnifiedFmt_;
     const auto curExchTs = fmt::format("{}", i * 60000000);
-    ReplaceSubStrBetween2Str(marketData, curExchTs, ET_LTAG, ET_RTAG);
-    (*filename2MDGroup_)[fileOfCandle.string()].emplace_back(marketData + "\n");
+    const auto d = ReplaceSubStrBetween2Str(md, curExchTs, ET_LTAG, ET_RTAG);
+    (*filename2MDGroup_)[fileOfCandle.string()].emplace_back(d + "\n");
   }
 
   argInCache = argInCurCandle;

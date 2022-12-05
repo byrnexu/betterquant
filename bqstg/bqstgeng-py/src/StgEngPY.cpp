@@ -51,22 +51,14 @@ BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(orderOverloads, order, 7, 9)
 
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(queryHisMDBetween2TsOverloadsByFields,
                                        queryHisMDBetween2Ts, 6, 7)
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(queryHisMDBetween2TsOverloadsByTopic,
-                                       queryHisMDBetween2Ts, 3, 4)
 
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(
     querySpecificNumOfHisMDBeforeTsOverloadsByFields,
     querySpecificNumOfHisMDBeforeTs, 6, 7)
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(
-    querySpecificNumOfHisMDBeforeTsOverloadsByTopic,
-    querySpecificNumOfHisMDBeforeTs, 3, 4)
 
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(
     querySpecificNumOfHisMDAfterTsOverloadsByFields,
     querySpecificNumOfHisMDAfterTs, 6, 7)
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(
-    querySpecificNumOfHisMDAfterTsOverloadsByTopic,
-    querySpecificNumOfHisMDAfterTs, 3, 4)
 
 BOOST_PYTHON_MODULE(bqstgeng) {
   // char array
@@ -398,27 +390,26 @@ BOOST_PYTHON_MODULE(bqstgeng) {
   using QryHisMDBetweenTsByFields = RetOfQryHisMD (StgEng::*)(
       MarketCode marketCode, SymbolType symbolType,
       const std::string& symbolCode, MDType mdType, std::uint64_t tsBegin,
-      std::uint64_t tsEnd, std::uint32_t level);
+      std::uint64_t tsEnd, const std::string& ext);
 
-  using QryHisMDBetweenTsByTopic =
-      RetOfQryHisMD (StgEng::*)(const std::string& topic, std::uint64_t tsBegin,
-                                std::uint64_t tsEnd, std::uint32_t level);
+  using QryHisMDBetweenTsByTopic = RetOfQryHisMD (StgEng::*)(
+      const std::string& topic, std::uint64_t tsBegin, std::uint64_t tsEnd);
 
-  using QryHisMDBeforeTsByFields =
-      RetOfQryHisMD (StgEng::*)(MarketCode marketCode, SymbolType symbolType,
-                                const std::string& symbolCode, MDType mdType,
-                                std::uint64_t ts, int num, std::uint32_t level);
+  using QryHisMDBeforeTsByFields = RetOfQryHisMD (StgEng::*)(
+      MarketCode marketCode, SymbolType symbolType,
+      const std::string& symbolCode, MDType mdType, std::uint64_t ts, int num,
+      const std::string& ext);
 
   using QryHisMDBeforeTsByTopic = RetOfQryHisMD (StgEng::*)(
-      const std::string& topic, std::uint64_t ts, int num, std::uint32_t level);
+      const std::string& topic, std::uint64_t ts, int num);
 
-  using QryHisMDAfterTsByFields =
-      RetOfQryHisMD (StgEng::*)(MarketCode marketCode, SymbolType symbolType,
-                                const std::string& symbolCode, MDType mdType,
-                                std::uint64_t ts, int num, std::uint32_t level);
+  using QryHisMDAfterTsByFields = RetOfQryHisMD (StgEng::*)(
+      MarketCode marketCode, SymbolType symbolType,
+      const std::string& symbolCode, MDType mdType, std::uint64_t ts, int num,
+      const std::string& ext);
 
   using QryHisMDAfterTsByTopic = RetOfQryHisMD (StgEng::*)(
-      const std::string& topic, std::uint64_t ts, int num, std::uint32_t level);
+      const std::string& topic, std::uint64_t ts, int num);
 
   // StgEng
   class_<StgEng, boost::noncopyable>("StgEng", init<std::string>())
@@ -438,33 +429,28 @@ BOOST_PYTHON_MODULE(bqstgeng) {
           "query_his_md_between_2_ts", &StgEng::queryHisMDBetween2Ts,
           queryHisMDBetween2TsOverloadsByFields(
               args("market_code", "symbol_type", "symbol_code", "mdtype",
-                   "ts_begin", "ts_end", "level")))
-      .def<QryHisMDBetweenTsByTopic>(
-          "query_his_md_between_2_ts", &StgEng::queryHisMDBetween2Ts,
-          queryHisMDBetween2TsOverloadsByTopic(
-              args("topic", "ts_begin", "ts_end", "level")))
+                   "ts_begin", "ts_end", "ext")))
+      .def<QryHisMDBetweenTsByTopic>("query_his_md_between_2_ts",
+                                     &StgEng::queryHisMDBetween2Ts,
+                                     args("topic", "ts_begin", "ts_end"))
       .def<QryHisMDBeforeTsByFields>(
           "query_specific_num_of_his_md_before_ts",
           &StgEng::querySpecificNumOfHisMDBeforeTs,
           querySpecificNumOfHisMDBeforeTsOverloadsByFields(
               args("market_code", "symbol_type", "symbol_code", "mdtype", "ts",
-                   "num", "level")))
-      .def<QryHisMDBeforeTsByTopic>(
-          "query_specific_num_of_his_md_before_ts",
-          &StgEng::querySpecificNumOfHisMDBeforeTs,
-          querySpecificNumOfHisMDBeforeTsOverloadsByTopic(
-              args("topic", "ts", "num", "level")))
+                   "num", "ext")))
+      .def<QryHisMDBeforeTsByTopic>("query_specific_num_of_his_md_before_ts",
+                                    &StgEng::querySpecificNumOfHisMDBeforeTs,
+                                    args("topic", "ts", "num"))
       .def<QryHisMDAfterTsByFields>(
           "query_specific_num_of_his_md_after_ts",
           &StgEng::querySpecificNumOfHisMDAfterTs,
           querySpecificNumOfHisMDAfterTsOverloadsByFields(
               args("market_code", "symbol_type", "symbol_code", "mdtype", "ts",
-                   "num", "level")))
-      .def<QryHisMDAfterTsByTopic>(
-          "query_specific_num_of_his_md_after_ts",
-          &StgEng::querySpecificNumOfHisMDAfterTs,
-          querySpecificNumOfHisMDAfterTsOverloadsByTopic(
-              args("topic", "ts", "num", "level")))
+                   "num", "ext")))
+      .def<QryHisMDAfterTsByTopic>("query_specific_num_of_his_md_after_ts",
+                                   &StgEng::querySpecificNumOfHisMDAfterTs,
+                                   args("topic", "ts", "num"))
       .def("install_stg_inst_timer", &StgEng::installStgInstTimer,
            args("stg_inst_id", "timer_name", "exec_at_startup",
                 "millisec_interval", "max_exec_times"))

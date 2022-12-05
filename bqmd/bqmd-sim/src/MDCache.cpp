@@ -113,6 +113,7 @@ void MDCache::cacheMDHis() {
         std::lock_guard<std::mutex> guard(mtxMDCache_);
         cacheSize = mdCache_.size();
       }
+
       if (cacheSize >= numOfCacheMD) {
         std::this_thread::sleep_for(
             std::chrono::milliseconds(intervalBetweenCacheCheck));
@@ -135,9 +136,10 @@ void MDCache::cache1BatchOfHisMD() {
 
   const auto topicGroup = Config::get_const_instance().getTopicGroup();
   for (const auto& topic : topicGroup) {
-    const auto [statusCodeOfLoad, ts2HisMDGroup] =
-        MDHis::LoadHisMDBetweenTs(mdRootPath_, topic, tsStartOfCurCache_, tsEnd,
-                                  IndexType::ByLocalTs, UINT32_MAX);
+    const auto maxNumOfHisMDCanBeQeuryEachTime = UINT32_MAX;
+    const auto [statusCodeOfLoad, ts2HisMDGroup] = MDHis::LoadHisMDBetweenTs(
+        mdRootPath_, topic, tsStartOfCurCache_, tsEnd, IndexType::ByLocalTs,
+        maxNumOfHisMDCanBeQeuryEachTime);
     if (statusCodeOfLoad != 0) {
       LOG_W("Load {} his md of topic {} between {} - {} failed. [{} - {}]",
             ts2HisMDGroup->size(), topic, ConvertTsToPtime(tsStartOfCurCache_),

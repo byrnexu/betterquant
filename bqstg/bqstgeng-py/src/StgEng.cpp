@@ -576,39 +576,38 @@ int StgEng::unSub(StgInstId subscriber, const std::string& topic) {
 std::tuple<int, std::string> StgEng::queryHisMDBetween2Ts(
     MarketCode marketCode, SymbolType symbolType, const std::string& symbolCode,
     MDType mdType, std::uint64_t tsBegin, std::uint64_t tsEnd,
-    std::uint32_t level) {
+    const std::string& ext) {
   return stgEngImpl_->queryHisMDBetween2Ts(marketCode, symbolType, symbolCode,
-                                           mdType, tsBegin, tsEnd, level);
+                                           mdType, tsBegin, tsEnd, ext);
 }
 
 std::tuple<int, std::string> StgEng::queryHisMDBetween2Ts(
-    const std::string& topic, std::uint64_t tsBegin, std::uint64_t tsEnd,
-    std::uint32_t level) {
-  return stgEngImpl_->queryHisMDBetween2Ts(topic, tsBegin, tsEnd, level);
+    const std::string& topic, std::uint64_t tsBegin, std::uint64_t tsEnd) {
+  return stgEngImpl_->queryHisMDBetween2Ts(topic, tsBegin, tsEnd);
 }
 
 std::tuple<int, std::string> StgEng::querySpecificNumOfHisMDBeforeTs(
     MarketCode marketCode, SymbolType symbolType, const std::string& symbolCode,
-    MDType mdType, std::uint64_t ts, int num, std::uint32_t level) {
+    MDType mdType, std::uint64_t ts, int num, const std::string& ext) {
   return stgEngImpl_->querySpecificNumOfHisMDBeforeTs(
-      marketCode, symbolType, symbolCode, mdType, ts, num, level);
+      marketCode, symbolType, symbolCode, mdType, ts, num, ext);
 }
 
 std::tuple<int, std::string> StgEng::querySpecificNumOfHisMDBeforeTs(
-    const std::string& topic, std::uint64_t ts, int num, std::uint32_t level) {
-  return stgEngImpl_->querySpecificNumOfHisMDBeforeTs(topic, ts, num, level);
+    const std::string& topic, std::uint64_t ts, int num) {
+  return stgEngImpl_->querySpecificNumOfHisMDBeforeTs(topic, ts, num);
 }
 
 std::tuple<int, std::string> StgEng::querySpecificNumOfHisMDAfterTs(
     MarketCode marketCode, SymbolType symbolType, const std::string& symbolCode,
-    MDType mdType, std::uint64_t ts, int num, std::uint32_t level) {
+    MDType mdType, std::uint64_t ts, int num, const std::string& ext) {
   return stgEngImpl_->querySpecificNumOfHisMDAfterTs(
-      marketCode, symbolType, symbolCode, mdType, ts, num, level);
+      marketCode, symbolType, symbolCode, mdType, ts, num, ext);
 }
 
 std::tuple<int, std::string> StgEng::querySpecificNumOfHisMDAfterTs(
-    const std::string& topic, std::uint64_t ts, int num, std::uint32_t level) {
-  return stgEngImpl_->querySpecificNumOfHisMDAfterTs(topic, ts, num, level);
+    const std::string& topic, std::uint64_t ts, int num) {
+  return stgEngImpl_->querySpecificNumOfHisMDAfterTs(topic, ts, num);
 }
 
 bool StgEng::saveStgPrivateData(StgInstId stgInstId,

@@ -183,6 +183,48 @@ TEST(test, testBefore) {
     const auto value = getValue(exchTs2HisMDGroup);
     EXPECT_TRUE(value == "123456789");
   }
+
+  {
+    const auto [stausCode, exchTs2HisMDGroup] = MDHis::LoadHisMDBeforeTs(
+        "testData", "MD@Binance@Spot@BTC-USDT@Candle", 1669338718861000, 1);
+    const auto value = getValue(exchTs2HisMDGroup);
+    EXPECT_TRUE(value == "3");
+  }
+
+  {
+    const auto [stausCode, exchTs2HisMDGroup] = MDHis::LoadHisMDBeforeTs(
+        "testData", "MD@Binance@Spot@BTC-USDT@Candle", 1669338718861000, 2);
+    const auto value = getValue(exchTs2HisMDGroup);
+    EXPECT_TRUE(value == "23");
+  }
+
+  {
+    const auto [stausCode, exchTs2HisMDGroup] = MDHis::LoadHisMDBeforeTs(
+        "testData", "MD@Binance@Spot@BTC-USDT@Candle", 1669338718861000, 3);
+    const auto value = getValue(exchTs2HisMDGroup);
+    EXPECT_TRUE(value == "123");
+  }
+
+  {
+    const auto [stausCode, exchTs2HisMDGroup] = MDHis::LoadHisMDBeforeTs(
+        "testData", "MD@Binance@Spot@BTC-USDT@Candle", 1669338718861000 + 1, 1);
+    const auto value = getValue(exchTs2HisMDGroup);
+    EXPECT_TRUE(value == "3");
+  }
+
+  {
+    const auto [stausCode, exchTs2HisMDGroup] = MDHis::LoadHisMDBeforeTs(
+        "testData", "MD@Binance@Spot@BTC-USDT@Candle", 1669338718861000 + 1, 2);
+    const auto value = getValue(exchTs2HisMDGroup);
+    EXPECT_TRUE(value == "23");
+  }
+
+  {
+    const auto [stausCode, exchTs2HisMDGroup] = MDHis::LoadHisMDBeforeTs(
+        "testData", "MD@Binance@Spot@BTC-USDT@Candle", 1669338718861000 + 1, 3);
+    const auto value = getValue(exchTs2HisMDGroup);
+    EXPECT_TRUE(value == "123");
+  }
 }
 
 TEST(test, testAfter) {
@@ -257,6 +299,48 @@ TEST(test, testAfter) {
         "testData", "MD@Binance@Spot@BTC-USDT@Candle", 1669338658437000, 9);
     const auto value = getValue(exchTs2HisMDGroup);
     EXPECT_TRUE(value == "123456789");
+  }
+
+  {
+    const auto [stausCode, exchTs2HisMDGroup] = MDHis::LoadHisMDAfterTs(
+        "testData", "MD@Binance@Spot@BTC-USDT@Candle", 1669338718861000, 1);
+    const auto value = getValue(exchTs2HisMDGroup);
+    EXPECT_TRUE(value == "2");
+  }
+
+  {
+    const auto [stausCode, exchTs2HisMDGroup] = MDHis::LoadHisMDAfterTs(
+        "testData", "MD@Binance@Spot@BTC-USDT@Candle", 1669338718861000, 2);
+    const auto value = getValue(exchTs2HisMDGroup);
+    EXPECT_TRUE(value == "23");
+  }
+
+  {
+    const auto [stausCode, exchTs2HisMDGroup] = MDHis::LoadHisMDAfterTs(
+        "testData", "MD@Binance@Spot@BTC-USDT@Candle", 1669338718861000, 3);
+    const auto value = getValue(exchTs2HisMDGroup);
+    EXPECT_TRUE(value == "234");
+  }
+
+  {
+    const auto [stausCode, exchTs2HisMDGroup] = MDHis::LoadHisMDAfterTs(
+        "testData", "MD@Binance@Spot@BTC-USDT@Candle", 1669338718861000 - 1, 1);
+    const auto value = getValue(exchTs2HisMDGroup);
+    EXPECT_TRUE(value == "2");
+  }
+
+  {
+    const auto [stausCode, exchTs2HisMDGroup] = MDHis::LoadHisMDAfterTs(
+        "testData", "MD@Binance@Spot@BTC-USDT@Candle", 1669338718861000 - 1, 2);
+    const auto value = getValue(exchTs2HisMDGroup);
+    EXPECT_TRUE(value == "23");
+  }
+
+  {
+    const auto [stausCode, exchTs2HisMDGroup] = MDHis::LoadHisMDAfterTs(
+        "testData", "MD@Binance@Spot@BTC-USDT@Candle", 1669338718861000 - 1, 3);
+    const auto value = getValue(exchTs2HisMDGroup);
+    EXPECT_TRUE(value == "234");
   }
 }
 
@@ -426,6 +510,54 @@ TEST(test, testBeforeByLT) {
     const auto value = getValue(exchTs2HisMDGroup);
     EXPECT_TRUE(value == "123456789");
   }
+
+  {
+    const auto [stausCode, exchTs2HisMDGroup] =
+        MDHis::LoadHisMDBeforeTs("testData", "MD@Binance@Spot@BTC-USDT@Trades",
+                                 1669338718861000, 1, IndexType::ByLocalTs);
+    const auto value = getValue(exchTs2HisMDGroup);
+    EXPECT_TRUE(value == "3");
+  }
+
+  {
+    const auto [stausCode, exchTs2HisMDGroup] =
+        MDHis::LoadHisMDBeforeTs("testData", "MD@Binance@Spot@BTC-USDT@Trades",
+                                 1669338718861000, 2, IndexType::ByLocalTs);
+    const auto value = getValue(exchTs2HisMDGroup);
+    EXPECT_TRUE(value == "23");
+  }
+
+  {
+    const auto [stausCode, exchTs2HisMDGroup] =
+        MDHis::LoadHisMDBeforeTs("testData", "MD@Binance@Spot@BTC-USDT@Trades",
+                                 1669338718861000, 3, IndexType::ByLocalTs);
+    const auto value = getValue(exchTs2HisMDGroup);
+    EXPECT_TRUE(value == "123");
+  }
+
+  {
+    const auto [stausCode, exchTs2HisMDGroup] =
+        MDHis::LoadHisMDBeforeTs("testData", "MD@Binance@Spot@BTC-USDT@Trades",
+                                 1669338718861000 + 1, 1, IndexType::ByLocalTs);
+    const auto value = getValue(exchTs2HisMDGroup);
+    EXPECT_TRUE(value == "3");
+  }
+
+  {
+    const auto [stausCode, exchTs2HisMDGroup] =
+        MDHis::LoadHisMDBeforeTs("testData", "MD@Binance@Spot@BTC-USDT@Trades",
+                                 1669338718861000 + 1, 2, IndexType::ByLocalTs);
+    const auto value = getValue(exchTs2HisMDGroup);
+    EXPECT_TRUE(value == "23");
+  }
+
+  {
+    const auto [stausCode, exchTs2HisMDGroup] =
+        MDHis::LoadHisMDBeforeTs("testData", "MD@Binance@Spot@BTC-USDT@Trades",
+                                 1669338718861000 + 1, 3, IndexType::ByLocalTs);
+    const auto value = getValue(exchTs2HisMDGroup);
+    EXPECT_TRUE(value == "123");
+  }
 }
 
 TEST(test, testAfterByLT) {
@@ -509,6 +641,54 @@ TEST(test, testAfterByLT) {
                                 1669338658437000, 9, IndexType::ByLocalTs);
     const auto value = getValue(exchTs2HisMDGroup);
     EXPECT_TRUE(value == "123456789");
+  }
+
+  {
+    const auto [stausCode, exchTs2HisMDGroup] =
+        MDHis::LoadHisMDAfterTs("testData", "MD@Binance@Spot@BTC-USDT@Trades",
+                                1669338718861000, 1, IndexType::ByLocalTs);
+    const auto value = getValue(exchTs2HisMDGroup);
+    EXPECT_TRUE(value == "2");
+  }
+
+  {
+    const auto [stausCode, exchTs2HisMDGroup] =
+        MDHis::LoadHisMDAfterTs("testData", "MD@Binance@Spot@BTC-USDT@Trades",
+                                1669338718861000, 2, IndexType::ByLocalTs);
+    const auto value = getValue(exchTs2HisMDGroup);
+    EXPECT_TRUE(value == "23");
+  }
+
+  {
+    const auto [stausCode, exchTs2HisMDGroup] =
+        MDHis::LoadHisMDAfterTs("testData", "MD@Binance@Spot@BTC-USDT@Trades",
+                                1669338718861000, 3, IndexType::ByLocalTs);
+    const auto value = getValue(exchTs2HisMDGroup);
+    EXPECT_TRUE(value == "234");
+  }
+
+  {
+    const auto [stausCode, exchTs2HisMDGroup] =
+        MDHis::LoadHisMDAfterTs("testData", "MD@Binance@Spot@BTC-USDT@Trades",
+                                1669338718861000 - 1, 1, IndexType::ByLocalTs);
+    const auto value = getValue(exchTs2HisMDGroup);
+    EXPECT_TRUE(value == "2");
+  }
+
+  {
+    const auto [stausCode, exchTs2HisMDGroup] =
+        MDHis::LoadHisMDAfterTs("testData", "MD@Binance@Spot@BTC-USDT@Trades",
+                                1669338718861000 - 1, 2, IndexType::ByLocalTs);
+    const auto value = getValue(exchTs2HisMDGroup);
+    EXPECT_TRUE(value == "23");
+  }
+
+  {
+    const auto [stausCode, exchTs2HisMDGroup] =
+        MDHis::LoadHisMDAfterTs("testData", "MD@Binance@Spot@BTC-USDT@Trades",
+                                1669338718861000 - 1, 3, IndexType::ByLocalTs);
+    const auto value = getValue(exchTs2HisMDGroup);
+    EXPECT_TRUE(value == "234");
   }
 }
 

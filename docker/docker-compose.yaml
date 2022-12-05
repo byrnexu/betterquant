@@ -38,6 +38,27 @@ services:
     networks: 
       - bqnet
 
+  bqmd-sim-multi-market:
+    image: bqmd-sim:${TAG}
+    container_name: bqmd-sim-multi-market
+    build:
+      context: ./bqmd-sim
+      dockerfile: ../../bqmd/bqmd-sim/docker/Dockerfile
+    volumes:
+      - $ROOT_DIR_OF_INSTALLATION/betterquant/data:/usr/bin/data
+      - $ROOT_DIR_OF_INSTALLATION/betterquant/config:/usr/bin/config
+      - /dev:/dev
+      - /tmp:/tmp
+    stop_signal: SIGINT
+    networks:
+      - bqnet
+    depends_on: 
+      roudi:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+    command: ['bqmd-sim', '--conf=config/bqmd-sim/bqmd-sim.yaml']
+
   bqmd-binance-spot:
     image: bqmd-binance:${TAG}
     container_name: bqmd-binance-spot

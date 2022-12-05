@@ -633,14 +633,13 @@ int StgEngImpl::unSub(StgInstId subscriber, const std::string& topic) {
 }
 
 std::tuple<int, std::string> StgEngImpl::queryHisMDBetween2Ts(
-    const std::string& topic, std::uint64_t tsBegin, std::uint64_t tsEnd,
-    std::uint32_t level) {
+    const std::string& topic, std::uint64_t tsBegin, std::uint64_t tsEnd) {
   const auto [statusCode, marketDataCond] = GetMarketDataCondFromTopic(topic);
   if (statusCode != 0) return {statusCode, ""};
   return queryHisMDBetween2Ts(
       marketDataCond->marketCode_, marketDataCond->symbolType_,
       marketDataCond->symbolCode_, marketDataCond->mdType_, tsBegin, tsEnd,
-      marketDataCond->level_);
+      marketDataCond->ext_);
 }
 
 //
@@ -650,24 +649,33 @@ std::tuple<int, std::string> StgEngImpl::queryHisMDBetween2Ts(
 std::tuple<int, std::string> StgEngImpl::queryHisMDBetween2Ts(
     MarketCode marketCode, SymbolType symbolType, const std::string& symbolCode,
     MDType mdType, std::uint64_t tsBegin, std::uint64_t tsEnd,
-    std::uint32_t level) {
+    const std::string& ext) {
   std::string addr;
-  if (mdType != MDType::Books) {
-    const auto prefix =
-        fmt::format(prefixOfQueryHisMDBetween,
-                    getConfig()["webSrv"].as<std::string>("localhost"));
+  const auto prefix =
+      fmt::format(prefixOfQueryHisMDBetween,
+                  getConfig()["webSrv"].as<std::string>("localhost"));
+  if (mdType == MDType::Books) {
+    addr = fmt::format("{}/{}/{}/{}/{}?level={}&tsBegin={}&tsEnd={}", prefix,
+                       magic_enum::enum_name(marketCode),
+                       magic_enum::enum_name(symbolType), symbolCode,
+                       magic_enum::enum_name(mdType), ext, tsBegin, tsEnd);
+  } else if (mdType == MDType::Candle) {
+    if (ext.empty()) {
+      addr = fmt::format("{}/{}/{}/{}/{}?tsBegin={}&tsEnd={}", prefix,
+                         magic_enum::enum_name(marketCode),
+                         magic_enum::enum_name(symbolType), symbolCode,
+                         magic_enum::enum_name(mdType), tsBegin, tsEnd);
+    } else {
+      addr = fmt::format("{}/{}/{}/{}/{}?detail=true&tsBegin={}&tsEnd={}",
+                         prefix, magic_enum::enum_name(marketCode),
+                         magic_enum::enum_name(symbolType), symbolCode,
+                         magic_enum::enum_name(mdType), tsBegin, tsEnd);
+    }
+  } else {
     addr = fmt::format("{}/{}/{}/{}/{}?tsBegin={}&tsEnd={}", prefix,
                        magic_enum::enum_name(marketCode),
                        magic_enum::enum_name(symbolType), symbolCode,
                        magic_enum::enum_name(mdType), tsBegin, tsEnd);
-  } else {
-    const auto prefix =
-        fmt::format(prefixOfQueryHisMDBetween,
-                    getConfig()["webSrv"].as<std::string>("localhost"));
-    addr = fmt::format("{}/{}/{}/{}/{}?level={}&tsBegin={}&tsEnd={}", prefix,
-                       magic_enum::enum_name(marketCode),
-                       magic_enum::enum_name(symbolType), symbolCode,
-                       magic_enum::enum_name(mdType), level, tsBegin, tsEnd);
   }
 
   const auto timeoutOfQueryHisMD =
@@ -688,37 +696,47 @@ std::tuple<int, std::string> StgEngImpl::queryHisMDBetween2Ts(
 }
 
 std::tuple<int, std::string> StgEngImpl::querySpecificNumOfHisMDBeforeTs(
-    const std::string& topic, std::uint64_t ts, int num, std::uint32_t level) {
+    const std::string& topic, std::uint64_t ts, int num) {
   const auto [statusCode, marketDataCond] = GetMarketDataCondFromTopic(topic);
   if (statusCode != 0) return {statusCode, ""};
   return querySpecificNumOfHisMDBeforeTs(
       marketDataCond->marketCode_, marketDataCond->symbolType_,
       marketDataCond->symbolCode_, marketDataCond->mdType_, ts, num,
-      marketDataCond->level_);
+      marketDataCond->ext_);
 }
 
 // http://192.168.19.113/v1/QueryHisMD/offset/Binance/Spot/BTC-USDT/Trades?ts=1668989747697000&offset=1
 // http://192.168.19.113/v1/QueryHisMD/offset/Binance/Spot/BTC-USDT/Books?level=20&ts=1669032414507000&offset=1000
 std::tuple<int, std::string> StgEngImpl::querySpecificNumOfHisMDBeforeTs(
     MarketCode marketCode, SymbolType symbolType, const std::string& symbolCode,
-    MDType mdType, std::uint64_t ts, int num, std::uint32_t level) {
+    MDType mdType, std::uint64_t ts, int num, const std::string& ext) {
   std::string addr;
-  if (mdType != MDType::Books) {
-    const auto prefix =
-        fmt::format(prefixOfQueryHisMDOffset,
-                    getConfig()["webSrv"].as<std::string>("localhost"));
+  const auto prefix =
+      fmt::format(prefixOfQueryHisMDOffset,
+                  getConfig()["webSrv"].as<std::string>("localhost"));
+  if (mdType == MDType::Books) {
+    addr = fmt::format("{}/{}/{}/{}/{}?level={}&ts={}&offset={}", prefix,
+                       magic_enum::enum_name(marketCode),
+                       magic_enum::enum_name(symbolType), symbolCode,
+                       magic_enum::enum_name(mdType), ext, ts, -1 * num);
+  } else if (mdType == MDType::Candle) {
+    if (ext.empty()) {
+      addr = fmt::format("{}/{}/{}/{}/{}?ts={}&offset={}", prefix,
+                         magic_enum::enum_name(marketCode),
+                         magic_enum::enum_name(symbolType), symbolCode,
+                         magic_enum::enum_name(mdType), ts, -1 * num);
+    } else {
+      addr = fmt::format("{}/{}/{}/{}/{}?detail=true&ts={}&offset={}", prefix,
+                         magic_enum::enum_name(marketCode),
+                         magic_enum::enum_name(symbolType), symbolCode,
+                         magic_enum::enum_name(mdType), ts, -1 * num);
+    }
+
+  } else {
     addr = fmt::format("{}/{}/{}/{}/{}?ts={}&offset={}", prefix,
                        magic_enum::enum_name(marketCode),
                        magic_enum::enum_name(symbolType), symbolCode,
                        magic_enum::enum_name(mdType), ts, -1 * num);
-  } else {
-    const auto prefix =
-        fmt::format(prefixOfQueryHisMDOffset,
-                    getConfig()["webSrv"].as<std::string>("localhost"));
-    addr = fmt::format("{}/{}/{}/{}/{}?level={}&ts={}&offset={}", prefix,
-                       magic_enum::enum_name(marketCode),
-                       magic_enum::enum_name(symbolType), symbolCode,
-                       magic_enum::enum_name(mdType), level, ts, -1 * num);
   }
 
   const auto timeoutOfQueryHisMD =
@@ -739,37 +757,46 @@ std::tuple<int, std::string> StgEngImpl::querySpecificNumOfHisMDBeforeTs(
 }
 
 std::tuple<int, std::string> StgEngImpl::querySpecificNumOfHisMDAfterTs(
-    const std::string& topic, std::uint64_t ts, int num, std::uint32_t level) {
+    const std::string& topic, std::uint64_t ts, int num) {
   const auto [statusCode, marketDataCond] = GetMarketDataCondFromTopic(topic);
   if (statusCode != 0) return {statusCode, ""};
   return querySpecificNumOfHisMDAfterTs(
       marketDataCond->marketCode_, marketDataCond->symbolType_,
       marketDataCond->symbolCode_, marketDataCond->mdType_, ts, num,
-      marketDataCond->level_);
+      marketDataCond->ext_);
 }
 
 // http://192.168.19.113/v1/QueryHisMD/offset/Binance/Spot/BTC-USDT/Trades?ts=1668989747697000&offset=1
 // http://192.168.19.113/v1/QueryHisMD/offset/Binance/Spot/BTC-USDT/Books?level=20&ts=1669032414507000&offset=1000
 std::tuple<int, std::string> StgEngImpl::querySpecificNumOfHisMDAfterTs(
     MarketCode marketCode, SymbolType symbolType, const std::string& symbolCode,
-    MDType mdType, std::uint64_t ts, int num, std::uint32_t level) {
+    MDType mdType, std::uint64_t ts, int num, const std::string& ext) {
   std::string addr;
-  if (mdType != MDType::Books) {
-    const auto prefix =
-        fmt::format(prefixOfQueryHisMDOffset,
-                    getConfig()["webSrv"].as<std::string>("localhost"));
+  const auto prefix =
+      fmt::format(prefixOfQueryHisMDOffset,
+                  getConfig()["webSrv"].as<std::string>("localhost"));
+  if (mdType == MDType::Books) {
+    addr = fmt::format("{}/{}/{}/{}/{}?level={}&ts={}&offset={}", prefix,
+                       magic_enum::enum_name(marketCode),
+                       magic_enum::enum_name(symbolType), symbolCode,
+                       magic_enum::enum_name(mdType), ext, ts, num);
+  } else if (mdType == MDType::Candle) {
+    if (ext.empty()) {
+      addr = fmt::format("{}/{}/{}/{}/{}?ts={}&offset={}", prefix,
+                         magic_enum::enum_name(marketCode),
+                         magic_enum::enum_name(symbolType), symbolCode,
+                         magic_enum::enum_name(mdType), ts, num);
+    } else {
+      addr = fmt::format("{}/{}/{}/{}/{}?detail=true&ts={}&offset={}", prefix,
+                         magic_enum::enum_name(marketCode),
+                         magic_enum::enum_name(symbolType), symbolCode,
+                         magic_enum::enum_name(mdType), ts, num);
+    }
+  } else {
     addr = fmt::format("{}/{}/{}/{}/{}?ts={}&offset={}", prefix,
                        magic_enum::enum_name(marketCode),
                        magic_enum::enum_name(symbolType), symbolCode,
                        magic_enum::enum_name(mdType), ts, num);
-  } else {
-    const auto prefix =
-        fmt::format(prefixOfQueryHisMDOffset,
-                    getConfig()["webSrv"].as<std::string>("localhost"));
-    addr = fmt::format("{}/{}/{}/{}/{}?level={}&ts={}&offset={}", prefix,
-                       magic_enum::enum_name(marketCode),
-                       magic_enum::enum_name(symbolType), symbolCode,
-                       magic_enum::enum_name(mdType), level, ts, num);
   }
 
   const auto timeoutOfQueryHisMD =

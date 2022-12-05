@@ -22,7 +22,7 @@ struct MarketDataCond {
   SymbolType symbolType_;
   std::string symbolCode_;
   MDType mdType_;
-  std::uint32_t level_{DEFAULT_DEPTH_LEVEL};
+  std::string ext_;
 };
 using MarketDataCondSPtr = std::shared_ptr<MarketDataCond>;
 

@@ -47,6 +47,14 @@ int MDSim::prepareInit() {
     return ret;
   }
 
+  if (CONFIG["enable"].as<bool>(false) == false) {
+    LOG_W(
+        "In order to avoid connecting the real trading environment to the "
+        "simulated market, the enable in the configuration must be changed to "
+        "true to start the service.");
+    return -1;
+  }
+
   return 0;
 }
 

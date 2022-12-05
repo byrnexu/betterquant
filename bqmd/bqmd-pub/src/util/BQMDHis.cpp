@@ -395,7 +395,7 @@ std::tuple<int, std::vector<IndexSPtr>> MDHis::MakeIndexGroup(
   std::vector<IndexSPtr> indexGroup;
   std::ifstream in(filename.c_str());
   if (!in.is_open()) {
-    LOG_W("Make index group failed because of open file {} failed.", filename);
+    LOG_D("Make index group failed because of open file {} failed.", filename);
     return {SCODE_HIS_MD_MAKE_INDEX_GROUP_FAILED, indexGroup};
   }
 
@@ -468,7 +468,7 @@ std::tuple<int, Ts2IndexWithFilenameGroupSPtr> MDHis::LoadIndexGroupFromFile(
 
   std::ifstream in(filename.c_str(), std::ios::binary | std::ios::ate);
   if (!in.is_open()) {
-    LOG_W("Load index group failed because of open file {} failed. ", filename);
+    LOG_D("Load index group failed because of open file {} failed. ", filename);
     return {SCODE_HIS_MD_LOAD_INDEX_GROUP_FAILED, ts2IndexGroup};
   }
 

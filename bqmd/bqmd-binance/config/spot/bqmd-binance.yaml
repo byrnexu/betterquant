@@ -3,16 +3,16 @@ symbolType: Spot
 
 saveMarketData: true
 
-addrOfSymbolTable: "https://api.binance.com/api/v3/exchangeInfo"
-addrOfWSPub: "wss://stream.binance.com:9443/ws"
+addrOfSymbolTable: "https://data.binance.com/api/v3/exchangeInfo"
+addrOfWSPub: "wss://data-stream.binance.com:9443/ws"
 
 enableSymbolTableMaint: true
 
 wsParam: svcName=WSCli; milliSecIntervalOfSendPingAndCheckConn=5000; sendPing=1; expireTimeOfConn=120000
 wsTaskDispatcherParam: moduleName=wsCliTaskDispatcher; taskRandAssignedThreadPoolSize=0; taskSpecificThreadPoolSize=2
 
-milliSecIntervalOfSymbolTableMaint: 30000
-timeoutOfQuerySymbolTableFromExch: 30000
+milliSecIntervalOfSymbolTableMaint: 60000
+timeoutOfQuerySymbolTableFromExch: 60000
 
 dbEngParam: svcName=dbEng; dbName=BetterQuant; host=0.0.0.0; port=3306; username=root; password=showmethemoney
 dbTaskDispatcherParam: moduleName=dbTaskDispatcher
@@ -24,7 +24,7 @@ topicGroupMustSubInAdvance: config/bqmd-binance/spot/TopicGroupMustSubInAdvance.
 topicGroupInBlackList: config/bqmd-binance/spot/TopicGroupInBlackList.yaml
 thresholdOfReSubWithoutRecvMD: config/bqmd-binance/spot/ThresholdOfReSub.yaml
 
-addrOfSnapshot: https://api.binance.com/api/v3/depth?symbol=symbolCode&limit=1000
+addrOfSnapshot: https://data.binance.com/api/v3/depth?symbol=symbolCode&limit=1000
 timeoutOfQuerySnapshot: 60000
 
 defaultExchMDTypeBooks: depth@100ms

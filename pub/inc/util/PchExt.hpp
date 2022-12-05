@@ -65,6 +65,7 @@
 #include <boost/dll/shared_library.hpp>
 #include <boost/dll/shared_library_load_mode.hpp>
 #include <boost/dll/smart_library.hpp>
+#include <boost/exception/all.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/generator_iterator.hpp>
 #include <boost/interprocess/creation_tags.hpp>
@@ -97,6 +98,7 @@
 #include <boost/regex.hpp>
 #include <boost/serialization/singleton.hpp>
 #include <boost/spirit/include/qi.hpp>
+#include <boost/stacktrace.hpp>
 #include <boost/uuid/detail/md5.hpp>
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_generators.hpp>

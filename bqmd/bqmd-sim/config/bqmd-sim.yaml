@@ -1,7 +1,9 @@
-playbackSpeed: 5
+enable: false
 
-playbackDateTimeStart: 20221125T020000
-playbackDateTimeEnd: 20221125T050000
+playbackSpeed: 0.1
+
+playbackDateTimeStart: 20221205T020000
+playbackDateTimeEnd: 20221205T120000
 
 playbackTopicGroup:
   - MD@Binance@Spot@BTC-USDT@Trades
