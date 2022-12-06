@@ -69,7 +69,7 @@ class MDHis {
       IndexType indexType = IndexType::ByExchTs,
       std::uint32_t maxNumOfHisMDCanBeQeuryEachTime = 10000);
 
-  static int CreateIdxFileIfNotExists(const std::string& filename,
+  static int CreateIdxFileIfNotExists(const std::string& filenameOfIdx,
                                       IndexType indexType);
 
   static std::string ToJson(int statusCode,

@@ -13,7 +13,7 @@ sys.path.append(".")
 
 class StgInstTaskHandler(StgInstTaskHandlerBase):
     def on_stg_start(self):
-        # Install a timer for stg inst 1 that fires 1 time after 3000 ms
+        # Install a timer for stg inst 1 that fires 1 time after a while
         self.stg_eng.install_stg_inst_timer(
             stg_inst_id=1,
             timer_name="TestSimedOrder",
@@ -22,7 +22,7 @@ class StgInstTaskHandler(StgInstTaskHandlerBase):
             max_exec_times=1,
         )
 
-        # Install a timer for stg inst 1 that fires 1 time after 3600 s
+        # Install a timer for stg inst 1 that fires 1 time after a while
         self.stg_eng.install_stg_inst_timer(
             stg_inst_id=1,
             timer_name="TestRealOrder",

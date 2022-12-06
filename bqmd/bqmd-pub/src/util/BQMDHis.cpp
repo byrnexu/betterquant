@@ -312,19 +312,42 @@ std::tuple<int, Ts2HisMDGroupSPtr> MDHis::LoadHisMDAfterTs(
   return {0, ts2HisMDGroup};
 }
 
-int MDHis::CreateIdxFileIfNotExists(const std::string& filename,
+int MDHis::CreateIdxFileIfNotExists(const std::string& filenameOfIdx,
                                     IndexType indexType) {
-  if (!boost::filesystem::exists(filename)) {
+  const auto filenameOfMD =
+      GetMDFilenameByIdxFilename(filenameOfIdx, indexType);
+
+  bool mustCreateIdxFile = false;
+  std::time_t lastWriteTimeOfMDFile;
+  std::time_t lastWriteTimeOfIDXFile;
+  if (boost::filesystem::exists(filenameOfIdx)) {
+    try {
+      lastWriteTimeOfMDFile = boost::filesystem::last_write_time(filenameOfMD);
+      lastWriteTimeOfIDXFile =
+          boost::filesystem::last_write_time(filenameOfIdx);
+    } catch (const std::exception& e) {
+      LOG_W(
+          "Create idx file failed because of "
+          "get last write time of file {} failed. [{}]",
+          filenameOfIdx, e.what());
+      return -1;
+    }
+    if (lastWriteTimeOfMDFile > lastWriteTimeOfIDXFile) {
+      mustCreateIdxFile = true;
+    }
+  } else {
+    mustCreateIdxFile = true;
+  }
+
+  if (mustCreateIdxFile) {
     int statusCode = 0;
     std::vector<IndexSPtr> indexGroup;
-
-    std::tie(statusCode, indexGroup) = MakeIndexGroup(
-        GetMDFilenameByIdxFilename(filename, indexType), indexType);
+    std::tie(statusCode, indexGroup) = MakeIndexGroup(filenameOfMD, indexType);
     if (statusCode != 0) {
       return statusCode;
     }
 
-    statusCode = SaveIndexGroupToFile(filename, indexGroup);
+    statusCode = SaveIndexGroupToFile(filenameOfIdx, indexGroup);
     if (statusCode != 0) {
       return statusCode;
     }
