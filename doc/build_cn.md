@@ -42,6 +42,6 @@
 | inc/cxx | 编写cxx策略需要的头文件 |  |
 | lib/libbqstgeng-cxx.a | 编写cxx策略需要的库文件 |  |
 | bin/bqstgeng.so | 编写python策略需要的库文件 |  |
-| bin/stgeng.py | python策略代码样例 |  |
+| bin/stgeng.py | python策略库 |  |
 
 lib/libbqstgeng-cxx.a 库文件非常大，因为包含很多符号，如果觉得太大可以用 strip libbqstgeng-cxx.a 将符号删除，当然没有符号的话策略 crash 会导致问题难以定位，建议保留符号。  

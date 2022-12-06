@@ -73,7 +73,7 @@ cd bqdb && bash run-db.sh &
 ```
 * 启动 IPC 组件
 ```shell
-iox-roudi &
+iox-roudi -m off &
 ```
 * 运行以下服务
 ```shell

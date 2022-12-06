@@ -1,3 +1,60 @@
+目录
+=================
+
+* [文档](#文档)
+   * [策略相关](#-策略相关)
+      * [说明](#-说明)
+      * [新建策略](#-新建策略)
+      * [启动](#-启动)
+      * [DEMO](#-demo)
+      * [策略接口](#-策略接口)
+         * [下单](#下单)
+         * [撤单](#撤单)
+         * [订阅](#订阅)
+         * [取消订阅](#取消订阅)
+         * [给子策略安装定时器](#给子策略安装定时器)
+         * [根据区间\[tsBegin, tsEnd)查询历史行情](#根据区间tsbegin-tsend查询历史行情)
+         * [从ts往前获取num条历史行情](#根据记录条数查询历史行情从ts往前获取num条历史行情)
+         * [从ts往后获取num条历史行情](#根据记录条数查询历史行情从ts往后获取num条历史行情)
+         * [子策略运行过程中的一些数据保存](#子策略运行过程中的一些数据保存请用json格式)
+         * [加载子策略运行过程中生成的数据](#加载子策略运行过程中生成的数据)
+         * [委托回报](#委托回报)
+         * [撤单应答](#撤单应答)
+         * [逐笔成交](#逐笔成交)
+         * [订单簿](#订单簿)
+         * [K线](#k线)
+         * [Tickers](#tickers)
+         * [策略启动事件](#策略启动事件)
+         * [子策略启动事件](#子策略启动事件)
+         * [账户层面仓位变动信息](#账户层面仓位变动信息收到的是全量盈亏等数据有变化就收到通知其他层面类似)
+         * [账户层面仓位快照](#账户层面仓位快照收到的是全量定时收到通知其他层面类似)
+         * [策略层面仓位变动信息](#策略层面仓位变动信息)
+         * [策略层面仓位快照](#策略层面仓位快照)
+         * [子策略层面仓位变动信息](#子策略层面仓位变动信息)
+         * [子策略层面仓位快照](#子策略层面仓位快照)
+         * [账户资产变动信息](#账户资产变动信息)
+         * [账户资产快照](#账户资产快照)
+         * [新增子策略事件](#新增子策略事件)
+         * [移除子策略事件](#移除子策略事件)
+         * [子策略参数变化事件](#子策略参数变化事件)
+         * [子策略定时器触发事件](#子策略定时器触发事件)
+      * [算法单接口](#-算法单接口)
+   * [web服务](#-web服务)
+      * [相关接口](#-相关接口)
+         * [人工干预指令](#人工干预指令)
+         * [根据区间查询历史行情](#根据区间查询历史行情)
+         * [根据记录数往前查num条记录](#根据记录数往前查num条记录)
+         * [根据记录数往后查num条记录](#根据记录数往后查num条记录)
+   * [行情服务和配置](#-行情服务和配置)
+   * [风控插件](#-风控插件)
+   * [历史行情回放](#-历史行情回放)
+   * [模拟成交](#-模拟成交)
+   * [数据库表](#-数据库表)
+
+
+<br/>  
+
+
 # 文档
 
 ## 📒 策略相关
@@ -90,7 +147,7 @@ stgId: 10001
 <br/>
 
 ### 🔥 策略接口
-* 下单
+#### 下单
 ```c++
   std::tuple<int, OrderId> StgEng::order(const StgInstInfoSPtr& stgInstInfo, AcctId acctId,
                                          const std::string& symbolCode, Side side, PosSide posSide,
@@ -98,13 +155,13 @@ stgId: 10001
 ```
 <br/>
 
-* 撤单
+#### 撤单
 ```c++
   int StgEng::cancelOrder(OrderId orderId);
 ```
 <br/>
 
-* 订阅
+#### 订阅
 ```c++
   int StgEng::sub(StgInstId subscriber, const std::string& topic);
 ```
@@ -117,13 +174,13 @@ stgId: 10001
 &emsp;&emsp;topic 为 "shm://RISK.PubChannel.Trade/PosInfo/StgId/10000"，注意大小写敏感  
 <br/>  
 
-* 取消订阅
+#### 取消订阅
 ```c++
   int StgEng::unSub(StgInstId subscriber, const std::string& topic);
 ```
 <br/>
 
-* 给子策略安装定时器
+#### 给子策略安装定时器
 ```c++
   void StgEng::installStgInstTimer(StgInstId stgInstId, const std::string& timerName,
                                    ExecAtStartup execAtStartUp, std::uint32_t millicSecInterval,
@@ -132,7 +189,43 @@ stgId: 10001
 &emsp;&emsp; 定时器最小间隔为1毫秒，但是后台定时监测任务是1毫秒触发一次，所以如果入参 millicSecInterval 为1的话，定时器触发误差会比较大，理论上实际触发间隔可能会达到2毫秒。
 <br/>
 
-* 子策略运行过程中的一些数据保存，请用json格式  
+#### 根据区间\[tsBegin, tsEnd)查询历史行情
+```c++
+   std::tuple<int, std::string> queryHisMDBetween2Ts(
+       MarketCode marketCode, SymbolType symbolType,
+       const std::string& symbolCode, MDType mdType, std::uint64_t tsBegin,
+       std::uint64_t tsEnd, const std::string& ext = "");
+ 
+   std::tuple<int, std::string> queryHisMDBetween2Ts(const std::string& topic,
+                                                     std::uint64_t tsBegin,
+                                                     std::uint64_t tsEnd);
+```                                                     
+<br/>
+ 
+#### 根据记录条数查询历史行情，从ts往前获取num条历史行情
+```c++
+   std::tuple<int, std::string> querySpecificNumOfHisMDBeforeTs(
+       MarketCode marketCode, SymbolType symbolType,
+       const std::string& symbolCode, MDType mdType, std::uint64_t ts, int num,
+       const std::string& ext = "");
+ 
+   std::tuple<int, std::string> querySpecificNumOfHisMDBeforeTs(
+       const std::string& topic, std::uint64_t ts, int num);
+```                                                     
+<br/>
+ 
+#### 根据记录条数查询历史行情，从ts往后获取num条历史行情
+```c++
+   std::tuple<int, std::string> querySpecificNumOfHisMDAfterTs(
+       MarketCode marketCode, SymbolType symbolType,
+       const std::string& symbolCode, MDType mdType, std::uint64_t ts, int num,
+       const std::string& ext = "");
+ 
+   std::tuple<int, std::string> querySpecificNumOfHisMDAfterTs(
+       const std::string& topic, std::uint64_t ts, int num);
+```       
+
+#### 子策略运行过程中的一些数据保存，请用json格式  
 策略除了启动参数之外，另外在策略的运行过程中可能会产生一些中间数据需要保存下来，可以使用以下接口。
 ```c++
    bool StgEng::saveStgPrivateData(StgInstId stgInstId, const std::string& jsonStr);
@@ -143,69 +236,69 @@ rootDirOfStgPrivateData: /dev/shm
 ```
 <br/>
 
-* 加载子策略运行过程中生成的数据
+#### 加载子策略运行过程中生成的数据
 ```c++
    bool StgEng::loadStgPrivateData(StgInstId stgInstId);
 ```
 <br/>
 
-* 委托回报
+#### 委托回报
 ```c++
    virtual void StgInstTaskHandlerBase::onOrderRet(const StgInstInfoSPtr& stgInstInfo,
                                                    const OrderInfoSPtr& orderInfo) {}
 ```
 <br/>
 
-* 撤单应答
+#### 撤单应答
 ```c++
    virtual void StgInstTaskHandlerBase::onCancelOrderRet(const StgInstInfoSPtr& stgInstInfo,
                                                          const OrderInfoSPtr& orderInfo) {}
 ```
 <br/>
 
-* 逐笔成交
+#### 逐笔成交
 ```c++
    virtual void StgInstTaskHandlerBase::onTrades(const StgInstInfoSPtr& stgInstInfo,
                                                  const TradesSPtr& trades) {}
 ```
 <br/>
  
-* 订单簿
+#### 订单簿
 ```c++
    virtual void StgInstTaskHandlerBase::onBooks(const StgInstInfoSPtr& stgInstInfo,
                                                 const BooksSPtr& books) {}
 ```
 <br/>
  
-* K线
+#### K线
 ```c++
    virtual void StgInstTaskHandlerBase::onCandle(const StgInstInfoSPtr& stgInstInfo,
                                                  const CandleSPtr& candle) {}
 ```
 <br/>
  
-* Tickers
+#### Tickers
 ```c++
    virtual void StgInstTaskHandlerBase::onTickers(const StgInstInfoSPtr& stgInstInfo,
                                                   const TickersSPtr& tickers) {}
 ```
 <br/>
 
-* 策略启动事件
+#### 策略启动事件
 ```c++
    virtual void StgInstTaskHandlerBase::onStgStart() {}
 ```
 &emsp;&emsp;策略启动的时候触发，这个事件会 dispatch 给 stgInstId 为 1 的子策略。  
 <br/>
 
-* 子策略启动事件
+#### 子策略启动事件
 ```c++
    virtual void StgInstTaskHandlerBase::onStgInstStart(const StgInstInfoSPtr& stgInstInfo) {}
 ```
 &emsp;&emsp;子策略启动的时候触发，每个子策略启动的时候都会接收到这个事件。  
 <br/>
 
-* 账户层面仓位变动信息（收到的是全量，盈亏等数据有变化就收到通知，其他层面类似）
+#### 账户层面仓位变动信息（收到的是全量，盈亏等数据有变化就收到通知，其他层面类似）
 ```c++
    // 需要先 sub(stgInstInfo.stgInstId_, topic = "shm://RISK.PubChannel.Trade/PosInfo/AcctId/10001");
    virtual void StgInstTaskHandlerBase::onPosUpdateOfAcctId(const StgInstInfoSPtr& stgInstInfo,
@@ -214,7 +307,7 @@ rootDirOfStgPrivateData: /dev/shm
 &emsp;&emsp;订阅了账户层面的仓位变动信息，那么账户的仓位，盈亏一有变化，就会收到这个事件，下面策略层面、子策略层面都类似。  
 <br/>
 
-* 账户层面仓位快照（收到的是全量，定时收到通知，其他层面类似）
+#### 账户层面仓位快照（收到的是全量，定时收到通知，其他层面类似）
 ```c++
    // 需要先 sub(stgInstInfo.stgInstId_, topic = "shm://RISK.PubChannel.Trade/PosInfo/AcctId/10001");
    virtual void StgInstTaskHandlerBase::onPosSnapshotOfAcctId(const StgInstInfoSPtr& stgInstInfo,
@@ -223,7 +316,7 @@ rootDirOfStgPrivateData: /dev/shm
 &emsp;&emsp;订阅了账户层面的仓位变动信息，就会定时触发这个事件，下面策略层面、子策略层面都类似。  
 <br/>
 
-* 策略层面仓位变动信息
+#### 策略层面仓位变动信息
 ```c++
    // 需要先 sub(stgInstInfo.stgInstId_, "shm://RISK.PubChannel.Trade/PosInfo/StgId/10001")
    virtual void StgInstTaskHandlerBase::onPosUpdateOfStgId(const StgInstInfoSPtr& stgInstInfo,
@@ -231,7 +324,7 @@ rootDirOfStgPrivateData: /dev/shm
 ```
 <br/>
 
-* 策略层面仓位快照
+#### 策略层面仓位快照
 ```c++
    // 需要先 sub(stgInstInfo.stgInstId_, "shm://RISK.PubChannel.Trade/PosInfo/StgId/10001")
    virtual void StgInstTaskHandlerBase::onPosSnapshotOfStgId(const StgInstInfoSPtr& stgInstInfo,
@@ -239,7 +332,7 @@ rootDirOfStgPrivateData: /dev/shm
 ```
 <br/>
 
-* 子策略层面仓位变动信息
+#### 子策略层面仓位变动信息
 ```c++
    // 需要先 sub(stgInstInfo.stgInstId_, "shm://RISK.PubChannel.Trade/PosInfo/StgId/10000/StgInstId/1")
    virtual void StgInstTaskHandlerBase::onPosUpdateOfStgInstId(const StgInstInfoSPtr& stgInstInfo,
@@ -247,7 +340,7 @@ rootDirOfStgPrivateData: /dev/shm
 ```
 <br/>
 
-* 子策略层面仓位快照
+#### 子策略层面仓位快照
 ```c++
    // 需要先 sub(stgInstInfo.stgInstId_, "shm://RISK.PubChannel.Trade/PosInfo/StgId/10000/StgInstId/1")
    virtual void StgInstTaskHandlerBase::onPosSnapshotOfStgInstId(const StgInstInfoSPtr& stgInstInfo,
@@ -255,7 +348,7 @@ rootDirOfStgPrivateData: /dev/shm
 ```
 <br/>
 
-* 账户资产变动信息
+#### 账户资产变动信息
 ```c++
    // 需要先 sub(stgInstInfo.stgInstId_, "shm://RISK.PubChannel.Trade/AssetInfo/AcctId/10001")
    virtual void StgInstTaskHandlerBase::onAssetsUpdate(const StgInstInfoSPtr& stgInstInfo,
@@ -264,7 +357,7 @@ rootDirOfStgPrivateData: /dev/shm
 &emsp;&emsp;订阅了账户层面的资产变动信息，账户资产一有变化就会触发此事件。  
 <br/>
 
-* 账户资产快照
+#### 账户资产快照
 ```c++
    // 需要先 sub(stgInstInfo.stgInstId_, "shm://RISK.PubChannel.Trade/AssetInfo/AcctId/10001")
    virtual void StgInstTaskHandlerBase::onAssetsSnapshot(const StgInstInfoSPtr& stgInstInfo,
@@ -273,36 +366,97 @@ rootDirOfStgPrivateData: /dev/shm
 &emsp;&emsp;订阅了账户层面的资产变动信息，就会定时触发此事件。  
 <br/>
 
-* 新增子策略事件
+#### 新增子策略事件
 ```c++
    virtual void StgInstTaskHandlerBase::onStgInstAdd(const StgInstInfoSPtr& stgInstInfo) {}
 ```
 &emsp;&emsp;新增一个子策略的时候，此事件会触发。  
 <br/>
 
-* 移除子策略事件
+#### 移除子策略事件
 ```c++
    virtual void StgInstTaskHandlerBase::onStgInstDel(const StgInstInfoSPtr& stgInstInfo) {}
 ```
 &emsp;&emsp;移除一个子策略的时候，此事件会触发。  
 <br/>
 
-* 子策略参数变化事件
+#### 子策略参数变化事件
 ```c++
    virtual void StgInstTaskHandlerBase::onStgInstChg(const StgInstInfoSPtr& stgInstInfo) {}
 ```
 &emsp;&emsp;修改一个子策略参数的时候，此事件会触发。  
 <br/>
 
-* 子策略定时器触发事件
+#### 子策略定时器触发事件
 ```c++
-   virtual void StgInstTaskHandlerBase::onStgInstTimer(const StgInstInfoSPtr& stgInstInfo) {}
+   virtual void StgInstTaskHandlerBase::onStgInstTimer(const StgInstInfoSPtr& stgInstInfo, const std::string& timerName) {}
 ```
 &emsp;&emsp;给子策略安装一个定时器的时候，此事件会触发。  
 <br/>
 
 ### 🔥 算法单接口
 TODO  
+<br/>
+
+## 📒 web服务
+### 🔥 相关接口  
+#### 人工干预指令
+POST /v1/manualIntervention
+
+| 名称 | 类型 | 描述 |
+| ------ | ------ | ------ |
+| stgId | INT | 策略编号 |
+| stgInstId | INT | 子策略编号 |
+
+body中传输JSON格式数据。  
+<br/>
+
+#### 根据区间查询历史行情  
+GET /v1/QueryHisMD/between/Binance/Spot/BTC-USDT/Trades  
+GET /v1/QueryHisMD/between/Binance/Spot/BTC-USDT/Books  
+GET /v1/QueryHisMD/between/Binance/Spot/BTC-USDT/Candle  
+GET /v1/QueryHisMD/between/Binance/Spot/BTC-USDT/Tickers  
+
+| 名称 | 类型 | 描述 |
+| ------ | ------ | ------ |
+| tsBegin | INT64 | 查询区间起点 |
+| tsEnd | INT64 | 查询区间终点 |
+| level | INT | 订单簿档数（仅对Books生效） |
+| detail | BOOL | 是否查询Candle区间内的所有数据（仅对Candle生效） |
+
+&emsp;&emsp;
+<br/>
+
+#### 根据记录数往前查num条记录  
+GET /v1/QueryHisMD/before/Binance/Spot/BTC-USDT/Trades  
+GET /v1/QueryHisMD/before/Binance/Spot/BTC-USDT/Books  
+GET /v1/QueryHisMD/before/Binance/Spot/BTC-USDT/Candle  
+GET /v1/QueryHisMD/before/Binance/Spot/BTC-USDT/Tickers  
+
+| 名称 | 类型 | 描述 |
+| ------ | ------ | ------ |
+| ts | INT64 | 查询区间起点 |
+| num | INT | 查询记录数 |
+| level | INT | 订单簿档数（仅对Books生效） |
+| detail | BOOL | 是否查询Candle区间内的所有数据（仅对Candle生效） |
+
+&emsp;&emsp;
+<br/>
+
+#### 根据记录数往后查num条记录  
+GET /v1/QueryHisMD/after/Binance/Spot/BTC-USDT/Trades  
+GET /v1/QueryHisMD/after/Binance/Spot/BTC-USDT/Books  
+GET /v1/QueryHisMD/after/Binance/Spot/BTC-USDT/Candle  
+GET /v1/QueryHisMD/after/Binance/Spot/BTC-USDT/Tickers  
+
+| 名称 | 类型 | 描述 |
+| ------ | ------ | ------ |
+| ts | INT64 | 查询区间起点 |
+| num | INT | 查询记录数 |
+| level | INT | 订单簿档数（仅对Books生效） |
+| detail | BOOL | 是否查询Candle区间内的所有数据（仅对Candle生效） |
+
+&emsp;&emsp;
 <br/>
 
 ## 📒 行情服务和配置
@@ -327,7 +481,7 @@ topicGroup:
   - BTC-USDT@Candle     # k线
   - BTC-USDT@Books@400  # 订单簿（目前只支持400档）
 ```
-如果没有这个配置，即使策略订阅了BTC-USDT成交明细，也收不到行情，之所以这么做的原因是因为以前我工作的时候有同事订阅了很多品种，也不取消订阅，对系统的性能产生了一定的影响。  
+如果没有这个配置，即使策略订阅了BTC-USDT成交明细，也收不到行情。  
 <br/>
 
 ## 📒 风控插件
@@ -341,6 +495,24 @@ topicGroup:
 1. 当风控插件配置文件发生变化的时候，系统会自动重新加载该插件，所以非必要不要修改生产环境里的配置文件。
 <br/>
 
+## 📒 历史行情回放
+* 启动命令  
+```bash
+./bqmd-sim --conf=config/bqmd-sim/bqmd-sim.yaml
+```
+配置文件中可以指定回放速度、回放的topic等信息。配置中的enable设定为true才能启动行情回放。
+<br/>
+
+## 📒 模拟成交
+* 启动命令  
+```bash
+./bqtd-binance --conf=config/bqtd-binance/spot/bqtd-binance.yaml
+```
+和启动交易网关的命令一样，注意配置中的simedMode项下的enable必须设定为true才能进入模拟成交模式。
+<br/>
+<br/>
+
+
 ## 📒 数据库表
 系统本身是全内存交易，数据库只是一个存放一些基本信息和交易流水的地方。
 
@@ -351,6 +523,7 @@ topicGroup:
 | 📰 externalStatusCode | 外部状态码 | 存放系统内部状态码和交易所状态码之间的映射关系 |
 | 📰 hisAssetInfo | 历史资产信息 | 每分钟 assetInfo 会自动备份到 hisAssetInfo |
 | 📰 hisPnl | 历史pnl信息 | PosSnapshot::saveToDB 会插入 pnl 到这个表 |
+| 📰 hisPosInfo | 历史仓位信息 | 历史仓位变动信息，结合历史行情可用于计算历史pnl变动情况。 |
 | 📰 orderInfo | 订单流水 | 包含每个订单的详细信息 |
 | 📰 posInfo | 仓位信息 | 仓位的详细信息 |
 | 📰 productInfo | 产品信息 | 创建产品信息用于产品层面的资金、仓位和订单维护 |

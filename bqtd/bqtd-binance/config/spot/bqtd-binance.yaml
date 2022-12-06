@@ -3,7 +3,7 @@ symbolType: Spot
 acctId: 10001
 
 simedMode:
-  enable: true
+  enable: false
   feeCurrency: ""
   feeRatioOfTaker: 0.003
   feeRatioOfMaker: 0.002
