@@ -9,7 +9,10 @@
 ```bash
    cd docker && bash make-images.sh
 ```
-&emsp;&emsp;Use command docker images. You can see the created images.
+&emsp;&emsp;Use command docker images. You can see the created images.  
+
+[<img src="../assets/images.png" width="800"/>]()
+
 
 ## 🔥 Run
 
@@ -19,6 +22,8 @@
 ```bash
    bash run-base.sh
 ```
+[<img src="../assets/containers.png" width="800"/>]()
+
 &emsp;&emsp;Use command docker ps. You can see several services started.  
 
 * Create a trading account  

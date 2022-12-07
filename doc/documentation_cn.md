@@ -24,6 +24,7 @@
          * [订单簿](#订单簿)
          * [K线](#k线)
          * [Tickers](#tickers)
+         * [人工干预指令处理](#人工干预指令处理)
          * [策略启动事件](#策略启动事件)
          * [子策略启动事件](#子策略启动事件)
          * [账户层面仓位变动信息](#账户层面仓位变动信息收到的是全量盈亏等数据有变化就收到通知其他层面类似)
@@ -186,7 +187,7 @@ stgId: 10001
                                    ExecAtStartup execAtStartUp, std::uint32_t millicSecInterval,
                                    std::uint64_t maxExecTimes = UINT64_MAX);
 ```
-&emsp;&emsp; 定时器最小间隔为1毫秒，但是后台定时监测任务是1毫秒触发一次，所以如果入参 millicSecInterval 为1的话，定时器触发误差会比较大，理论上实际触发间隔可能会达到2毫秒。
+&emsp;&emsp; 定时器最小间隔为1毫秒，但是后台定时监测任务是1毫秒触发一次，所以如果入参 millicSecInterval 为1的话，定时器触发误差会比较大，理论上实际触发间隔可能会达到2毫秒。  
 <br/>
 
 #### 根据区间\[tsBegin, tsEnd)查询历史行情
@@ -224,7 +225,8 @@ stgId: 10001
    std::tuple<int, std::string> querySpecificNumOfHisMDAfterTs(
        const std::string& topic, std::uint64_t ts, int num);
 ```       
-
+<br/>
+ 
 #### 子策略运行过程中的一些数据保存，请用json格式  
 策略除了启动参数之外，另外在策略的运行过程中可能会产生一些中间数据需要保存下来，可以使用以下接口。
 ```c++
@@ -282,6 +284,15 @@ rootDirOfStgPrivateData: /dev/shm
    virtual void StgInstTaskHandlerBase::onTickers(const StgInstInfoSPtr& stgInstInfo,
                                                   const TickersSPtr& tickers) {}
 ```
+<br/>
+
+#### 人工干预指令处理
+```c++
+   virtual void onStgManualIntervention(const StgInstInfoSPtr& stgInstInfo,
+                                        const CommonIPCDataSPtr& commonIPCData) {
+   }
+```
+此消息在 **[人工干预指令](#人工干预指令)** 中发起，在这里触发。  
 <br/>
 
 #### 策略启动事件
@@ -401,21 +412,24 @@ TODO
 ## 📒 web服务
 ### 🔥 相关接口  
 #### 人工干预指令
-POST /v1/manualIntervention
+* POST /v1/manualIntervention
 
 | 名称 | 类型 | 描述 |
 | ------ | ------ | ------ |
 | stgId | INT | 策略编号 |
 | stgInstId | INT | 子策略编号 |
 
-body中传输JSON格式数据。  
+body中传输JSON格式数据。 
+
+在 **[人工干预指令处理](#人工干预指令处理)** 收到此消息编写代码处理。
+
 <br/>
 
 #### 根据区间查询历史行情  
-GET /v1/QueryHisMD/between/Binance/Spot/BTC-USDT/Trades  
-GET /v1/QueryHisMD/between/Binance/Spot/BTC-USDT/Books  
-GET /v1/QueryHisMD/between/Binance/Spot/BTC-USDT/Candle  
-GET /v1/QueryHisMD/between/Binance/Spot/BTC-USDT/Tickers  
+* GET /v1/QueryHisMD/between/Binance/Spot/BTC-USDT/Trades  
+* GET /v1/QueryHisMD/between/Binance/Spot/BTC-USDT/Books  
+* GET /v1/QueryHisMD/between/Binance/Spot/BTC-USDT/Candle  
+* GET /v1/QueryHisMD/between/Binance/Spot/BTC-USDT/Tickers  
 
 | 名称 | 类型 | 描述 |
 | ------ | ------ | ------ |
@@ -428,10 +442,10 @@ GET /v1/QueryHisMD/between/Binance/Spot/BTC-USDT/Tickers
 <br/>
 
 #### 根据记录数往前查num条记录  
-GET /v1/QueryHisMD/before/Binance/Spot/BTC-USDT/Trades  
-GET /v1/QueryHisMD/before/Binance/Spot/BTC-USDT/Books  
-GET /v1/QueryHisMD/before/Binance/Spot/BTC-USDT/Candle  
-GET /v1/QueryHisMD/before/Binance/Spot/BTC-USDT/Tickers  
+* GET /v1/QueryHisMD/before/Binance/Spot/BTC-USDT/Trades  
+* GET /v1/QueryHisMD/before/Binance/Spot/BTC-USDT/Books  
+* GET /v1/QueryHisMD/before/Binance/Spot/BTC-USDT/Candle  
+* GET /v1/QueryHisMD/before/Binance/Spot/BTC-USDT/Tickers  
 
 | 名称 | 类型 | 描述 |
 | ------ | ------ | ------ |
@@ -444,10 +458,10 @@ GET /v1/QueryHisMD/before/Binance/Spot/BTC-USDT/Tickers
 <br/>
 
 #### 根据记录数往后查num条记录  
-GET /v1/QueryHisMD/after/Binance/Spot/BTC-USDT/Trades  
-GET /v1/QueryHisMD/after/Binance/Spot/BTC-USDT/Books  
-GET /v1/QueryHisMD/after/Binance/Spot/BTC-USDT/Candle  
-GET /v1/QueryHisMD/after/Binance/Spot/BTC-USDT/Tickers  
+* GET /v1/QueryHisMD/after/Binance/Spot/BTC-USDT/Trades  
+* GET /v1/QueryHisMD/after/Binance/Spot/BTC-USDT/Books  
+* GET /v1/QueryHisMD/after/Binance/Spot/BTC-USDT/Candle  
+* GET /v1/QueryHisMD/after/Binance/Spot/BTC-USDT/Tickers  
 
 | 名称 | 类型 | 描述 |
 | ------ | ------ | ------ |

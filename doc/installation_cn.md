@@ -9,7 +9,10 @@
 ```bash
    cd docker && bash make-images.sh
 ```
-&emsp;&emsp;docker images 可以看到创建的 images
+&emsp;&emsp;docker images 可以看到创建的 images  
+
+[<img src="../assets/images.png" width="800"/>]()
+
 
 ## 🔥 运行
 
@@ -19,6 +22,8 @@
 ```bash
    bash run-base.sh
 ```
+[<img src="../assets/containers.png" width="800"/>]()
+
 &emsp;&emsp;docker ps 可以看到启动的几个服务。  
 
 * 创建交易账号  

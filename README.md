@@ -2,7 +2,7 @@
 
 [![github](https://img.shields.io/badge/github-byrnexu-brightgreen.svg)](https://github.com/byrnexu)  
 
-[<img src="./assets/logo-big.png" width="180" />]()
+[<img src="./assets/logo.png" width="180" />]()
 
 **Better quant today, best quant tomorrow.** 💪  
 
