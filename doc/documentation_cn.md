@@ -14,15 +14,15 @@
          * [取消订阅](#取消订阅)
          * [给子策略安装定时器](#给子策略安装定时器)
          * [根据区间\[tsBegin, tsEnd)查询历史行情](#根据区间tsbegin-tsend查询历史行情)
-         * [从ts往前获取num条历史行情](#根据记录条数查询历史行情从ts往前获取num条历史行情)
-         * [从ts往后获取num条历史行情](#根据记录条数查询历史行情从ts往后获取num条历史行情)
+         * [根据时间点往前获取num条历史行情](#根据记录条数查询历史行情从ts往前获取num条历史行情)
+         * [根据时间点往后获取num条历史行情](#根据记录条数查询历史行情从ts往后获取num条历史行情)
          * [子策略运行过程中的一些数据保存](#子策略运行过程中的一些数据保存请用json格式)
          * [加载子策略运行过程中生成的数据](#加载子策略运行过程中生成的数据)
          * [委托回报](#委托回报)
          * [撤单应答](#撤单应答)
          * [逐笔成交](#逐笔成交)
          * [订单簿](#订单簿)
-         * [K线](#k线)
+         * [Candle](#Candle)
          * [Tickers](#tickers)
          * [人工干预指令处理](#人工干预指令处理)
          * [策略启动事件](#策略启动事件)
@@ -44,8 +44,8 @@
       * [相关接口](#-相关接口)
          * [人工干预指令](#人工干预指令)
          * [根据区间查询历史行情](#根据区间查询历史行情)
-         * [根据记录数往前查num条记录](#根据记录数往前查num条记录)
-         * [根据记录数往后查num条记录](#根据记录数往后查num条记录)
+         * [根据时间点往前查num条记录](#根据时间点往前查num条记录)
+         * [根据时间点往后查num条记录](#根据时间点往后查num条记录)
    * [行情服务和配置](#-行情服务和配置)
    * [风控插件](#-风控插件)
    * [历史行情回放](#-历史行情回放)
@@ -272,7 +272,7 @@ rootDirOfStgPrivateData: /dev/shm
 ```
 <br/>
  
-#### K线
+#### Candle
 ```c++
    virtual void StgInstTaskHandlerBase::onCandle(const StgInstInfoSPtr& stgInstInfo,
                                                  const CandleSPtr& candle) {}
@@ -441,7 +441,7 @@ body中传输JSON格式数据。
 &emsp;&emsp;
 <br/>
 
-#### 根据记录数往前查num条记录  
+#### 根据时间点往前查num条记录  
 * GET /v1/QueryHisMD/before/Binance/Spot/BTC-USDT/Trades  
 * GET /v1/QueryHisMD/before/Binance/Spot/BTC-USDT/Books  
 * GET /v1/QueryHisMD/before/Binance/Spot/BTC-USDT/Candle  
@@ -457,7 +457,7 @@ body中传输JSON格式数据。
 &emsp;&emsp;
 <br/>
 
-#### 根据记录数往后查num条记录  
+#### 根据时间点往后查num条记录  
 * GET /v1/QueryHisMD/after/Binance/Spot/BTC-USDT/Trades  
 * GET /v1/QueryHisMD/after/Binance/Spot/BTC-USDT/Books  
 * GET /v1/QueryHisMD/after/Binance/Spot/BTC-USDT/Candle  
@@ -502,7 +502,7 @@ topicGroup:
 * 🔥 风控插件安装、启用和禁用：
 1. 每个插件都包含一个动态链接库和配置文件：如 libbqtd-srv-risk-plugin-flow-ctrl-0.so 和 libbqtd-srv-risk-plugin-flow-ctrl-0.yaml
 1. 插件名称中的数字代表风控规则检查顺序，不需要连续，最大值为 MAX_TD_SRV_RISK_PLUGIN_NUM = 32，这是个常量，可以修改并重新编译，建议不要超过128。
-1. 安装新的风控插件只需将动态链接库和配置文件拷贝到 plugin 目录下（这个目录在中配置）。
+1. 安装新的风控插件只需将动态链接库和配置文件拷贝到 plugin 目录下（这个目录可在配置中修改）。
 1. 启用风控插件只需将配置文件里的 enable 改成 true 即可。
 1. 禁用风控插件只需将配置文件里的 enable 改成 false 即可，最多5秒后该插件就会被关闭，5秒这个时间可以在配置文件里配置。
 1. 升级风控插件需要先禁用该插件，日志提示该插件已经被 unload 之后后覆盖动态链接库。再启用该插件。

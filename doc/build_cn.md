@@ -21,7 +21,7 @@
 
 * 🔥 编译  
 
-&emsp;&emsp;由于开启了并行编译，因此可能编译过程系统内存不足导致中断，请将setting.sh中DEFAULT_PARALLEL_COMPILE_THREAD_NUM=8从8修改为更小的数值🎃。
+&emsp;&emsp;编译时间较长，如果需要开启并行编译，请将setting.sh中DEFAULT_PARALLEL_COMPILE_THREAD_NUM=1从1修改为更大的数值，当然如果编译线程数过多，极有可能会导致系统内存不足而编译中断，所以保险起见不要修改此参数，整个编译过程大概会持续一小时，C++ 你懂的。🎃。
 ```bash
    bash build-all.sh
 ```

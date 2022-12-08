@@ -1,8 +1,8 @@
 [**中文版**](README_cn.md)
 
-[![github](https://img.shields.io/badge/github-byrnexu-brightgreen.svg)](https://github.com/byrnexu)  
-
 [<img src="./assets/logo.png" width="180" />]()
+
+[![github](https://img.shields.io/badge/github-byrnexu-brightgreen.svg)](https://github.com/byrnexu)  ![visitors](https://visitor-badge.laobi.icu/badge?page_id=byrnexu.betterquant)  [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=102)](https://github.com/byrnexu)
 
 **Better quant today, best quant tomorrow.** 💪  
 

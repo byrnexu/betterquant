@@ -1,16 +1,19 @@
 
 [**English version**](README.md)
 
-[![github](https://img.shields.io/badge/github-byrnexu-brightgreen.svg)](https://github.com/byrnexu)  
 
 [<img src="./assets/logo.png" width="180" />]()
+
+[![github](https://img.shields.io/badge/github-byrnexu-brightgreen.svg)](https://github.com/byrnexu)  ![visitors](https://visitor-badge.laobi.icu/badge?page_id=byrnexu.betterquant)  [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=102)](https://github.com/byrnexu)
 
 **Better quant today, best quant tomorrow.** 💪  
 
 欢迎fork/star，你的支持是这个项目越来越好的最大动力，BetterQuant 沟通交流群 431100199
 
+**最近在外面看机会，上海地区私募机构需要技术总监/合伙人或者主力研发可以微信联系：wxid_6215412154712**   
+
+
 ## 前言
-&emsp;&emsp;**最近在外面看机会，上海地区私募机构需要技术总监/合伙人或者架构师请邮件联系：28645861@qqcom**   
 
 &emsp;&emsp;目前交易所只接了数字货币的币安，但是国内现货和其他衍生品的仓位管理、盈亏计算、资产管理的算法及订单的状态维护基本都类似，稍加修改即可同时支持国内的二级市场，这些功能就暂时放在todo list里了。另外如果要接入更多的交易所，基于目前良好的行情和交易网关的接口，也可以逐个快速接入。betterquant的主要功能和特点包括：<br/>
 * 🔥 这是一个设计目标为支持多账户、多策略、多个产品、多托管主机并行的可水平扩展的分布式量化交易系统。也就是说，未来你可以看到类似自营资金跨托管主机、跨账户借仓这样牛X的功能。<br/>
