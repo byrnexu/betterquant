@@ -88,6 +88,7 @@ def on_stg_inst_start(self, stg_inst_info):
 | stgName | 策略名称 | 给策略取一个有辨识度的名称 |
 | stgDesc | 策略描述 | 一些额外的说明 |
 | userIdOfAuthor | 策略作者 | 记录策略作者，不影响策略逻辑 |
+<br/>  
 
 
 * 修改表 stgInstInfo ，增加子策略信息的记录
@@ -100,6 +101,7 @@ def on_stg_inst_start(self, stg_inst_info):
 | stgInstName | 子策略名称 | 给子策略取一个有辨识度的名称 |
 | stgInstDesc | 子策略描述 | 一些额外的说明 |
 | userId | 用户Id | 用于统计用户层面的资产、仓位、盈亏 |
+<br/>  
 
 &emsp;&emsp;目前没有客户端，请通过SQLyog或者其他 mysql 客户端应用直接改库。  
 ```sql
@@ -113,7 +115,7 @@ INSERT INTO `BetterQuant`.`stgInstInfo`(`stgId`, `stgInstId`, `stgInstParams`, `
 ```shell
 docker exec -i bqdb mysql -uroot -p123456  <<< "use BetterQuant; select * from stgInfo;"
 ```
-&emsp;&emsp;bqdb 是容器名称，123456 是数据库密码。
+&emsp;&emsp;bqdb 是容器名称，123456 是数据库密码。  
 <br/>  
 
 * 创建策略配置文件  
