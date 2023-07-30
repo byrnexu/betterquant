@@ -1,7 +1,7 @@
 
 [**English version**](README.md)
 
-**功能更为强大的同时支持国内二级市场期现的版本已经开发完成，这个版本未开源，目前在补 [wiki](https://github.com/byrnexu/bq/wiki) 文档和 demo，有商业合作的小伙伴可以邮件联系 byrnexu@163.com**   
+**功能更为强大的同时支持国内二级市场期现的版本已经开发完成，这个版本未开源，相关介绍参考 [wiki](https://github.com/byrnexu/bq/wiki) ，有商业合作的小伙伴可以邮件联系 byrnexu@163.com**      
 
 [<img src="./assets/logo.png" width="180" />]()
 
