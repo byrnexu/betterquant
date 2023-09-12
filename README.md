@@ -12,7 +12,7 @@
 Welcome to fork/star, your support is the greatest motivation for this project to get better and better.
 
 ## Overview
-&emsp;&emsp;**I'm looking for job opportunities recently, if you need a technical director/partner or chief architect for a quantitative hedge fund in Shanghai, China, please email: byrnexu@163.com. Of course, if you support telecommuting, It doesn't matter where the job is.**   
+&emsp;&emsp;**I'm looking for job opportunities recently, if you need a technical director/partner or chief architect for a quantitative hedge fund in Shanghai, China, please email: byrnexu@qq.com. Of course, if you support telecommuting, It doesn't matter where the job is.**   
 
 &emsp;&emsp;The main functions and features of betterquant include: <br/>
 * 🔥 This is a quantitative trading  system designed to support multiple accounts, multiple strategies, multiple products, and multiple hosts in parallel.<br/>
