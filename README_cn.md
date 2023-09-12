@@ -1,7 +1,7 @@
 
 [**English version**](README.md)
 
-**功能更为强大的同时支持国内二级市场期现的版本已经开发完成，这个版本未开源，相关介绍参考 [wiki](https://github.com/byrnexu/bq/wiki) ，有商业合作的小伙伴可以邮件联系 byrnexu@163.com**      
+**功能更为强大的支持国内二级市场股票期货的版本 [BetterQuant2](https://github.com/byrnexu/betterquant) 已经开发完成**         
 
 [<img src="./assets/logo.png" width="180" />]()
 
@@ -11,7 +11,7 @@
 
 欢迎fork/star，你的支持是这个项目越来越好的最大动力，BetterQuant 沟通交流群 431100199
 
-**最近在外面看机会，上海地区私募机构需要技术总监/合伙人可以联系：byrnexu@163.com**   
+**最近在外面看机会，上海地区私募机构需要技术总监/合伙人可以联系：byrnexu@qq.com**   
 
 
 ## 前言
