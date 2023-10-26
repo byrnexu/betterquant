@@ -1,7 +1,7 @@
 
 [**English version**](README.md)
 
-**功能更为强大的支持国内二级市场股票期货的版本 [BetterQuant2](https://github.com/byrnexu/betterquant) 已经开发完成**         
+**功能更为强大的支持国内二级市场股票期货的版本 [BetterQuant2](https://github.com/byrnexu/betterquant2) 已经开发完成**         
 
 [<img src="./assets/logo.png" width="180" />]()
 
